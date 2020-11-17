@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:cheki_keja/apartClass.dart';
-import 'package:cheki_keja/apartdetails.dart';
-import 'package:cheki_keja/drawer.dart';
-import 'package:cheki_keja/networkApi.dart';
+import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:cheki_keja/models/apartClass.dart';
+import 'package:cheki_keja/ui/apartdetails.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
+import 'package:cheki_keja/views/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';

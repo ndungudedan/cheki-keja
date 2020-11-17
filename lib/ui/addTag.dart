@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cheki_keja/apartClass.dart';
 import 'package:flutter/material.dart';
 
 class addTag extends StatelessWidget{

@@ -1,12 +1,15 @@
-import 'package:cheki_keja/category.dart';
-import 'package:cheki_keja/home.dart';
-import 'package:cheki_keja/introduction.dart';
+import 'package:cheki_keja/ui/category.dart';
+import 'package:cheki_keja/ui/home.dart';
+import 'package:cheki_keja/ui/introduction.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -53,7 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  FirebaseUser user;
   bool signed_in = false;
   SharedPreferences prefs;
 

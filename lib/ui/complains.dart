@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:cheki_keja/addReview.dart';
-import 'package:cheki_keja/complainsClass.dart';
-import 'package:cheki_keja/networkApi.dart';
+import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:cheki_keja/models/complainsClass.dart';
 import 'package:cheki_keja/ui/addComplain.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

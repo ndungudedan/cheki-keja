@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:cheki_keja/complainsClass.dart';
+import 'package:cheki_keja/models/complainsClass.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

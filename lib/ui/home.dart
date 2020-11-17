@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:cheki_keja/apartClass.dart';
-import 'package:cheki_keja/apartdetails.dart';
-import 'package:cheki_keja/drawer.dart';
-import 'package:cheki_keja/favorites.dart';
-import 'package:cheki_keja/myhouse.dart';
-import 'package:cheki_keja/complains.dart';
-import 'package:cheki_keja/networkApi.dart';
+import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:cheki_keja/models/apartClass.dart';
+import 'package:cheki_keja/models/userClass.dart' as myuser;
+import 'package:cheki_keja/ui/apartdetails.dart';
 import 'package:cheki_keja/ui/contact.dart';
-import 'package:cheki_keja/userClass.dart';
+import 'package:cheki_keja/ui/favorites.dart';
+import 'package:cheki_keja/ui/myhouse.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +14,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:path/path.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:shared_preferences/shared_preferences.dart';
 
 final List<String> imageList = [];
@@ -34,8 +32,8 @@ class home extends StatefulWidget {
 class _MyHomePageState extends State<home> with SingleTickerProviderStateMixin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  FirebaseUser fireuser;
-  User user;
+  auth.User fireuser;
+  myuser.User user;
   bool signed_in = false;
   SharedPreferences prefs;
   AnimationController _controller;
@@ -590,22 +588,22 @@ class _MyHomePageState extends State<home> with SingleTickerProviderStateMixin {
   }
 
   void signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
+   var googleSignInAccount = await googleSignIn.signIn();
+   var googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    var credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
 
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
+    var authResult = await _auth.signInWithCredential(credential);
     fireuser = authResult.user;
 
     assert(!fireuser.isAnonymous);
     assert(await fireuser.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
+    var currentUser = await  _auth.currentUser;
     assert(fireuser.uid == currentUser.uid);
     setState(() {
       fireuser = authResult.user;
@@ -619,12 +617,12 @@ class _MyHomePageState extends State<home> with SingleTickerProviderStateMixin {
     print("User Sign Out");
   }
 
-  Future<void> registerUser(FirebaseUser fireuser) async {
+  Future<void> registerUser(auth.User fireuser) async {
     var result = await NetworkApi().registerUser(fireuser);
     var Map = json.decode(result);
 
     setState(() {
-      user = User.fromJson(Map);
+      user = myuser.User.fromJson(Map);
     });
     await prefs.setString('userId', user.id);
     await prefs.setString('name', user.name);

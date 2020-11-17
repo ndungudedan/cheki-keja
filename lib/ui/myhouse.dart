@@ -1,7 +1,7 @@
-import 'package:cheki_keja/paymentsClass.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:cheki_keja/networkApi.dart';
+import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:cheki_keja/models/paymentsClass.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

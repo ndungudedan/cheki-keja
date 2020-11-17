@@ -1,11 +1,9 @@
 import 'dart:convert';
-
-import 'package:cheki_keja/createApartment.dart';
-import 'package:cheki_keja/favorites.dart';
-import 'package:cheki_keja/map.dart';
-import 'package:cheki_keja/myhouse.dart';
-import 'package:cheki_keja/networkApi.dart';
-import 'package:cheki_keja/userClass.dart';
+import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:cheki_keja/models/userClass.dart' as myuser;
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:cheki_keja/ui/favorites.dart';
+import 'package:cheki_keja/ui/myhouse.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -21,8 +19,8 @@ class Draw extends StatefulWidget {
 class _DrawState extends State<Draw> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  FirebaseUser fireuser;
-  User user;
+  auth.User fireuser;
+  myuser.User user;
   bool signed_in = false;
   SharedPreferences prefs;
   
@@ -118,22 +116,22 @@ class _DrawState extends State<Draw> {
   }
 
   void signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
+     var googleSignInAccount = await googleSignIn.signIn();
+     var googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+     var credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
 
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
+    var authResult = await _auth.signInWithCredential(credential);
     fireuser = authResult.user;
 
     assert(!fireuser.isAnonymous);
     assert(await fireuser.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
+    var currentUser = await _auth.currentUser;
     assert(fireuser.uid == currentUser.uid);
     setState(() {
       fireuser = authResult.user;
@@ -147,12 +145,12 @@ class _DrawState extends State<Draw> {
     print("User Sign Out");
   }
 
-  Future<void> registerUser(FirebaseUser fireuser) async {
+  Future<void> registerUser(auth.User fireuser) async {
     var result = await NetworkApi().registerUser(fireuser);
     var Map = json.decode(result);
 
     setState(() {
-      user = User.fromJson(Map);
+      user = myuser.User.fromJson(Map);
     });
     await prefs.setString('userId', user.id);
     await prefs.setString('name', user.name);

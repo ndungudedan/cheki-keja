@@ -1,5 +1,4 @@
-import 'package:cheki_keja/apartClass.dart';
-import 'package:cheki_keja/networkApi.dart';
+import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +45,7 @@ class _MyHomePageState extends State<AddReview> {
       body: ListView(
         children: <Widget>[
           Container(
-              child: RatingBar(
+              child: RatingBar.builder(
             initialRating: 3,
             minRating: 1,
             direction: Axis.horizontal,

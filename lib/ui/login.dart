@@ -1,4 +1,4 @@
-import 'package:cheki_keja/inputFieldArea.dart';
+import 'package:cheki_keja/views/inputFieldArea.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

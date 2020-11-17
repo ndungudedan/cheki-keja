@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cheki_keja/locations.dart' as locations;
+import 'package:cheki_keja/models/locations.dart' as locations;
 
 class Gmap extends StatefulWidget {
   var latitude, longitude;
