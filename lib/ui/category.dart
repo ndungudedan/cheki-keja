@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:cheki_keja/locations.dart' as locations;

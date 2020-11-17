@@ -32,7 +32,7 @@ dependencies:
   getflutter: ^1.0.11
   video_player:
   carousel_slider: ^2.0.0
-  geolocator: ^4.0.3
+  geolocator:
   path_provider:
   path:
   file_picker:
@@ -41,7 +41,7 @@ dependencies:
   multi_image_picker: ^4.6.7
   flutter_page_transition: ^0.1.0
   flare_splash_screen: ^3.0.1
-  firebase_auth: ^0.16.0
+  firebase_auth:
   google_sign_in: ^4.4.4
   shared_preferences:
   flutter_rating_bar: ^3.0.1+1

@@ -16,7 +16,6 @@ import 'package:cheki_keja/reviewClass.dart';
 import 'package:cheki_keja/reviews.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cheki_keja/locations.dart' as locations;
 import 'package:shared_preferences/shared_preferences.dart';
