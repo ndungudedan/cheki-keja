@@ -49,7 +49,6 @@ class _MyHomePageState extends State<home> with SingleTickerProviderStateMixin {
   List<int> likes_count = List();
   List<int> comments_count = List();
   StreamController<Apartment> _streamController = StreamController<Apartment>();
-  //SharedPreferences prefs;
   bool _loadingMore = true;
   var _hasMoreItems = true;
   var paginationId = '0';

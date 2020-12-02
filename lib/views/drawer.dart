@@ -7,6 +7,7 @@ import 'package:cheki_keja/ui/myhouse.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cheki_keja/management/management.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Draw extends StatefulWidget {
@@ -22,8 +23,6 @@ class _DrawState extends State<Draw> {
   auth.User fireuser;
   myuser.User user;
   bool signed_in = false;
-  SharedPreferences prefs;
-  
 
   @override
   void initState() {
@@ -40,13 +39,14 @@ class _DrawState extends State<Draw> {
           signed_in
               ? Center(
                   child: UserAccountsDrawerHeader(
-                    currentAccountPicture: prefs.getString('photo') != null
-                        ? Image.network(prefs.getString('photo'))
-                        : Icon(Icons.account_circle),
-                    accountEmail: Text(prefs.getString('email')),
-                    accountName: Text(prefs.getString('name')),
+                  currentAccountPicture: sharedPreferences.getPhoto() != null
+                      ? Image.network(sharedPreferences.getPhoto())
+                      : Icon(Icons.account_circle),
+                  accountEmail: Text(sharedPreferences.getEmail()),
+                  accountName: Text(
+                    sharedPreferences.getFirstname(),
                   ),
-                )
+                ))
               : DrawerHeader(
                   child: OutlineButton(
                     splashColor: Colors.grey,
@@ -111,16 +111,14 @@ class _DrawState extends State<Draw> {
           ),
         ],
       ),
-    
     );
   }
 
   void signInWithGoogle() async {
-     var googleSignInAccount = await googleSignIn.signIn();
-     var googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+    var googleSignInAccount = await googleSignIn.signIn();
+    var googleSignInAuthentication = await googleSignInAccount.authentication;
 
-     var credential = GoogleAuthProvider.credential(
+    var credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
@@ -152,25 +150,19 @@ class _DrawState extends State<Draw> {
     setState(() {
       user = myuser.User.fromJson(Map);
     });
-    await prefs.setString('userId', user.id);
-    await prefs.setString('name', user.name);
-    await prefs.setString('email', user.email);
-    await prefs.setString('photo', user.photo);
-    await prefs.setBool('issignedin', true);
+    sharedPreferences.setEmail(user.email);
+    sharedPreferences.setUserId(user.id);
+    sharedPreferences.setSignedIn(true);
+    sharedPreferences.setFirstname(user.name);
+    sharedPreferences.setPhoto(user.photo);
     setState(() {
-      signed_in = prefs.getBool('issignedin');
+      signed_in = sharedPreferences.getSignedIn();
     });
   }
 
   Future<void> initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
     setState(() {
-      if (!prefs.containsKey('issignedin')) {
-        prefs.setBool('issignedin', false);
-        signed_in = false;
-      } else {
-        signed_in = prefs.getBool('issignedin');
-      }
+      signed_in = sharedPreferences.checkSignedIn();
     });
   }
 }
