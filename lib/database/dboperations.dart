@@ -1,5 +1,10 @@
-import 'package:cheki_keja/constants/constants.dart';
+/* import 'package:cheki_keja/constants/constants.dart';
 import 'package:cheki_keja/database/databasehelper.dart';
+import 'package:cheki_keja/models/apartment.dart';
+import 'package:cheki_keja/models/features.dart';
+import 'package:cheki_keja/models/home.dart';
+import 'package:cheki_keja/models/tenant.dart';
+import 'package:cheki_keja/models/transaction.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbOperations {
@@ -21,7 +26,7 @@ class DbOperations {
   DbOperations._privateConstructor();
   static final DbOperations instance = DbOperations._privateConstructor();
 
-  /* Future<MyApartment> insertApartment(MyApartment myApartment) async {
+   Future<MyApartment> insertApartment(MyApartment myApartment) async {
     Database _db = await instance.dbHelper.database;
     var count = Sqflite.firstIntValue(await _db.rawQuery(
         "SELECT COUNT(*) FROM $apartmenttable WHERE online_id = ?",
@@ -139,7 +144,7 @@ class DbOperations {
   }
 
   //Features
-  Future<Features> insertFeatures(Features features) async {
+ /*  Future<Features> insertFeatures(Features features) async {
     Database _db = await instance.dbHelper.database;
     var count = Sqflite.firstIntValue(await _db.rawQuery(
         "SELECT COUNT(*) FROM $featurestable WHERE online_id = ?",
@@ -151,7 +156,7 @@ class DbOperations {
           where: 'id = ?', whereArgs: [features.id]);
     }
     return features;
-  }
+  } */
 
   Future<Features> fetchFeatures(var id) async {
     Database _db = await instance.dbHelper.database;
@@ -293,7 +298,7 @@ class DbOperations {
       myTransactions.add(myTrans);
     });
     return myTransactions;
-  } */
+  }
 
   /*  Future<MyApartment> updateApartment(MyApartment myApartment) async {
     Database db = await instance.dbHelper.database;
@@ -333,3 +338,4 @@ class DbOperations {
     return await db.delete(salestable, where: '$columnId = ?', whereArgs: [id]);
   } */
 }
+ */

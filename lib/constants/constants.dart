@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  final String baseurl = 'http://192.168.43.247/chekiKeja/adminKeja.php/';
-  final String uploadurl = 'http://192.168.43.247/chekiKeja/tengenezaKeja.php/';
-   final String updateurl = 'http://192.168.43.247/chekiKeja/updateKeja.php/';
+  final String baseurl = 'http://192.168.43.188/chekiKeja/chekiKeja.php/';
+  final String uploadurl = 'http://192.168.43.188/chekiKeja/tengenezaKeja.php/';
+  final String updateurl = 'http://192.168.43.188/chekiKeja/updateKeja.php/';
   //final String path = 'http://www.thebuktu.com/chekiKeja/uploads/';
-  final String path = 'http://192.168.43.247/chekiKeja/uploads/';
+  final String path = 'http://192.168.43.188/chekiKeja/uploads/';
+  final String stkpush = 'http://www.thebuktu.com/chekiKeja/lipaNaMpesa.php';
+  final String termsurl = 'http://192.168.43.188/chekiKeja/uploads/terms.rtf';
+  final String abouturl = 'http://192.168.43.188/chekiKeja/uploads/about.rtf';
   final String folder = '/images/';
 
   final String firstlogin = 'firstlogin';
@@ -69,6 +72,24 @@ class UploadData {
   static final category = 'category';
   static final email = 'email';
   static final companyId = 'companyId';
+}
+
+class ApartmentCategory {
+   static final singles = 'Single Room';
+   static final doubles = 'Double Room';
+  static final bedsitter = 'Bed Sitter';
+   static final one_bed = 'One Bedroom';
+    static final two_bed = 'Two Bedroom';
+     static final three_bed = 'Three Bedroom';
+      //static final four_bed = 'Four Bedroom';
+
+      static final single_id = '1';
+      static final double_id = '2';
+  static final bedsitter_id = '4';
+   static final one_bed_id = '5';
+    static final two_bed_id = '11';
+     static final three_bed_id = '12';
+      //static final four_bed_id = 'Four Bedroom';
 }
 
 // list of colors that we use in our app

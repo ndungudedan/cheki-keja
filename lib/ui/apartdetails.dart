@@ -1,13 +1,20 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cheki_keja/blocs/companybloc.dart';
+import 'package:cheki_keja/blocs/featurebloc.dart';
+import 'package:cheki_keja/blocs/imagebloc.dart';
+import 'package:cheki_keja/blocs/reviewbloc.dart';
 import 'package:cheki_keja/connection/networkApi.dart';
-import 'package:cheki_keja/models/apartClass.dart';
-import 'package:cheki_keja/models/companyClass.dart';
-import 'package:cheki_keja/models/featureClass.dart';
+import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/management/management.dart';
+import 'package:cheki_keja/models/apartment.dart';
+import 'package:cheki_keja/models/company.dart';
+import 'package:cheki_keja/models/features.dart';
 import 'package:cheki_keja/models/reviewClass.dart';
+import 'package:cheki_keja/models/status.dart';
 import 'package:cheki_keja/models/stkpush.dart';
+import 'package:cheki_keja/ui/viewonmap.dart';
 import 'package:cheki_keja/ui/addReview.dart';
-import 'package:cheki_keja/ui/map.dart';
 import 'package:cheki_keja/ui/photoViewer.dart';
 import 'package:cheki_keja/ui/reviews.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
@@ -15,12 +22,11 @@ import 'package:cheki_keja/views/floatingButton.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cheki_keja/models/locations.dart' as locations;
+import 'package:like_button/like_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:video_player/video_player.dart';
 
 class Apartdetails extends StatefulWidget {
-  Apartment apartment;
+  MyApartment apartment;
   Apartdetails({Key key, @required this.apartment}) : super(key: key);
 
   final String title = 'apartmentDetails';
@@ -33,29 +39,19 @@ class _MyHomePageState extends State<Apartdetails> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   String userId;
   String apartmentId, ownerId;
-  Apartment apartment;
-  Company company;
+  MyApartment apartment;
+  MyCompany company;
   Stkpush stkpush;
-  int _selectedIndex = 0;
-  Images images = Images();
-  ImageList imageList = ImageList();
-  final String path = 'http://www.thebuktu.com/chekiKeja/uploads/';
-  //final String path = 'http://192.168.43.247/chekiKeja/uploads/';
-  final String folder = '/images/';
-  String owner;
-  VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
-  final List<String> picList = [];
-  final List<String> imageTags = [];
-  final List<String> featurelist = [];
-  ReviewList reviewList = ReviewList();
-  List<Review> reviews = List<Review>();
   final Map<String, Marker> _markers = {};
   SharedPreferences prefs;
   var features;
   var phone;
   var paginationId = '0';
   bool signed_in = false;
+  FeatureBloc feature_bloc;
+  CompanyBloc company_bloc;
+  ImagesBloc images_bloc;
+  ReviewBloc review_bloc;
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     setState(() {
@@ -75,38 +71,29 @@ class _MyHomePageState extends State<Apartdetails> {
 
   @override
   void initState() {
+    super.initState();
+    feature_bloc = FeatureBloc();
+    company_bloc = CompanyBloc();
+    images_bloc = ImagesBloc();
+    review_bloc = ReviewBloc();
     apartment = widget.apartment;
-    owner = widget.apartment.owner_name;
     userId = '1';
     apartmentId = widget.apartment.id;
     ownerId = widget.apartment.owner_id;
-    picList.add(path + ownerId + folder + widget.apartment.image0);
-    picList.add(path + ownerId + folder + widget.apartment.image1);
-    picList.add(path + ownerId + folder + widget.apartment.image2);
-    imageTags.add(widget.apartment.tag0);
-    imageTags.add(widget.apartment.tag1);
-    imageTags.add(widget.apartment.tag2);
-
+    feature_bloc.fetchFeatures(apartmentId);
+    images_bloc.fetchImages(apartmentId);
+    company_bloc.fetchCompany(ownerId);
+    review_bloc.fetchReviews(apartmentId, paginationId);
     getPrefs();
-    fetchImages();
-    fetchFeatures();
-    fetchReviews();
-    fetchCompany();
-
-    _controller = VideoPlayerController.network(
-      path + ownerId + '/videos/vid1.mp4',
-    );
-    _initializeVideoPlayerFuture = _controller.initialize();
-    _controller.setLooping(true);
-
-    super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
-
     super.dispose();
+    feature_bloc.dispose();
+    images_bloc.dispose();
+    company_bloc.dispose();
+    review_bloc.dispose();
   }
 
   @override
@@ -122,28 +109,49 @@ class _MyHomePageState extends State<Apartdetails> {
         title: Text(apartment.title + ' Apartments'),
         actions: <Widget>[
           Builder(
-            builder: (context)=> IconButton(
-                icon: Icon(
-                  apartment.liked.isNotEmpty
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  color: apartment.liked.isNotEmpty ? Colors.amber : null,
+            builder: (BuildContext context) {
+              return LikeButton(
+                isLiked: apartment.liked.isNotEmpty,
+                size: 30,
+                circleColor:
+                    CircleColor(start: Colors.redAccent, end: Colors.redAccent),
+                bubblesColor: BubblesColor(
+                  dotPrimaryColor: Colors.red,
+                  dotSecondaryColor: Colors.redAccent,
                 ),
-                onPressed: () {
-                  setState(() {
-                    if(signed_in){
-                    if (apartment.liked.isEmpty) {
-                      apartment.liked = '1';
-                      likes(apartment.id);
-                    } else {
-                      apartment.liked = '';
-                      dislike(apartment.id);
-                    }
-                    }else{
-                      Scaffold.of(context).showSnackBar(snack('Please Sign in first'));
-                    }
-                  });
-                }),
+                likeBuilder: (bool isLiked) {
+                  return Icon(
+                    Icons.favorite,
+                    color: isLiked ? Colors.red : Colors.white,
+                    size: 30,
+                  );
+                },
+                //likeCount: int.tryParse(apartment.likes),
+                countBuilder: (int count, bool isLiked, String text) {
+                  var color = isLiked ? Colors.red : Colors.white;
+                  Widget result;
+                  if (count == 0) {
+                    result = Text(
+                      "love",
+                      style: TextStyle(color: color),
+                    );
+                  } else {
+                    result = Text(
+                      text,
+                      style: TextStyle(color: color),
+                    );
+                  }
+                  return result;
+                },
+                onTap: (isLiked) {
+                  if (!isLiked) {
+                    return likes(apartment.id);
+                  } else {
+                    return dislike(apartment.id);
+                  }
+                },
+              );
+            },
           ),
         ],
       ),
@@ -151,125 +159,126 @@ class _MyHomePageState extends State<Apartdetails> {
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         children: <Widget>[
-          Container(
-              child: apartment.video.isNotEmpty
-                  ? Column(
-                      children: <Widget>[
-                        Container(
-                          height: 150,
-                          child: FutureBuilder(
-                            future: _initializeVideoPlayerFuture,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                return AspectRatio(
-                                  aspectRatio: _controller.value.aspectRatio,
-                                  child: VideoPlayer(_controller),
-                                );
-                              } else {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              }
+          Center(
+            child: apartmentDetails(apartment),
+          ),
+          StreamBuilder(
+            stream: images_bloc.allImages,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Images>> snapshot) {
+              if (snapshot.hasData) {
+                return GFItemsCarousel(
+                  rowCount: 3,
+                  itemHeight: 150,
+                  children: snapshot.data.map(
+                    (url) {
+                      return Container(
+                        margin: EdgeInsets.all(5.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => PhotoViewer(
+                                        picList: snapshot.data,
+                                        apartment: apartment,
+                                        backgroundDecoration:
+                                            const BoxDecoration(
+                                          color: Colors.black,
+                                        ),
+                                        initialIndex:
+                                            snapshot.data.indexOf(url),
+                                        scrollDirection: Axis.horizontal,
+                                      )));
                             },
+                            child: Stack(
+                              children: <Widget>[
+                                CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl: constants.path +
+                                      apartment.owner_id +
+                                      constants.folder +
+                                      url.image,
+                                  placeholder: (context, url) => Container(
+                                      alignment: Alignment(0.0, 2.0),
+                                      child: Center(
+                                          child: CircularProgressIndicator())),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                          alignment: Alignment(0.0, 2.0),
+                                          child:
+                                              Center(child: Icon(Icons.error))),
+                                ),
+                                // Image.network(url,fit: BoxFit.contain, width: 2000.0),
+                                Positioned(
+                                  bottom: 1.0,
+                                  left: 0.0,
+                                  right: 0.0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color.fromARGB(200, 0, 0, 0),
+                                          Color.fromARGB(0, 0, 0, 0)
+                                        ],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    child: Text(
+                                      url.tag,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                        Center(
-                          child: apartmentDetails(apartment),
-                        )
-                      ],
-                    )
-                  : Center(
-                      child: apartmentDetails(apartment),
-                    )),
-          GFItemsCarousel(
-            rowCount: 3,
-            itemHeight: 150,
-            children: picList.map(
-              (url) {
-                return Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => photoViewer(
-                                  picList: picList,
-                                  tagList: imageTags,
-                                  index: picList.indexOf(url),
-                                )));
-                      },
-                      child: Stack(
-                        children: <Widget>[
-                          CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: url,
-                            placeholder: (context, url) => Container(
-                                alignment: Alignment(0.0, 2.0),
-                                child:
-                                    Center(child: CircularProgressIndicator())),
-                            errorWidget: (context, url, error) => Container(
-                                alignment: Alignment(0.0, 2.0),
-                                child: Center(child: Icon(Icons.error))),
-                          ),
-                          // Image.network(url,fit: BoxFit.contain, width: 2000.0),
-                          Positioned(
-                            bottom: 1.0,
-                            left: 0.0,
-                            right: 0.0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color.fromARGB(200, 0, 0, 0),
-                                    Color.fromARGB(0, 0, 0, 0)
-                                  ],
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                ),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 20.0),
-                              child: Text(
-                                imageTags.elementAt(picList.indexOf(url)),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                      );
+                    },
+                  ).toList(),
                 );
-              },
-            ).toList(),
+              } else if (snapshot.hasError) {}
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
           Container(
             padding: EdgeInsets.all(5),
-            height: 200,
             child: Column(
               children: <Widget>[
                 Center(child: Text('Features')),
-                featurelist.isNotEmpty
-                    ? Center(
-                        child: GridView.count(
+                Center(
+                  child: StreamBuilder(
+                    stream: feature_bloc.allFeatures,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Features>> snapshot) {
+                      if (snapshot.hasData) {
+                        return GridView.count(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           crossAxisCount: 2,
                           childAspectRatio: 6.0,
                           scrollDirection: Axis.vertical,
-                          children: List.generate(featurelist.length, (index) {
-                            return featuresCard(featurelist.elementAt(index));
+                          children:
+                              List.generate(snapshot.data.length, (index) {
+                            return featuresCard(
+                                snapshot.data.elementAt(index).feat);
                           }),
-                        ),
-                      )
-                    : Container(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
+                        );
+                      } else if (snapshot.hasError) {}
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  ),
+                )
               ],
             ),
           ),
@@ -281,29 +290,34 @@ class _MyHomePageState extends State<Apartdetails> {
                 Row(
                   children: <Widget>[
                     Builder(
-                      builder: (context)=> IconButton(
+                      builder: (context) => IconButton(
                         splashColor: Colors.lightGreen,
                         icon: Icon(
                           Icons.add_circle_outline,
                           color: Colors.green,
                         ),
                         onPressed: () {
-                          signed_in
+                          sharedPreferences.getSignedIn()
                               ? Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => AddReview(
                                         userId: userId,
                                         apartmentId: apartmentId,
                                       )))
-                              : Scaffold.of(context).showSnackBar(snack('Please Sign in first'));;
+                              : Scaffold.of(context)
+                                  .showSnackBar(snack('Please Sign in first'));
+                          ;
                         },
                       ),
                     ),
                     Text('Add Review'),
                   ],
                 ),
-                reviews.isNotEmpty
-                    ? Column(
-                        children: <Widget>[
+                StreamBuilder(
+                  stream: review_bloc.reviews,
+                  builder: (context, AsyncSnapshot<List<Review>> snapshot) {
+                    if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                      return Column(
+                        children: [
                           ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -313,43 +327,66 @@ class _MyHomePageState extends State<Apartdetails> {
                               return ListTile(
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.transparent,
-                                  child: Image.network(
-                                      reviews.elementAt(index).user.photo),
+                                  child: Image.network(snapshot.data
+                                      .elementAt(index)
+                                      .user
+                                      .photo),
                                 ),
                                 title: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text(reviews.elementAt(index).user.name),
-                                    Text(reviews.elementAt(index).timeline.substring(0,10))
+                                    Text(snapshot.data
+                                        .elementAt(index)
+                                        .user
+                                        .name),
+                                    Text(snapshot.data
+                                        .elementAt(index)
+                                        .timeline
+                                        .substring(0, 10))
                                   ],
                                 ),
                                 subtitle: Text(
-                                  reviews.elementAt(index).review,
+                                  snapshot.data.elementAt(index).review,
                                   overflow: TextOverflow.visible,
                                   softWrap: true,
                                 ),
                               );
                             },
                           ),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Reviews(
+                          snapshot.data!=null &&snapshot.data.isNotEmpty ?
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Reviews(
                                             apartmentId: apartmentId,
-                                            reviewList: reviewList)));
-                              },
-                              child: Text(
-                                'see all reviews',
-                                style: TextStyle(color: Colors.blue),
-                              ))
+                                            reviews: snapshot.data,
+                                          )));
+                            },
+                            child: Text(
+                              'see all reviews',
+                              style: TextStyle(color: Colors.blue),
+                            ))
+                        : SizedBox()
                         ],
-                      )
-                    : Center(
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
                         child: Text('No reviews yet'),
-                      ),
+                      );
+                    } else if (snapshot.data != null &&
+                        snapshot.data.isEmpty) {
+                      return Center(
+                        child: Text('No reviews yet'),
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                )
               ],
             ),
           ),
@@ -361,7 +398,7 @@ class _MyHomePageState extends State<Apartdetails> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Gmap(
+                        builder: (context) => ViewOnMap(
                               latitude: apartment.latitude,
                               longitude: apartment.longitude,
                             )));
@@ -380,8 +417,11 @@ class _MyHomePageState extends State<Apartdetails> {
               ),
             ),
           ),
-          company != null
-              ? Container(
+          StreamBuilder(
+            stream: company_bloc.company,
+            builder: (BuildContext context, AsyncSnapshot<MyCompany> snapshot) {
+              if (snapshot.hasData) {
+                return Container(
                   padding: EdgeInsets.all(5),
                   child: Column(
                     children: <Widget>[
@@ -389,40 +429,43 @@ class _MyHomePageState extends State<Apartdetails> {
                       ListTile(
                         title: Text('Phone'),
                         leading: Icon(Icons.call),
-                        subtitle: Text(company.phone),
+                        subtitle: Text(snapshot.data.phone),
                       ),
                       ListTile(
                         title: Text('Email'),
                         leading: Icon(Icons.email),
-                        subtitle: Text(company.email),
+                        subtitle: Text(snapshot.data.email),
                       ),
                       ListTile(
                         title: Text('Address'),
                         leading: Icon(Icons.account_box),
-                        subtitle:
-                            Text(company.address + '\n' + company.location),
+                        subtitle: Text(snapshot.data.address),
                       ),
                     ],
                   ),
-                )
-              : Container(),
-        ConnectionCallback(onlineCall: () {
-          
-        },),
+                );
+              } else if (snapshot.hasError) {}
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          ),
+          ConnectionCallback(
+            onlineCall: () {},
+          ),
         ],
       ),
-      floatingActionButton: Builder(
-              builder: (context)=> floatingButton(
+      /*  floatingActionButton: Builder(
+        builder: (context) => floatingButton(
           onPressed: () {
-            if(signed_in){
+            if (signed_in) {
               lipaNaMpesa();
-            }
-            else{
+            } else {
               Scaffold.of(context).showSnackBar(snack('Please Sign in first'));
             }
           },
         ),
-      ),
+      ), */
     );
   }
 
@@ -435,96 +478,6 @@ class _MyHomePageState extends State<Apartdetails> {
       stkpush = Stkpush.fromJson(Map);
       Scaffold.of(context).showSnackBar(snack(stkpush.message));
     });
-  }
-
-  void fetchImages() async {
-    var result = await NetworkApi().getImages();
-    print(result);
-    var Map = json.decode(result);
-    setState(() {
-      imageList = ImageList.fromJson(Map);
-      images = imageList.images.elementAt(0);
-      //i dont know why ...review later
-      populateImageList();
-    });
-  }
-
-  void fetchFeatures() async {
-    var result = await NetworkApi().getFeatures(apartmentId);
-    print(result);
-    var Map = json.decode(result);
-    setState(() {
-      features = Features.fromJson(Map);
-      populateFeaturesList();
-    });
-  }
-
-  void fetchCompany() async {
-    var result = await NetworkApi().getCompany(ownerId);
-    print(result);
-    var Map = json.decode(result);
-    setState(() {
-      company = Company.fromJson(Map);
-    });
-  }
-
-  void fetchReviews() async {
-    var result = await NetworkApi().getReviews(apartmentId, paginationId);
-    print(result);
-    var Map = json.decode(result);
-    setState(() {
-      reviewList = ReviewList.fromJson(Map);
-      for (int i = 0; i < 3; i++) {
-        reviews.add(reviewList.reviews.elementAt(i));
-      }
-    });
-  }
-
-  void populateImageList() {
-    //           picList.add(path+ownerId+folder+images.image0+'.jpg');picList.add(path+ownerId+folder+images.image1+'.jpg');
-    //           picList.add(path+ownerId+folder+images.image2+'.jpg');
-    picList.add(path + ownerId + folder + images.image3);
-    picList.add(path + ownerId + folder + images.image4);
-    picList.add(path + ownerId + folder + images.image5);
-    picList.add(path + ownerId + folder + images.image6);
-    picList.add(path + ownerId + folder + images.image7);
-    picList.add(path + ownerId + folder + images.image8);
-    picList.add(path + ownerId + folder + images.image9);
-    picList.add(path + ownerId + folder + images.image10);
-    picList.add(path + ownerId + folder + images.image11);
-    picList.add(path + ownerId + folder + images.image12);
-    picList.add(path + ownerId + folder + images.image13);
-    picList.add(path + ownerId + folder + images.image14);
-    picList.add(path + ownerId + folder + images.image15);
-
-//            imageTags.add(images.tag0);imageTags.add(images.tag1);
-//            imageTags.add(images.tag2);
-    imageTags.add(images.tag3);
-    imageTags.add(images.tag4);
-    imageTags.add(images.tag5);
-    imageTags.add(images.tag6);
-    imageTags.add(images.tag7);
-    imageTags.add(images.tag8);
-    imageTags.add(images.tag9);
-    imageTags.add(images.tag10);
-    imageTags.add(images.tag11);
-    imageTags.add(images.tag12);
-    imageTags.add(images.tag13);
-    imageTags.add(images.tag14);
-    imageTags.add(images.tag15);
-  }
-
-  void populateFeaturesList() {
-    featurelist.add(features.feat1);
-    featurelist.add(features.feat2);
-    featurelist.add(features.feat3);
-    featurelist.add(features.feat4);
-    featurelist.add(features.feat5);
-    featurelist.add(features.feat6);
-    featurelist.add(features.feat7);
-    featurelist.add(features.feat8);
-    featurelist.add(features.feat9);
-    featurelist.add(features.feat10);
   }
 
   SnackBar snack(String message) {
@@ -556,7 +509,7 @@ class _MyHomePageState extends State<Apartdetails> {
     );
   }
 
-  Container apartmentDetails(Apartment apartment) {
+  Container apartmentDetails(MyApartment apartment) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
       padding: EdgeInsets.all(10),
@@ -597,13 +550,43 @@ class _MyHomePageState extends State<Apartdetails> {
     }
   }
 
-  Future<void> likes(var id) async {
-    var result = await NetworkApi().addLike(id, userId);
-    print(result);
+  Future<bool> likes(var id) async {
+    if (sharedPreferences.getSignedIn()) {
+      var result = await NetworkApi().addLike(id, userId);
+      print(result);
+      var res = json.decode(result);
+      var status = Status.fromJson(res);
+      if (status.code == Constants.success) {
+        setState(() {
+          apartment.liked = '1';
+        });
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      scaffoldKey.currentState.showSnackBar(snack('Please sign in first'));
+      return false;
+    }
   }
 
-  Future<void> dislike(var id) async {
-    var result = await NetworkApi().disLike(id, userId);
-    print(result);
+  Future<bool> dislike(var id) async {
+    if (sharedPreferences.getSignedIn()) {
+      var result = await NetworkApi().disLike(id, userId);
+      print(result);
+      var res = json.decode(result);
+      var status = Status.fromJson(res);
+      if (status.code == Constants.success) {
+        setState(() {
+          apartment.liked = '';
+        });
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      scaffoldKey.currentState.showSnackBar(snack('Please sign in first'));
+      return false;
+    }
   }
 }

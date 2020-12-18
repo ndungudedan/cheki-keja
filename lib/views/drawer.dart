@@ -1,6 +1,16 @@
+import 'dart:collection';
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cheki_keja/connection/networkApi.dart';
-import 'package:cheki_keja/models/userClass.dart' as myuser;
+import 'package:cheki_keja/models/user.dart' as myuser;
+import 'package:cheki_keja/ui/about.dart';
+import 'package:cheki_keja/ui/category.dart';
+import 'package:cheki_keja/ui/contact.dart';
+import 'package:cheki_keja/ui/contactus.dart';
+import 'package:cheki_keja/ui/map.dart';
+import 'package:cheki_keja/ui/section%20organizer/sectionhome.dart';
+import 'package:cheki_keja/ui/section%20organizer/sectionmain.dart';
+import 'package:cheki_keja/ui/terms.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:cheki_keja/ui/favorites.dart';
 import 'package:cheki_keja/ui/myhouse.dart';
@@ -8,10 +18,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cheki_keja/management/management.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Draw extends StatefulWidget {
-  const Draw({Key key}) : super(key: key);
+  const Draw(
+      {Key key,})
+      : super(key: key);
+  //final bool iscollapsed;
 
   @override
   _DrawState createState() => _DrawState();
@@ -22,98 +34,171 @@ class _DrawState extends State<Draw> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   auth.User fireuser;
   myuser.User user;
-  bool signed_in = false;
+  bool iscollapsed;
 
   @override
   void initState() {
-    initPrefs();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    return Padding(
+      padding: const EdgeInsets.only(left: 2.0),
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          signed_in
+          sharedPreferences.getSignedIn()
               ? Center(
                   child: UserAccountsDrawerHeader(
-                  currentAccountPicture: sharedPreferences.getPhoto() != null
-                      ? Image.network(sharedPreferences.getPhoto())
-                      : Icon(Icons.account_circle),
-                  accountEmail: Text(sharedPreferences.getEmail()),
-                  accountName: Text(
-                    sharedPreferences.getFirstname(),
+                    currentAccountPicture:
+                        sharedPreferences.getPhoto() != null
+                            ? CircleAvatar(
+                                radius: 30,
+                                backgroundImage: CachedNetworkImageProvider(sharedPreferences.getPhoto()),)
+                            : Icon(Icons.account_circle),
+                    accountEmail: Text(sharedPreferences.getEmail(),style: TextStyle(color: Colors.white),),
+                    accountName: Text(sharedPreferences.getFirstname(),style: TextStyle(color: Colors.white),),
                   ),
-                ))
+                )
               : DrawerHeader(
-                  child: OutlineButton(
-                    splashColor: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40)),
-                    highlightElevation: 0,
-                    borderSide: BorderSide(color: Colors.grey),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image(
-                              image: AssetImage('assets/images/google_logo'),
-                              height: 35.0),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              'Sign in',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.grey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FlatButton(
+                      color: Colors.white,
+                      autofocus: true,
+                      splashColor: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40)),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image(
+                                image: AssetImage(
+                                    'assets/images/google_logo.png'),
+                                height: 35.0),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                'Sign in',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.red[600],
+                                ),
                               ),
-                            ),
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
+                      onPressed: () {
+                        signInWithGoogle();
+                      },
                     ),
-                    onPressed: () {
-                      signInWithGoogle();
-                    },
                   ),
                 ),
+          Divider(
+            color: Colors.white,
+            height: 5,
+          ),
           ListTile(
-              title: Text('Favorites'),
-              trailing: Icon(Icons.arrow_forward),
+              title: Text(
+                'Favorites',
+                style: TextStyle(color: Colors.white),
+              ),
+             leading: Icon(
+              Icons.favorite_border_outlined,
+              color: Colors.white,
+            ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => favorites()),
+                  MaterialPageRoute(builder: (context) => Favorites()),
+                );
+              }),
+              ListTile(
+              title: Text(
+                'Category',
+                style: TextStyle(color: Colors.white),
+              ),
+             leading: Icon(
+              Icons.category_outlined,
+              color: Colors.white,
+            ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Category()),
                 );
               }),
           ListTile(
-            title: Text('My apartment'),
-            trailing: Icon(Icons.arrow_forward),
+              title: Text(
+                'Map View',
+                style: TextStyle(color: Colors.white),
+              ),
+             leading: Icon(
+              Icons.map_outlined,
+              color: Colors.white,
+            ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Gmap()),
+                );
+              }),
+          ListTile(
+            title: Text('My apartment',
+                style: TextStyle(color: Colors.white)),
+            leading: Icon(
+              Icons.home_outlined,
+              color: Colors.white,
+            ),
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => myhouse())),
           ),
-          Divider(),
           ListTile(
-            title: Text('Complains'),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => myhouse())),
+              leading: Icon(Icons.contact_phone,color: Colors.white,),
+              title: Text('Contact us',style:TextStyle(color: Colors.white),),
+              onTap: () {
+                Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ContactUs()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.read_more,color: Colors.white,),
+              title: Text('Terms & Conditions',style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Terms()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.chrome_reader_mode_rounded,color: Colors.white,),
+              title: Text('About',style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => About()));
+              },
+            ),
+          Divider(
+            color: Colors.white,
+            height: 5,
           ),
-          Divider(),
-          ListTile(
-            title: Text('Close'),
-            trailing: Icon(Icons.close),
-            onTap: () => Navigator.of(context).pop(),
-          ),
+         sharedPreferences.getSignedIn() ? ListTile(
+            title: Text('Log out', style: TextStyle(color: Colors.white)),
+            leading: Icon(
+              Icons.settings_power,
+              color: Colors.white,
+            ),
+            onTap: () => signOutGoogle(),
+          ): SizedBox(),
+         
         ],
       ),
     );
   }
-
   void signInWithGoogle() async {
     var googleSignInAccount = await googleSignIn.signIn();
     var googleSignInAuthentication = await googleSignInAccount.authentication;
@@ -138,8 +223,10 @@ class _DrawState extends State<Draw> {
   }
 
   void signOutGoogle() async {
-    await googleSignIn.signOut();
-
+    await googleSignIn.signOut().then((value) => {
+      sharedPreferences.setSignedIn(false)
+    });
+    
     print("User Sign Out");
   }
 
@@ -155,14 +242,7 @@ class _DrawState extends State<Draw> {
     sharedPreferences.setSignedIn(true);
     sharedPreferences.setFirstname(user.name);
     sharedPreferences.setPhoto(user.photo);
-    setState(() {
-      signed_in = sharedPreferences.getSignedIn();
-    });
+   
   }
 
-  Future<void> initPrefs() async {
-    setState(() {
-      signed_in = sharedPreferences.checkSignedIn();
-    });
-  }
 }

@@ -9,11 +9,11 @@ part of 'stkpush.dart';
 Stkpush _$StkpushFromJson(Map<String, dynamic> json) {
   return Stkpush(
     code: json['code'] as String,
-    message: json['description'] as String,
+    message: json['message'] as String,
   );
 }
 
 Map<String, dynamic> _$StkpushToJson(Stkpush instance) => <String, dynamic>{
       'code': instance.code,
-      'description': instance.message,
+      'message': instance.message,
     };

@@ -1,19 +1,32 @@
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/management/management.dart';
+import 'package:cheki_keja/models/apartment.dart';
+import 'package:cheki_keja/models/category.dart';
+import 'package:cheki_keja/models/company.dart';
+import 'package:cheki_keja/models/features.dart';
+import 'package:cheki_keja/models/reviewClass.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'network.dart';
 
-//const url='http://192.168.43.247/chekiKeja/chekiKeja.php';
-const url = 'http://www.thebuktu.com/chekiKeja/chekiKeja.php';
-const stkpush = 'http://www.thebuktu.com/chekiKeja/lipaNaMpesa.php';
+
+Constants constants = Constants();
+var url = constants.baseurl;
+var stkpush = constants.stkpush;
 
 class NetworkApi {
-  // 5
-  Future<dynamic> getApartments(var id, var userId) async {
-    // 6
+  Future<List<MyApartment>> getApartments(var id, var userId) {
     Network network = Network('$url');
-    // 7
-    var Data = await network.getData(homejson(id, userId));
-    return Data;
+    var data = network.getData(homejson(id, userId));
+    print(data.toString());
+    return data;
+  }
+
+   Future<List<MyApartment>> getSectionCategorys(var id) {
+    Network network = Network('$url');
+    var data = network.getSectionCategorys(sectionCategorysjson(id));
+    print(data.toString());
+    return data;
   }
 
   Future<dynamic> getMyhouse(var userId) async {
@@ -32,7 +45,7 @@ class NetworkApi {
     return Data;
   }
 
-  Future<dynamic> getFavorites(var id, var userId) async {
+  Future<List<MyApartment>> getFavorites(var id, var userId) async {
     // 6
     Network network = Network('$url');
     // 7
@@ -47,15 +60,19 @@ class NetworkApi {
     return Data;
   }
 
-  Future<dynamic> getImages() async {
+  Future<dynamic> getImages(var apartmentId) async {
     // 6
     Network network = Network('$url');
     // 7
-    var Data = await network.getData(imagejson());
+    var Data = await network.getImages(imagejson(apartmentId));
     return Data;
   }
-
-  Future<dynamic> getReviews(String apartmentId, var paginationId) async {
+    Future<dynamic> getApartmentLocations() async {
+    Network network = Network(constants.baseurl);
+    var data = await network.call(locationsjson());
+    return data;
+  }
+  Future<List<Review>> getReviews(String apartmentId, var paginationId) async {
     // 6
     Network network = Network('$url');
     // 7
@@ -83,7 +100,7 @@ class NetworkApi {
     return Data;
   }
 
-  Future<dynamic> getFeatures(String apartmentId) async {
+  Future<List<Features>>getFeatures(String apartmentId) async {
     // 6
     Network network = Network('$url');
     // 7
@@ -91,7 +108,7 @@ class NetworkApi {
     return Data;
   }
 
-  Future<dynamic> getCompany(String ownerId) async {
+  Future<MyCompany> getCompany(String ownerId) async {
     // 6
     Network network = Network('$url');
     // 7
@@ -152,7 +169,7 @@ class NetworkApi {
     return Data;
   }
 
-  Future<dynamic> registerUser(FirebaseUser user) async {
+  Future<dynamic> registerUser(auth.User user) async {
     Network network = Network('$url');
     // 7
     var Data = await network.registerUser(userJson(user));
@@ -164,6 +181,14 @@ class NetworkApi {
       'functionality': 'homePage',
       'pagination': id,
       'user_id': userId,
+    });
+    return json;
+  }
+    String sectionCategorysjson(var id) {
+    var json = jsonEncode(<String, String>{
+      'functionality': 'fetchByCategory',
+      'categoryId': id,
+      'pagination': '0',
     });
     return json;
   }
@@ -222,9 +247,16 @@ class NetworkApi {
     return json;
   }
 
-  String imagejson() {
+  String imagejson(var apartmentId) {
     var json = jsonEncode(<String, String>{
       'functionality': 'retreiveImages',
+      'apartmentId': apartmentId,
+    });
+    return json;
+  }
+  String locationsjson() {
+    var json = jsonEncode(<String, String>{
+      'functionality':'getLocations',
     });
     return json;
   }
@@ -302,11 +334,11 @@ class NetworkApi {
     return json;
   }
 
-  String userJson(FirebaseUser user) {
+  String userJson(auth.User user) {
     var json = jsonEncode(<String, String>{
       'functionality': 'registerUser',
       'email': user.email,
-      'photo': user.photoUrl,
+      'photo': user.photoURL,
       'name': user.displayName,
     });
     return json;

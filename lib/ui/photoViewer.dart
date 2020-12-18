@@ -1,110 +1,84 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:cheki_keja/models/apartment.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
-class photoViewer extends StatefulWidget {
-  List<String> picList = [];
-  List<String> tagList = [];
-  var index;
-  photoViewer(
-      {Key key,
-      @required this.picList,
-      @required this.tagList,
-      @required this.index})
-      : super(key: key);
+class PhotoViewer extends StatefulWidget {
+  PhotoViewer({
+    Key key,
+    this.loadingBuilder,
+    this.backgroundDecoration,
+    this.minScale,
+    this.maxScale,
+    this.initialIndex,
+    this.scrollDirection = Axis.horizontal,
+    @required this.picList,@required this.apartment,
+  }) : pageController = PageController(initialPage: initialIndex);
 
+List<Images> picList = [];
+  MyApartment apartment;
+  final LoadingBuilder loadingBuilder;
+  final Decoration backgroundDecoration;
+  final dynamic minScale;
+  final dynamic maxScale;
+  final int initialIndex;
+  final PageController pageController;
+  final Axis scrollDirection;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<photoViewer> {
-  List<String> picList = [];
-  List<String> tagList = [];
-  var index;
-  
+class _MyHomePageState extends State<PhotoViewer> {
+  List<Images> picList = [];
+  var picIndex = 0;
+  MyApartment apartment;
+  int currentIndex;
+
   @override
   void initState() {
     picList = widget.picList;
-    tagList = widget.tagList;
-    index = widget.index;
-    
+    apartment = widget.apartment;
+    currentIndex = widget.initialIndex;
     super.initState();
+  }
+void onPageChanged(int index) {
+    setState(() {
+      currentIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Photoview'),),
-      body: Container(
-          color: Colors.black,
-          child: Stack(
-            children: <Widget>[
-              CarouselSlider(
-      items: populateImageList(index),
-      options: CarouselOptions(
-          viewportFraction: 0.99,
-          autoPlay: true,
-          autoPlayInterval: Duration(seconds: 3),
-          autoPlayAnimationDuration: Duration(milliseconds: 1000),
-          autoPlayCurve: Curves.slowMiddle,
-          enlargeCenterPage: true,
-          aspectRatio: 0.7,
-          scrollDirection: Axis.horizontal,
-          onPageChanged: (index, reason) {
-            setState(() {
-              
-            });
-          }),
-              ),
-            ],
+    return Container(
+    child: PhotoViewGallery.builder(
+      scrollPhysics: const BouncingScrollPhysics(),
+      builder: (BuildContext context, int index) {
+        return PhotoViewGalleryPageOptions(
+          imageProvider: CachedNetworkImageProvider(constants.path +
+                                      apartment.owner_id +
+                                      constants.folder +widget.picList[index].image),
+          initialScale: PhotoViewComputedScale.contained * 0.8,
+          heroAttributes: PhotoViewHeroAttributes(tag: currentIndex),
+        );
+      },
+      itemCount: picList.length,
+      loadingBuilder: (context, event) => Center(
+        child: Container(
+          width: 20.0,
+          height: 20.0,
+          child: CircularProgressIndicator(
+            value: event == null
+                ? 0
+                : event.cumulativeBytesLoaded / event.expectedTotalBytes,
           ),
         ),
-    );
-  }
-
-  List<Widget> populateImageList(int index) {
-    return picList
-        .map((item) => Container(
-              child: Container(
-                margin: EdgeInsets.all(5.0),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    child: Stack(
-                      children: <Widget>[
-                        
-                        Image(fit: BoxFit.fill,
-                            image: CachedNetworkImageProvider(item)),
-                        Positioned(
-                          bottom: 0.0,
-                          left: 0.0,
-                          right: 0.0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color.fromARGB(200, 0, 0, 0),
-                                  Color.fromARGB(0, 0, 0, 0)
-                                ],
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                              ),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            child: Text(
-                              tagList.elementAt(picList.indexOf(item)),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              ),
-            ))
-        .toList();
+      ),
+      backgroundDecoration: widget.backgroundDecoration,
+      pageController: widget.pageController,
+      onPageChanged: onPageChanged,
+    )
+  );
   }
 }

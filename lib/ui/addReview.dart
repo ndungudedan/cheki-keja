@@ -1,4 +1,5 @@
 import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:cheki_keja/management/management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,8 +16,8 @@ class AddReview extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<AddReview> {
-  var _cleanValue = 0;
-  var _secureValue = 0;
+  var _cleanValue = 5;
+  var _secureValue = 5;
   final _formKey = GlobalKey<FormState>();
   Map<String, String> data = {};
   SharedPreferences prefs;
@@ -44,28 +45,37 @@ class _MyHomePageState extends State<AddReview> {
       ),
       body: ListView(
         children: <Widget>[
-          Container(
-              child: RatingBar.builder(
-            initialRating: 3,
-            minRating: 1,
-            direction: Axis.horizontal,
-            allowHalfRating: true,
-            itemCount: 5,
-            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-            itemBuilder: (context, _) => Icon(
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Card(
+              elevation: 10,
+                            child: Center(
+                              child: RatingBar.builder(
+              initialRating: 3,
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: true,
+              itemCount: 5,
+              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) => Icon(
               Icons.star,
               color: Colors.amber,
-            ),
-            onRatingUpdate: (rating) {
+              ),
+              onRatingUpdate: (rating) {
               data['rating'] = rating.toString();
-            },
-          )),
+              },
+            ),
+                            ),
+            ),
+          ),
           Container(
             child: Column(
               children: <Widget>[
                 Text('How would you rate the cleanliness of the apartment?'),
                 RadioListTile(
-                    title: Text('Very Clean'),
+                    title: Text('Very Clean',style: TextStyle(
+                      color: _cleanValue==5 ? Colors.blue :Colors.black
+                    ),),
                     groupValue: _cleanValue,
                     activeColor: Colors.blue,
                     value: 5,
@@ -77,7 +87,9 @@ class _MyHomePageState extends State<AddReview> {
                       });
                     }),
                 RadioListTile(
-                    title: Text('Clean'),
+                    title: Text('Clean',style: TextStyle(
+                      color: _cleanValue==4 ? Colors.blue :Colors.black
+                    ),),
                     groupValue: _cleanValue,
                     activeColor: Colors.blue,
                     value: 4,
@@ -88,7 +100,9 @@ class _MyHomePageState extends State<AddReview> {
                       });
                     }),
                 RadioListTile(
-                    title: Text('Dirty'),
+                    title: Text('Dirty',style: TextStyle(
+                      color: _cleanValue==3 ? Colors.blue :Colors.black
+                    ),),
                     groupValue: _cleanValue,
                     activeColor: Colors.blue,
                     value: 3,
@@ -99,7 +113,9 @@ class _MyHomePageState extends State<AddReview> {
                       });
                     }),
                 RadioListTile(
-                    title: Text('Very Dirty'),
+                    title: Text('Very Dirty',style: TextStyle(
+                      color: _cleanValue==2 ? Colors.blue :Colors.black
+                    ),),
                     groupValue: _cleanValue,
                     activeColor: Colors.blue,
                     value: 2,
@@ -117,7 +133,9 @@ class _MyHomePageState extends State<AddReview> {
               children: <Widget>[
                 Text('How would you rate the security of the apartment?'),
                 RadioListTile(
-                    title: Text('Very Secure'),
+                    title: Text('Very Secure',style: TextStyle(
+                      color: _secureValue==5 ? Colors.blue :Colors.black
+                    ),),
                     groupValue: _secureValue,
                     value: 5,
                     selected: true,
@@ -129,7 +147,9 @@ class _MyHomePageState extends State<AddReview> {
                       });
                     }),
                 RadioListTile(
-                    title: Text('Secure'),
+                    title: Text('Secure',style: TextStyle(
+                      color: _secureValue==4 ? Colors.blue :Colors.black
+                    ),),
                     groupValue: _secureValue,
                     value: 4,
                     activeColor: Colors.blue,
@@ -140,7 +160,9 @@ class _MyHomePageState extends State<AddReview> {
                       });
                     }),
                 RadioListTile(
-                    title: Text('Insecure'),
+                    title: Text('Insecure',style: TextStyle(
+                      color: _secureValue==3 ? Colors.blue :Colors.black
+                    ),),
                     groupValue: _secureValue,
                     value: 3,
                     activeColor: Colors.blue,
@@ -151,7 +173,9 @@ class _MyHomePageState extends State<AddReview> {
                       });
                     }),
                 RadioListTile(
-                    title: Text('Very Insecure'),
+                    title: Text('Very Insecure',style: TextStyle(
+                      color: _secureValue==2 ? Colors.blue :Colors.black
+                    ),),
                     groupValue: _secureValue,
                     value: 2,
                     activeColor: Colors.blue,
@@ -167,35 +191,43 @@ class _MyHomePageState extends State<AddReview> {
           Container(
             child: Form(
               key: _formKey,
-              child: TextFormField(
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-                onChanged: (text) {
-                  data['review'] = text;
-                },
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      borderSide: BorderSide(),
-                                    ), 
-                    hintText: 'Write Review'),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  maxLines: 5,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                  onChanged: (text) {
+                    data['review'] = text;
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        borderSide: BorderSide(),
+                                      ), 
+                      hintText: 'Write Review'),
+                ),
               ),
             ),
           ),
-          OutlineButton(
-            child: Text('Submit'),
-            onPressed: () async {
-              if (_formKey.currentState.validate()) {
-                data['userId'] = prefs.getString('userId');
-                var result = await NetworkApi().addReview(data);
-                print(result);
-                Navigator.pop(context);
-              }
-            },
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: FlatButton(
+              color: Color.fromARGB(255, 238, 133, 57),
+              child: Text('Submit',style: TextStyle(fontSize: 20,color: Colors.white),),
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  data['userId'] = sharedPreferences.getUserId();
+                  var result = await NetworkApi().addReview(data);
+                  print(result);
+                  Navigator.pop(context);
+                }
+              },
+            ),
           )
         ],
       ),

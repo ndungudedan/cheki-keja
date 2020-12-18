@@ -1,121 +1,382 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cheki_keja/blocs/category/bedsittercatbloc.dart';
+import 'package:cheki_keja/blocs/category/doublecatbloc.dart';
+import 'package:cheki_keja/blocs/category/onebedcatbloc.dart';
+import 'package:cheki_keja/blocs/category/singlecatbloc.dart';
+import 'package:cheki_keja/blocs/category/threebedcatbloc.dart';
+import 'package:cheki_keja/blocs/category/twobedcatbloc.dart';
+import 'package:cheki_keja/models/apartment.dart';
+import 'package:cheki_keja/ui/apartdetails.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:video_player/video_player.dart';
-import 'package:cheki_keja/models/locations.dart' as locations;
+import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 
-class category extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CATEGORY',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'CATEGORY',),
-    );
-  }
-
-}
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+class Category extends StatefulWidget {
+  Category({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
-
-    }
+}
   
-  class _MyHomePageState extends State<MyHomePage>{
-  int _selectedIndex = 0;
-  VideoPlayerController _controller;
-    final List<String> picList = [
-         'assets/images/red0.jpg',
-        'assets/images/red1.jpg',
-        'assets/images/red2.jpg',
-        'assets/images/red3.jpg',
-        'assets/images/red4.jpg' 
-];
-  Future<void> _initializeVideoPlayerFuture;
-  final List<String> imageList = [
-  'https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg',
-  'https://cdn.pixabay.com/photo/2017/12/13/00/23/christmas-3015776_960_720.jpg',
-  'https://cdn.pixabay.com/photo/2019/12/19/10/55/christmas-market-4705877_960_720.jpg',
-  'https://cdn.pixabay.com/photo/2019/12/20/00/03/road-4707345_960_720.jpg',
-  'https://cdn.pixabay.com/photo/2019/12/22/04/18/x-mas-4711785__340.jpg',
-  'https://cdn.pixabay.com/photo/2016/11/22/07/09/spruce-1848543__340.jpg'
-];
-  final Map<String, Marker> _markers = {};
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    final googleOffices = await locations.getGoogleOffices();
-    setState(() {
-      _markers.clear();
-      for (final office in googleOffices.offices) {
-        final marker = Marker(
-          markerId: MarkerId(office.name),
-          position: LatLng(office.lat, office.lng),
-          infoWindow: InfoWindow(
-            title: office.name,
-            snippet: office.address,
-          ),
-        );
-        _markers[office.name] = marker;
-      }
-    });
-  }
+  class _MyHomePageState extends State<Category>{
+    SingleCatBloc singleCatBloc;
+  DoubleCatBloc doubleCatBloc;
+  BedSitterCatBloc bedSitterCatBloc;
+  OneBedCatBloc oneBedCatBloc;
+  TwoBedCatBloc twoBedCatBloc;
+  ThreeBedCatBloc threeBedCatBloc;
    
    @override
-  void initState() { 
-
-    _controller = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-    );
-    _initializeVideoPlayerFuture = _controller.initialize();
-    _controller.setLooping(true);
-
+  void initState() {
     super.initState();
+    singleCatBloc = SingleCatBloc();
+    doubleCatBloc = DoubleCatBloc();
+    bedSitterCatBloc = BedSitterCatBloc();
+    oneBedCatBloc = OneBedCatBloc();
+    twoBedCatBloc = TwoBedCatBloc();
+    threeBedCatBloc = ThreeBedCatBloc();
+    singleCatBloc.fetchData(ApartmentCategory.single_id);
+    doubleCatBloc.fetchData(ApartmentCategory.double_id);
+    bedSitterCatBloc.fetchData(ApartmentCategory.bedsitter_id);
+    oneBedCatBloc.fetchData(ApartmentCategory.one_bed_id);
+    twoBedCatBloc.fetchData(ApartmentCategory.two_bed_id);
+    threeBedCatBloc.fetchData(ApartmentCategory.three_bed_id);
   }
  
    @override
   void dispose() {
-
-    _controller.dispose();
-
     super.dispose();
+    singleCatBloc.dispose();
+    doubleCatBloc.dispose();
+    bedSitterCatBloc.dispose();
+    oneBedCatBloc.dispose();
+    twoBedCatBloc.dispose();
+    threeBedCatBloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body:GridView.count( 
-          primary: true,
-          crossAxisCount: 2,
-          childAspectRatio: 6.0,
-          children: List.generate(
-            picList.length, (index){
-              return featuresCard(picList.elementAt(index));
-                      }),
+    return DefaultTabController(
+      length: 6,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Category'),
+            //backgroundColor: Colors.white,
+            elevation: 0,
+            bottom: TabBar(
+              isScrollable: true,
+              unselectedLabelColor: Colors.white,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                  color: Colors.white),
+            tabs: [
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("SINGLES"),
+                ),
               ),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("DOUBLES"),
+                ),
+              ),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("BEDSITTER"),
+                ),
+              ),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("ONE BED"),
+                ),
+              ),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("TWO BED"),
+                ),
+              ),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("THREE BED"),
+                ),
+              ),
+            ]),
+          ),
+      body:TabBarView(     children: [
+                            StreamBuilder(
+                              stream: singleCatBloc.result,
+                              builder: (context,
+                                  AsyncSnapshot<List<MyApartment>> snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      return PostWidget(
+                                          snapshot.data.elementAt(index),
+                                          index);
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            ),
+                            StreamBuilder(
+                              stream: doubleCatBloc.result,
+                              builder: (context,
+                                  AsyncSnapshot<List<MyApartment>> snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      return PostWidget(snapshot.data.elementAt(index),
+                                          index);
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            ),
+                            StreamBuilder(
+                              stream: bedSitterCatBloc.result,
+                              builder: (context,
+                                  AsyncSnapshot<List<MyApartment>> snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      return PostWidget(snapshot.data.elementAt(index),
+                                          index);
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            ),
+                            StreamBuilder(
+                              stream: oneBedCatBloc.result,
+                              builder: (context,
+                                  AsyncSnapshot<List<MyApartment>> snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      return PostWidget(
+                                          snapshot.data.elementAt(index),
+                                          index);
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            ),
+                            StreamBuilder(
+                              stream: twoBedCatBloc.result,
+                              builder: (context,
+                                  AsyncSnapshot<List<MyApartment>> snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      return PostWidget(
+                                          snapshot.data.elementAt(index),
+                                          index);
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            ),
+                            StreamBuilder(
+                              stream: threeBedCatBloc.result,
+                              builder: (context,
+                                  AsyncSnapshot<List<MyApartment>> snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      return PostWidget(
+                                          snapshot.data.elementAt(index),
+                                          index);
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            ),
+                          ]),
       
+    )
     );
   }
- Row featuresCard(var feature) {
-              return Row(              
+    Container PostWidget(MyApartment myApartment, var index) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Apartdetails(apartment: myApartment)));
+            },
+            child: Card(
+              child: Column(
                 children: <Widget>[
-                Icon(Icons.star),
-                Container(
-                  child: Text(feature,
-                  style: TextStyle(
-                  color: Colors.lightBlueAccent,
-
-                ),)                
+                  ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: CachedNetworkImage(
+                        imageUrl: constants.path +
+                            myApartment.owner_id +
+                            constants.folder +
+                            myApartment.owner_logo,
+                        placeholder: (context, url) => Container(
+                            alignment: Alignment(0.0, 2.0),
+                            child:
+                                Center(child: CircularProgressIndicator())),
+                        errorWidget: (context, url, error) => Container(
+                            alignment: Alignment(0.0, 2.0),
+                            child: Center(child: Icon(Icons.error))),
+                      ),
+                    ),
+                    title: Text(
+                      myApartment.owner_name,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                    ),
+                    subtitle: Text(
+                      myApartment.title,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                    ),
+                    trailing: RatingBarIndicator(
+                      rating: double.parse(myApartment.rating),
+                      itemBuilder: (context, index) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      itemCount: 5,
+                      itemSize: 20.0,
+                      direction: Axis.horizontal,
+                    ),
+                  ),
+                  Center(
+                    child: Container(
+                      height: 300,
+                      width: MediaQuery.of(context).size.width,
+                      child: CachedNetworkImage(
+                        imageUrl: constants.path +
+                            myApartment.owner_id +
+                            constants.folder +
+                            myApartment.banner.first.banner,
+                        fit: BoxFit.fill,
+                        placeholder: (context, url) => Container(
+                            alignment: Alignment(0.0, 2.0),
+                            child: Center(child: CircularProgressIndicator())),
+                        errorWidget: (context, url, error) => Container(
+                            alignment: Alignment(0.0, 2.0),
+                            child: Center(child: Icon(Icons.error))),
+                      ),
+                    ),
                   )
-              ],
-              );
-            }
-  }
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  } }

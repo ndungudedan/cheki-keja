@@ -1,4 +1,4 @@
-import 'package:cheki_keja/ui/home.dart';
+import 'package:cheki_keja/ui/index.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -13,7 +13,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   void _onIntroEnd(context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => home()),
+      MaterialPageRoute(builder: (_) => Index()),
     );
   }
 

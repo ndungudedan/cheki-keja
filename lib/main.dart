@@ -1,5 +1,5 @@
 import 'package:cheki_keja/management/management.dart';
-import 'package:cheki_keja/ui/home.dart';
+import 'package:cheki_keja/ui/index.dart';
 import 'package:cheki_keja/ui/introduction.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,11 +32,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primaryColor: Color.fromARGB(255, 238, 133, 57),
+        accentColor:  Color.fromARGB(255, 250, 180, 70),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-      home: firsttime ? OnBoardingPage() : home(),
+      home: firsttime ? OnBoardingPage() : Index(),
     );
   }
 }
