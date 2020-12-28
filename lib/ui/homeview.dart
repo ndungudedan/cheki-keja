@@ -10,6 +10,7 @@ import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/apartment.dart';
 import 'package:cheki_keja/models/status.dart';
 import 'package:cheki_keja/ui/apartdetails.dart';
+import 'package:cheki_keja/ui/reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -232,9 +233,15 @@ class _HomePageState extends State<HomeView> {
                     IconButton(
                         icon: Icon(Icons.comment),
                         onPressed: () {
-                          setState(() {});
+
                         }),
                     Text(myApartment.comments ),
+                    IconButton(
+                        icon: Icon(Icons.location_on_outlined,color: Colors.amber,),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Reviews(apartmentId: myApartment.id,)));
+                        }),
                   ],
                 ),
               ),

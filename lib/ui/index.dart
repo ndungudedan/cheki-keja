@@ -77,8 +77,8 @@ class _MyHomePageState extends State<Index> with SingleTickerProviderStateMixin 
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
               colors: [
-            Color.fromARGB(255, 250, 180, 70),
-            Color.fromARGB(255, 238, 133, 57),
+            Color.fromARGB(255, 255, 161, 46),
+            Color.fromARGB(255, 255, 101, 6),
           ])),
       child: Stack(
         children: <Widget>[

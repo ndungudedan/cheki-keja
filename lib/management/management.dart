@@ -34,67 +34,67 @@ class SharedPrefsManagement {
     return sharedPreferences.containsKey(SharedPrefs.email);
   }
 
-  setEmail(var val) {
+  void setEmail(var val) {
     sharedPreferences.setString(SharedPrefs.email, val);
   }
   
-  setPassword(var val) {
+  void setPassword(var val) {
     sharedPreferences.setString(SharedPrefs.password, val);
   }
 
-  setCompanyId(var val) {
+  void setCompanyId(var val) {
     sharedPreferences.setString(SharedPrefs.companyid, val);
   }
 
-  setUserId(var val) {
+  void setUserId(var val) {
     sharedPreferences.setString(SharedPrefs.userid, val);
   }
 
-  setPhone(var val) {
+  void setPhone(var val) {
     sharedPreferences.setString(SharedPrefs.phone, val);
   }
 
-  setPhoto(var val) {
+  void setPhoto(var val) {
     sharedPreferences.setString(SharedPrefs.photo, val);
   }
 
-  setSurname(var val) {
+  void setSurname(var val) {
     sharedPreferences.setString(SharedPrefs.surname, val);
   }
 
-  setFirstname(var val) {
+  void setFirstname(var val) {
     sharedPreferences.setString(SharedPrefs.firstname, val);
   }
 
-  setFirstLogin(var val) {
+  void setFirstLogin(var val) {
     sharedPreferences.setBool(SharedPrefs.firstlogin, val);
   }
 
-  setSignedIn(var val) {
+  void setSignedIn(var val) {
     sharedPreferences.setBool(SharedPrefs.signedIn, val);
   }
 
-  setCompanyName(var val) {
+  void setCompanyName(var val) {
     sharedPreferences.setString(SharedPrefs.companyname, val);
   }
 
-  setCompanyPhone(var val) {
+  void setCompanyPhone(var val) {
     sharedPreferences.setString(SharedPrefs.companyphone, val);
   }
 
-  setCompanyAddress(var val) {
+  void setCompanyAddress(var val) {
     sharedPreferences.setString(SharedPrefs.companyaddress, val);
   }
 
-  setCompanyEmail(var val) {
+  void setCompanyEmail(var val) {
     sharedPreferences.setString(SharedPrefs.companyemail, val);
   }
 
-  setCompanyLocation(var val) {
+  void setCompanyLocation(var val) {
     sharedPreferences.setString(SharedPrefs.companylocation, val);
   }
 
-  setCompanyPhoto(String image){
+  void setCompanyPhoto(String image){
     sharedPreferences.setString(SharedPrefs.companyphoto, image);
   }
 

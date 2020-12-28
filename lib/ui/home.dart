@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.only(top: 50),
-          color: Color.fromARGB(255, 238, 133, 57),
+          color: Color.fromARGB(255, 255, 101, 6),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -90,9 +90,9 @@ class MyApartment {
     "space",
     "latitude",
     "longitude",
-    "likes",
-    "comments",
-    "rating"
+    'likes',
+    'comments',
+    'rating'
   ];
 
   Map<String, dynamic> toMap() {
