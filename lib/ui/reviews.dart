@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class Reviews extends StatefulWidget {
   var apartmentId;
   List<Review> reviews;
-  Reviews({Key key, this.apartmentId, @required this.reviews})
+  Reviews({Key key, this.apartmentId, this.reviews})
       : super(key: key);
 
   final String title = 'apartmentDetails';

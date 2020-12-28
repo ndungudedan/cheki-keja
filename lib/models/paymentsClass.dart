@@ -50,6 +50,7 @@ class PaymentsList {
 @JsonSerializable()
 class Myhouse {
   PaymentsList paymentsList;
+  ArrearsList arrearsList;
   Details details;
 
   Myhouse({

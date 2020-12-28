@@ -5,9 +5,11 @@ import 'package:cheki_keja/models/apartment.dart';
 import 'package:cheki_keja/models/category.dart';
 import 'package:cheki_keja/models/company.dart';
 import 'package:cheki_keja/models/features.dart';
+import 'package:cheki_keja/models/paymentsClass.dart';
 import 'package:cheki_keja/models/reviewClass.dart';
 import 'package:cheki_keja/ui/reviews.dart';
 import 'package:http/http.dart' as http;
+import 'package:moor/moor.dart';
 import 'package:path/path.dart';
 import 'package:dio/dio.dart';
 
@@ -272,17 +274,17 @@ class Network {
     }
   }
 
-  Future getMyhouse(String json) async {
+  Future<Myhouse> getMyhouse(String value) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: json,
+      body: value,
     );
     if (response.statusCode == 200) {
-      return response.body;
+      return Myhouse.fromJson(json.decode(response.body));
     } else {
       print(response.statusCode);
     }
