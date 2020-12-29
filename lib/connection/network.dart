@@ -284,6 +284,7 @@ class Network {
       body: value,
     );
     if (response.statusCode == 200) {
+      print(response.body);
       return Myhouse.fromJson(json.decode(response.body));
     } else {
       print(response.statusCode);

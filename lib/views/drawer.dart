@@ -23,7 +23,6 @@ class Draw extends StatefulWidget {
   const Draw(
       {Key key,})
       : super(key: key);
-  //final bool iscollapsed;
 
   @override
   _DrawState createState() => _DrawState();
@@ -51,6 +50,10 @@ class _DrawState extends State<Draw> {
           sharedPreferences.getSignedIn()
               ? Center(
                   child: UserAccountsDrawerHeader(
+                    margin: EdgeInsets.all(0),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent
+                    ),
                     currentAccountPicture:
                         sharedPreferences.getPhoto() != null
                             ? CircleAvatar(

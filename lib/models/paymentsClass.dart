@@ -56,6 +56,7 @@ class Myhouse {
   Myhouse({
     this.paymentsList,
     this.details,
+    this.arrearsList,
   });
 
   factory Myhouse.fromJson(Map<String, dynamic> json) =>
@@ -114,6 +115,7 @@ class Details {
   String rating;
   String payed;
   String deposit;
+  String unit;
 
   Details({
     this.id,
@@ -125,6 +127,7 @@ class Details {
     this.owner_location,
     this.owner_phone,
     this.category,
+    this.unit,
     this.deposit,
     this.price,
     this.title,

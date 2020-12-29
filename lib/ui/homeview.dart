@@ -64,16 +64,18 @@ class _HomePageState extends State<HomeView> {
               child: Text('no posts'),
             );
           }
-          return ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return index >= state.posts.length
-                  ? BottomLoader()
-                  : PostWidget(state.posts[index], index);
-            },
-            itemCount: state.hasReachedMax
-                ? state.posts.length
-                : state.posts.length + 1,
-            controller: _scrollController,
+          return Container(
+            child: ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return index >= state.posts.length
+                    ? BottomLoader()
+                    : PostWidget(state.posts[index], index);
+              },
+              itemCount: state.hasReachedMax
+                  ? state.posts.length
+                  : state.posts.length + 1,
+              controller: _scrollController,
+            ),
           );
         }
       },
@@ -111,6 +113,8 @@ class _HomePageState extends State<HomeView> {
 
   Container PostWidget(MyApartment myApartment, var index) {
     return Container(
+      color: Colors.white,
+      margin: EdgeInsets.fromLTRB(0, 2, 0, 2),
       child: Column(
         children: <Widget>[
           GestureDetector(
@@ -244,6 +248,8 @@ class _HomePageState extends State<HomeView> {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ViewOnMap(
+                  title: myApartment.title,
+                  address: myApartment.address,
                   latitude: myApartment.latitude,
                   longitude: myApartment.longitude,
                   )));

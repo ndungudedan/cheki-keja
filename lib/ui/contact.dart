@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cheki_keja/models/complainsClass.dart';
+import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,6 +49,9 @@ class _MyHomePageState extends State<Contact> {
       body: ListView(
         shrinkWrap: true,
         children: <Widget>[
+          ConnectionCallback(
+          onlineCall: () {},
+        ),
           Card(
             margin: EdgeInsets.all(10),
             elevation: 5,

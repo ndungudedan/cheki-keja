@@ -25,6 +25,14 @@ class _MyHomePageState extends State<ConnectionCallback> {
       //offlineCallback: offlineCall,
       showOfflineBanner: true,
       builder: (context, isOnline) => Center(),
+      offlineBanner: Card(
+        color: Colors.black,
+        elevation: 10,
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text('no internet connection',style: TextStyle(color: Colors.white),),
+        ),
+      ),
     );
   }
 }

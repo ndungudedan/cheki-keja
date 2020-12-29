@@ -56,11 +56,15 @@ Myhouse _$MyhouseFromJson(Map<String, dynamic> json) {
     details: json['details'] == null
         ? null
         : Details.fromJson(json['details'] as Map<String, dynamic>),
+    arrearsList: json['arrearsList'] == null
+        ? null
+        : ArrearsList.fromJson(json['arrearsList'] as List),
   );
 }
 
 Map<String, dynamic> _$MyhouseToJson(Myhouse instance) => <String, dynamic>{
       'paymentsList': instance.paymentsList,
+      'arrearsList': instance.arrearsList,
       'details': instance.details,
     };
 
@@ -105,6 +109,7 @@ Details _$DetailsFromJson(Map<String, dynamic> json) {
     owner_location: json['owner_location'] as String,
     owner_phone: json['owner_phone'] as String,
     category: json['category'] as String,
+    unit: json['unit'] as String,
     deposit: json['deposit'] as String,
     price: json['price'] as String,
     title: json['title'] as String,
@@ -128,4 +133,5 @@ Map<String, dynamic> _$DetailsToJson(Details instance) => <String, dynamic>{
       'rating': instance.rating,
       'payed': instance.payed,
       'deposit': instance.deposit,
+      'unit': instance.unit,
     };

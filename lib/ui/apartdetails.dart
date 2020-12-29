@@ -114,15 +114,15 @@ class _MyHomePageState extends State<Apartdetails> {
                 isLiked: apartment.liked.isNotEmpty,
                 size: 30,
                 circleColor:
-                    CircleColor(start: Colors.redAccent, end: Colors.redAccent),
+                    CircleColor(start: Colors.white, end: Colors.white),
                 bubblesColor: BubblesColor(
-                  dotPrimaryColor: Colors.red,
-                  dotSecondaryColor: Colors.redAccent,
+                  dotPrimaryColor: Colors.white,
+                  dotSecondaryColor: Colors.white70,
                 ),
                 likeBuilder: (bool isLiked) {
                   return Icon(
                     Icons.favorite,
-                    color: isLiked ? Colors.red : Colors.white,
+                    color: isLiked ? Colors.white : Colors.grey,
                     size: 30,
                   );
                 },
@@ -159,6 +159,9 @@ class _MyHomePageState extends State<Apartdetails> {
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         children: <Widget>[
+          ConnectionCallback(
+          onlineCall: () {},
+        ),
           Center(
             child: apartmentDetails(apartment),
           ),

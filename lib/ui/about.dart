@@ -1,4 +1,5 @@
 import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -36,6 +37,9 @@ class About extends StatelessWidget {
         child: Container(
           child: ListView(
             children: <Widget>[
+              ConnectionCallback(
+          onlineCall: () {},
+        ),
               FutureBuilder<String>(
                 future: makePostRequest(),
                 builder: (context, snapshot) {

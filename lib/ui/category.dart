@@ -63,11 +63,11 @@ class Category extends StatefulWidget {
         child: Scaffold(
           appBar: AppBar(
             title: Text('Category'),
-            //backgroundColor: Colors.white,
             elevation: 0,
             bottom: TabBar(
               isScrollable: true,
               unselectedLabelColor: Colors.white,
+              labelColor: Color.fromARGB(255, 255, 101, 6),
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.only(

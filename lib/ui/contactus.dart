@@ -1,4 +1,5 @@
 import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,6 +23,9 @@ class ContactUs extends StatelessWidget {
           child: Container(
             child: ListView(
               children: <Widget>[
+                ConnectionCallback(
+          onlineCall: () {},
+        ),
                 ListTile(
                   title: Text('Phone'),
                   leading: Icon(Icons.call,color: Colors.red,),

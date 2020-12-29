@@ -1,5 +1,6 @@
 import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/management/management.dart';
+import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,6 +46,9 @@ class _MyHomePageState extends State<AddReview> {
       ),
       body: ListView(
         children: <Widget>[
+          ConnectionCallback(
+          onlineCall: () {},
+        ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Card(

@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:cheki_keja/blocs/favorites/favoritebloc.dart';
 import 'package:cheki_keja/blocs/favorites/favoriteevent.dart';
 import 'package:cheki_keja/blocs/favorites/favoritestate.dart';
-import 'package:cheki_keja/blocs/featurebloc.dart';
 import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/constants/constants.dart';
 import 'package:cheki_keja/models/apartment.dart';
 import 'package:cheki_keja/models/status.dart';
 import 'package:cheki_keja/ui/apartdetails.dart';
+import 'package:cheki_keja/ui/reviews.dart';
+import 'package:cheki_keja/ui/viewonmap.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
-import 'package:cheki_keja/views/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -210,58 +210,70 @@ class _MyHomePageState extends State<FavoriteView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Center(
-                                    child: ButtonBar(
-                                      children: <Widget>[
-                                       
-                    LikeButton(
-                      isLiked: myApartment.liked.isNotEmpty ,
-                      size: 30,
-                      circleColor: CircleColor(
-                          start: Colors.redAccent, end: Colors.redAccent),
-                      bubblesColor: BubblesColor(
-                        dotPrimaryColor: Colors.red,
-                        dotSecondaryColor: Colors.redAccent,
-                      ),
-                      likeBuilder: (bool isLiked) {
-                        return Icon(
-                          Icons.favorite,
-                          color: isLiked ? Colors.red : Colors.grey,
-                          size: 30,
-                        );
-                      },
-                      likeCount: int.tryParse(myApartment.likes),
-                      countBuilder: (int count, bool isLiked, String text) {
-                        var color = isLiked ? Colors.red : Colors.grey;
-                        Widget result;
-                        if (count == 0) {
-                          result = Text(
-                            "love",
-                            style: TextStyle(color: color),
-                          );
-                        } else {
-                          result = Text(
-                            text,
-                            style: TextStyle(color: color),
-                          );
-                        }
-                        return result;
-                      },
-                      onTap: (isLiked) {
-                        if (!isLiked) {
-                         return likes(myApartment.id);
-                        } else {
-                          return dislike(myApartment.id);
-                        }
-                      },
+                                    child: ButtonBar( 
+                alignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  LikeButton(
+                    isLiked: myApartment.liked.isNotEmpty ,
+                    size: 30,
+                    circleColor: CircleColor(
+                        start: Colors.redAccent, end: Colors.redAccent),
+                    bubblesColor: BubblesColor(
+                      dotPrimaryColor: Colors.red,
+                      dotSecondaryColor: Colors.redAccent,
                     ),
-                    IconButton(
-                        icon: Icon(Icons.comment),
-                        onPressed: () {
-                          setState(() {});
-                        }),
-                    Text(myApartment.comments ),
-                                      ],
-                                    ),
+                    likeBuilder: (bool isLiked) {
+                      return Icon(
+                        Icons.favorite,
+                        color: isLiked ? Colors.red : Colors.grey,
+                        size: 30,
+                      );
+                    },
+                    likeCount: int.tryParse(myApartment.likes),
+                    countBuilder: (int count, bool isLiked, String text) {
+                      var color = isLiked ? Colors.red : Colors.grey;
+                      Widget result;
+                      if (count == 0) {
+                        result = Text(
+                          "love",
+                          style: TextStyle(color: color),
+                        );
+                      } else {
+                        result = Text(
+                          text,
+                          style: TextStyle(color: color),
+                        );
+                      }
+                      return result;
+                    },
+                    onTap: (isLiked) {
+                      if (!isLiked) {
+                       return likes(myApartment.id);
+                      } else {
+                        return dislike(myApartment.id);
+                      }
+                    },
+                  ),
+                  IconButton(
+                      icon: Icon(Icons.comment,color: Colors.amber,),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Reviews(apartmentId: myApartment.id,)));
+                      }),
+                  Text(myApartment.comments ),
+                  IconButton(
+                      icon: Icon(Icons.location_on_outlined,color: Colors.amber,),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ViewOnMap(
+                  title: myApartment.title,
+                  address: myApartment.address,
+                  latitude: myApartment.latitude,
+                  longitude: myApartment.longitude,
+                  )));
+                      }),
+                ],
+              ),
                                   ),
                                 ],
                               ),
