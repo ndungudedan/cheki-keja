@@ -13,21 +13,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  bool firsttime =false;
-
-  Future<void> initPrefs() async {
-    var prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('firsttime')) {
-      prefs.setBool('firsttime', false);
-      firsttime = true;
-    } else {
-      firsttime = prefs.getBool('firsttime');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    initPrefs();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -37,7 +25,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-      home: firsttime ? OnBoardingPage() : Index(),
+      home: sharedPreferences.getFirstLogin() ? OnBoardingPage() : Index(),
     );
   }
 }
