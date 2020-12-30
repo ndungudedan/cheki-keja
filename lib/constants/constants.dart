@@ -4,7 +4,6 @@ class Constants {
   final String baseurl = 'http://192.168.43.188/chekiKeja/chekiKeja.php/';
   final String uploadurl = 'http://192.168.43.188/chekiKeja/tengenezaKeja.php/';
   final String updateurl = 'http://192.168.43.188/chekiKeja/updateKeja.php/';
-  //final String path = 'http://www.thebuktu.com/chekiKeja/uploads/';
   final String path = 'http://192.168.43.188/chekiKeja/uploads/';
   final String stkpush = 'http://www.thebuktu.com/chekiKeja/lipaNaMpesa.php';
   final String termsurl = 'http://192.168.43.188/chekiKeja/uploads/terms.rtf';

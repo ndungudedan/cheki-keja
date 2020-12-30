@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:like_button/like_button.dart';
+import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Apartdetails extends StatefulWidget {
@@ -47,7 +48,6 @@ class _MyHomePageState extends State<Apartdetails> {
   var features;
   var phone;
   var paginationId = '0';
-  bool signed_in = false;
   FeatureBloc feature_bloc;
   CompanyBloc company_bloc;
   ImagesBloc images_bloc;
@@ -84,7 +84,6 @@ class _MyHomePageState extends State<Apartdetails> {
     images_bloc.fetchImages(apartmentId);
     company_bloc.fetchCompany(ownerId);
     review_bloc.fetchReviews(apartmentId, paginationId);
-    getPrefs();
   }
 
   @override
@@ -458,29 +457,57 @@ class _MyHomePageState extends State<Apartdetails> {
           ),
         ],
       ),
-      /*  floatingActionButton: Builder(
+        floatingActionButton: Builder(
         builder: (context) => floatingButton(
           onPressed: () {
-            if (signed_in) {
+            if (sharedPreferences.getSignedIn()) {
               lipaNaMpesa();
             } else {
               Scaffold.of(context).showSnackBar(snack('Please Sign in first'));
             }
           },
         ),
-      ), */
+      ), 
     );
   }
 
-  void lipaNaMpesa() async {
-    var result = await NetworkApi().lipaNaMpesa(
-        phone, apartment.deposit, userId, apartmentId, ownerId, 'deposit');
-    print(result);
-    var Map = json.decode(result);
-    setState(() {
-      stkpush = Stkpush.fromJson(Map);
-      Scaffold.of(context).showSnackBar(snack(stkpush.message));
-    });
+  Future<void> lipaNaMpesa() async {
+    MpesaFlutterPlugin.setConsumerKey('nKhZGNTodZvLjbgSH5yx309SQMS9eAe4');
+    MpesaFlutterPlugin.setConsumerSecret('YX9ZO1JZNy5vQSUV');
+     dynamic transactionInitialisation;
+     var queryParameters = {
+  'userId': sharedPreferences.getUserId(),
+  'apartmentId': apartment.id,
+  'type': 'deposit',
+  'ownerId': apartment.owner_id,
+};
+ //Wrap it with a try-catch
+  try {
+  //Run it
+  transactionInitialisation =
+          await MpesaFlutterPlugin.initializeMpesaSTKPush(
+                  businessShortCode: '174379',
+                  transactionType: TransactionType.CustomerPayBillOnline,
+                  amount: 1,
+                  partyA: '254700314700',
+                  partyB: '174379',
+                  callBackURL: Uri(scheme: 'https', host : 'adminkeja.romeofoxalpha.co.ke', 
+                  path: '/chekiKeja/confirmation.php',queryParameters: queryParameters),
+                  accountReference: 'please work',
+                  phoneNumber: '254700314700',
+                  baseUri: Uri(scheme: 'https', host: 'sandbox.safaricom.co.ke'),
+                  transactionDesc: 'booking',
+                  passKey: 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919');
+  print('TRANSACTION RESULT: ' + transactionInitialisation.toString());
+
+      /*Update your db with the init data received from initialization response,
+      * Remaining bit will be sent via callback url*/
+      return transactionInitialisation;
+  } catch (e) {
+  //you can implement your exception handling here.
+  //Network unreachability is a sure exception.
+  print(e.getMessage());
+  }
   }
 
   SnackBar snack(String message) {
@@ -541,16 +568,6 @@ class _MyHomePageState extends State<Apartdetails> {
         ],
       ),
     );
-  }
-
-  Future<void> getPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('issignedin')) {
-      await prefs.setBool('issignedin', false);
-      signed_in = false;
-    } else {
-      signed_in = prefs.getBool('issignedin');
-    }
   }
 
   Future<bool> likes(var id) async {
