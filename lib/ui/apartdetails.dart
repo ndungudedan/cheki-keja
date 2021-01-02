@@ -478,7 +478,7 @@ class _MyHomePageState extends State<Apartdetails> {
      var queryParameters = {
   'userId': sharedPreferences.getUserId(),
   'apartmentId': apartment.id,
-  'type': 'deposit',
+  'type': constants.paymentDeposit,
   'ownerId': apartment.owner_id,
 };
  //Wrap it with a try-catch
@@ -486,18 +486,18 @@ class _MyHomePageState extends State<Apartdetails> {
   //Run it
   transactionInitialisation =
           await MpesaFlutterPlugin.initializeMpesaSTKPush(
-                  businessShortCode: '174379',
+                  businessShortCode: constants.bizNo,
                   transactionType: TransactionType.CustomerPayBillOnline,
                   amount: 1,
-                  partyA: '254700314700',
-                  partyB: '174379',
+                  partyA: constants.phoneNo,
+                  partyB: constants.bizNo,
                   callBackURL: Uri(scheme: 'https', host : 'adminkeja.romeofoxalpha.co.ke', 
                   path: '/chekiKeja/confirmation.php',queryParameters: queryParameters),
                   accountReference: 'please work',
-                  phoneNumber: '254700314700',
+                  phoneNumber: constants.phoneNo,
                   baseUri: Uri(scheme: 'https', host: 'sandbox.safaricom.co.ke'),
                   transactionDesc: 'booking',
-                  passKey: 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919');
+                  passKey: constants.passKey);
   print('TRANSACTION RESULT: ' + transactionInitialisation.toString());
 
       /*Update your db with the init data received from initialization response,

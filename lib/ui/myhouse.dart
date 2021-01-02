@@ -23,7 +23,7 @@ class _MyHomePageState extends State<myhouse> {
 
   @override
   void initState() {
-    super.initState();
+    super.initState();    
     myhouseBloc = MyhouseBloc();
     userId = sharedPreferences.getUserId();
     myhouseBloc.fetchMyhouse(userId);
@@ -55,8 +55,8 @@ class _MyHomePageState extends State<myhouse> {
                       shrinkWrap: true,
                       children: <Widget>[
                         ConnectionCallback(
-          onlineCall: () {},
-        ),
+                          onlineCall: () {},
+                        ),
                         Container(
                           color: Colors.white,
                           child: ListTile(
@@ -146,7 +146,8 @@ class _MyHomePageState extends State<myhouse> {
                                     Center(
                                         child: Text(
                                       'Total due is: ' +
-                                          totalArrears(snapshot.data.arrearsList.arrears),
+                                          totalArrears(snapshot
+                                              .data.arrearsList.arrears),
                                       style: TextStyle(color: Colors.white),
                                     )),
                                     Center(

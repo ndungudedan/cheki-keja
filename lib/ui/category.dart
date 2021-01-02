@@ -354,22 +354,52 @@ class Category extends StatefulWidget {
                     ),
                   ),
                   Center(
-                    child: Container(
-                      height: 300,
-                      width: MediaQuery.of(context).size.width,
-                      child: CachedNetworkImage(
-                        imageUrl: constants.path +
-                            myApartment.owner_id +
-                            constants.folder +
-                            myApartment.banner.first.banner,
-                        fit: BoxFit.fill,
-                        placeholder: (context, url) => Container(
-                            alignment: Alignment(0.0, 2.0),
-                            child: Center(child: CircularProgressIndicator())),
-                        errorWidget: (context, url, error) => Container(
-                            alignment: Alignment(0.0, 2.0),
-                            child: Center(child: Icon(Icons.error))),
-                      ),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 300,
+                          width: MediaQuery.of(context).size.width,
+                          child: CachedNetworkImage(
+                            imageUrl: constants.path +
+                                myApartment.owner_id +
+                                constants.folder +
+                                myApartment.banner.first.banner,
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => Container(
+                                alignment: Alignment(0.0, 2.0),
+                                child: Center(child: CircularProgressIndicator())),
+                            errorWidget: (context, url, error) => Container(
+                                alignment: Alignment(0.0, 2.0),
+                                child: Center(child: Icon(Icons.error))),
+                          ),
+                        ),
+                        Positioned(
+                                  bottom: 1.0,
+                                  left: 0.0,
+                                  right: 0.0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color.fromARGB(200, 0, 0, 0),
+                                          Color.fromARGB(0, 0, 0, 0)
+                                        ],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    child: Text(
+                                      myApartment.banner.last.tag,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            
+                      ],
                     ),
                   )
                 ],

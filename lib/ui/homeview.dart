@@ -127,7 +127,7 @@ class _HomePageState extends State<HomeView> {
                 children: <Widget>[
                   ListTile(
                     leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(100),
                       child: CachedNetworkImage(
                         imageUrl: constants.path +
                             myApartment.owner_id +
@@ -164,25 +164,54 @@ class _HomePageState extends State<HomeView> {
                     ),
                   ),
                   Center(
-                    child: Container(
-                      height: 300,
-                      width: MediaQuery.of(context).size.width,
-                      child: CachedNetworkImage(
-                        imageUrl: constants.path +
-                            myApartment.owner_id +
-                            constants.folder +
-                            myApartment.banner.first.banner,
-                        fit: BoxFit.fill,
-                        placeholder: (context, url) => Container(
-                            alignment: Alignment(0.0, 2.0),
-                            child: Center(child: SizedBox(
-                              height: 30,
-                              width: 3,
-                              child: CircularProgressIndicator()))),
-                        errorWidget: (context, url, error) => Container(
-                            alignment: Alignment(0.0, 2.0),
-                            child: Center(child: Icon(Icons.error))),
-                      ),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 300,
+                          width: MediaQuery.of(context).size.width,
+                          child: CachedNetworkImage(
+                            imageUrl: constants.path +
+                                myApartment.owner_id +
+                                constants.folder +
+                                myApartment.banner.first.banner,
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => Container(
+                                alignment: Alignment(0.0, 2.0),
+                                child: Center(child: SizedBox(
+                                  height: 30,
+                                  width: 3,
+                                  child: CircularProgressIndicator()))),
+                            errorWidget: (context, url, error) => Container(
+                                alignment: Alignment(0.0, 2.0),
+                                child: Center(child: Icon(Icons.error))),
+                          ),
+                        ),
+                        Positioned(
+                                  bottom: 1.0,
+                                  left: 0.0,
+                                  right: 0.0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color.fromARGB(200, 0, 0, 0),
+                                          Color.fromARGB(0, 0, 0, 0)
+                                        ],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    child: Text(
+                                      myApartment.banner.last.tag,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                      ],
                     ),
                   )
                 ],
@@ -289,7 +318,7 @@ class _HomePageState extends State<HomeView> {
   }
 
   Future<void> getPrefs() async {
-    if (sharedPreferences.checkSignedIn()) {
+    if (sharedPreferences.getSignedIn()) {
       userId = sharedPreferences.getUserId();
     }
   }

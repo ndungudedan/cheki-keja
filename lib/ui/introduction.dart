@@ -1,6 +1,7 @@
 import 'package:cheki_keja/ui/index.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:onboardme/onboardme.dart';
 
 
 class OnBoardingPage extends StatefulWidget {
@@ -35,70 +36,48 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       imagePadding: EdgeInsets.zero,
     );
 
-    return IntroductionScreen(
-      key: introKey,
-      pages: [
-        PageViewModel(
-          title: "Fractional shares",
-          body:
-              "Instead of having to buy an entire share, invest any amount you want.",
-          image: _buildImage('assets/images/red0.jpg'),
-          decoration: pageDecoration,
-        ),
-    
-        PageViewModel(
-          title: "Another title page",
-          body: "Another beautiful body text for this example onboarding",
-          image: _buildImage('assets/images/red0.jpg'),
-          footer: RaisedButton(
-            onPressed: () {
-              introKey.currentState?.animateScroll(0);
-            },
-            child: const Text(
-              'FooButton',
-              style: TextStyle(color: Colors.white),
-            ),
-            color: Colors.lightBlue,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          decoration: pageDecoration,
-        ),
-        PageViewModel(
-          title: "Title of last page",
-          bodyWidget: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text("Click on ", style: bodyStyle),
-              Icon(Icons.edit),
-              Text(" to edit a post", style: bodyStyle),
-            ],
-          ),
-          image: _buildImage('assets/images/red0.jpg'),
-          decoration: pageDecoration,
-        ),
+    return OnboardingMe(
+      /// Number of Pages for the screens
+      numOfPage: 3,
+
+      /// No of colors you want for your screen
+      noOfBackgroundColor: 2,
+
+      /// List of background colors => In descending order
+      bgColor: [
+        Color.fromARGB(255, 255, 101, 6),
+        Color.fromARGB(255, 255, 161, 46),
       ],
-      onDone: () => _onIntroEnd(context),
-      //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
-      showSkipButton: true,
-      skipFlex: 0,
-      nextFlex: 0,
-      skip:  Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text('Skip',
-        style: TextStyle(fontSize: 20,color: Colors.orange),),
-      ),
-      //next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
-      dotsDecorator: const DotsDecorator(
-        size: Size(10.0, 10.0),
-        color: Color(0xFFBDBDBD),
-        activeSize: Size(22.0, 10.0),
-        activeShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-        ),
-      ),
-    );
-  }
+
+      /// List of  Call-to-action action
+      ctaText: [
+        'Skip',
+        'Get Started'
+      ],
+
+      /// List that maps your screen content
+      screenContent: [
+        {
+          'Scr 1 Heading' : 'Quality Apartments',
+          'Scr 1 Sub Heading' : 'Canvas through various quality high class apartments',
+          'Scr 1 Image Path' : 'assets/images/onboard1.jpg',
+        },
+        {
+          'Scr 2 Heading' : 'Pick What You Like',
+          'Scr 2 Sub Heading' : 'Look,see and take what you like',
+          'Scr 2 Image Path' : 'assets/images/onboard2.jpg',
+        },
+        {
+          'Scr 3 Heading' : 'Comfort and Leisure at your hand',
+          'Scr 3 Sub Heading' : 'Go through lots of comfortable and luxurious apartments',
+          'Scr 3 Image Path' : 'assets/images/onboard3.jpg',
+        },
+      ],
+
+      /// Bool for Circle Page Indicator
+      isPageIndicatorCircle: true,
+
+      /// Home Screen Route that lands after on-boarding
+      homeRoute: '/index',
+    );}
 }

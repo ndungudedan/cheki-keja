@@ -3,7 +3,6 @@ import 'package:cheki_keja/ui/index.dart';
 import 'package:cheki_keja/ui/introduction.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,12 +15,11 @@ class MyApp extends StatelessWidget {
   bool firsttime =false;
 
   Future<void> initPrefs() async {
-    var prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('firsttime')) {
-      prefs.setBool('firsttime', false);
+    if (!sharedPreferences.checkFirstTime()) {
+      sharedPreferences.setFirstLogin(false);
       firsttime = true;
     } else {
-      firsttime = prefs.getBool('firsttime');
+      firsttime = sharedPreferences.getFirstLogin();
     }
   }
 
@@ -36,8 +34,13 @@ class MyApp extends StatelessWidget {
         accentColor:  Color.fromARGB(255, 255, 161, 46),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-
-      home: firsttime ? OnBoardingPage() : Index(),
+      initialRoute: '/',
+    routes: {
+      // When navigating to the "/" route, build the FirstScreen widget.
+      '/': (context) => firsttime ? OnBoardingPage() : Index(),
+      '/index': (context) => Index(),
+    },
+      //home: firsttime ? OnBoardingPage() : OnBoardingPage(),
     );
   }
 }

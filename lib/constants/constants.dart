@@ -23,6 +23,12 @@ class Constants {
   static final fail = '0'; //network query failed
   static final success = '1'; //network query successful
 
+   final bizNo = '174379';
+   final passKey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+   final phoneNo = '254700314700';
+   final paymentDeposit = 'deposit';
+   final paymentRent = 'rent';
+
   static final jan = '1';
   static final dec = '12';
 

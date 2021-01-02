@@ -1,15 +1,12 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cheki_keja/connection/networkApi.dart';
+import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/models/user.dart' as myuser;
 import 'package:cheki_keja/ui/about.dart';
 import 'package:cheki_keja/ui/category.dart';
-import 'package:cheki_keja/ui/contact.dart';
 import 'package:cheki_keja/ui/contactus.dart';
 import 'package:cheki_keja/ui/map.dart';
-import 'package:cheki_keja/ui/section%20organizer/sectionhome.dart';
-import 'package:cheki_keja/ui/section%20organizer/sectionmain.dart';
 import 'package:cheki_keja/ui/terms.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:cheki_keja/ui/favorites.dart';
@@ -18,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cheki_keja/management/management.dart';
+import 'package:moor_db_viewer/moor_db_viewer.dart';
 
 class Draw extends StatefulWidget {
   const Draw(
@@ -116,10 +114,11 @@ class _DrawState extends State<Draw> {
               color: Colors.white,
             ),
               onTap: () {
-                Navigator.push(
+Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(databasehelper)));
+               /*  Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Favorites()),
-                );
+                  MaterialPageRoute(builder: (context) => Favorites()), */
+               // );
               }),
               ListTile(
               title: Text(
@@ -158,8 +157,9 @@ class _DrawState extends State<Draw> {
               Icons.home_outlined,
               color: Colors.white,
             ),
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => myhouse())),
+            onTap: () =>sharedPreferences.getSignedIn() ? Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => myhouse()))
+                : dialog(),
           ),
           ListTile(
               leading: Icon(Icons.contact_phone,color: Colors.white,),
@@ -247,5 +247,22 @@ class _DrawState extends State<Draw> {
     sharedPreferences.setPhoto(user.photo);
    
   }
-
+  void dialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Please Login to access this page.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 }

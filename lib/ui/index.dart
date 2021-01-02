@@ -22,7 +22,8 @@ class Index extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<Index> with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<Index>
+    with SingleTickerProviderStateMixin {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   auth.User fireuser;
@@ -83,53 +84,50 @@ class _MyHomePageState extends State<Index> with SingleTickerProviderStateMixin 
       child: Stack(
         children: <Widget>[
           AnimatedPositioned(
-      duration: duration,
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: iscollapsed ? 0 : 0.3 * screenwidth,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: ScaleTransition(
-          scale: _dashscaleAnimation,
-          child: Draw()
-        ),
-      ),
-    ),
+            duration: duration,
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: iscollapsed ? 0 : 0.3 * screenwidth,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: ScaleTransition(scale: _dashscaleAnimation, child: Draw()),
+            ),
+          ),
           AnimatedPositioned(
-      duration: duration,
-      top: 0,
-      bottom: 0,
-      left: iscollapsed ? 0 : 0.6 * screenwidth,
-      right: iscollapsed ? 0 : -0.2 * screenwidth,
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: InkWell(
-          onTap: () {
-            if (!iscollapsed) {
-              setState(() {
-                iscollapsed = !iscollapsed;
-                _controller.reverse();
-              });
-            }
-          },
-          child: Home(
-            press: (){
-              setState(() {
-                    if (iscollapsed) {
-                      _controller.forward();
-                    } else {
+            duration: duration,
+            top: 0,
+            bottom: 0,
+            left: iscollapsed ? 0 : 0.6 * screenwidth,
+            right: iscollapsed ? 0 : -0.2 * screenwidth,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: InkWell(
+                onTap: () {
+                  if (!iscollapsed) {
+                    setState(() {
+                      iscollapsed = !iscollapsed;
                       _controller.reverse();
-                    }
-                    iscollapsed = !iscollapsed;
-                  });
-            },
-            controller: _controller,
-            iscollapsed: iscollapsed,
-          ), 
-        ),
-      ),
-    ),
+                    });
+                  }
+                },
+                child: Home(
+                  press: () {
+                    setState(() {
+                      if (iscollapsed) {
+                        _controller.forward();
+                      } else {
+                        _controller.reverse();
+                      }
+                      iscollapsed = !iscollapsed;
+                    });
+                  },
+                  controller: _controller,
+                  iscollapsed: iscollapsed,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     ));
@@ -137,7 +135,7 @@ class _MyHomePageState extends State<Index> with SingleTickerProviderStateMixin 
 
   Future<void> initPrefs() async {
     setState(() {
-      if (!sharedPreferences.checkSignedIn()) {
+      if (!sharedPreferences.getSignedIn()) {
         sharedPreferences.setSignedIn(false);
         signed_in = false;
       } else {
