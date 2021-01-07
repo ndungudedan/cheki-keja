@@ -9,7 +9,7 @@ part of 'paymentsClass.dart';
 Payments _$PaymentsFromJson(Map<String, dynamic> json) {
   return Payments(
     id: json['id'] as String,
-    transaction_id: json['transaction_id'] as String,
+    transactionid: json['transactionid'] as String,
     category: json['category'] as String,
     title: json['title'] as String,
     amount: json['amount'] as String,
@@ -23,7 +23,7 @@ Payments _$PaymentsFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PaymentsToJson(Payments instance) => <String, dynamic>{
       'id': instance.id,
-      'transaction_id': instance.transaction_id,
+      'transactionid': instance.transactionid,
       'category': instance.category,
       'title': instance.title,
       'amount': instance.amount,
@@ -101,13 +101,13 @@ Map<String, dynamic> _$ArrearsListToJson(ArrearsList instance) =>
 Details _$DetailsFromJson(Map<String, dynamic> json) {
   return Details(
     id: json['id'] as String,
-    owner_id: json['owner_id'] as String,
-    owner_name: json['owner_name'] as String,
-    owner_logo: json['owner_logo'] as String,
-    owner_address: json['owner_address'] as String,
-    owner_email: json['owner_email'] as String,
-    owner_location: json['owner_location'] as String,
-    owner_phone: json['owner_phone'] as String,
+    ownerid: json['ownerid'] as String,
+    ownername: json['ownername'] as String,
+    ownerlogo: json['ownerlogo'] as String,
+    owneraddress: json['owneraddress'] as String,
+    owneremail: json['owneremail'] as String,
+    ownerlocation: json['ownerlocation'] as String,
+    ownerphone: json['ownerphone'] as String,
     category: json['category'] as String,
     unit: json['unit'] as String,
     deposit: json['deposit'] as String,
@@ -120,13 +120,13 @@ Details _$DetailsFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$DetailsToJson(Details instance) => <String, dynamic>{
       'id': instance.id,
-      'owner_id': instance.owner_id,
-      'owner_name': instance.owner_name,
-      'owner_logo': instance.owner_logo,
-      'owner_phone': instance.owner_phone,
-      'owner_address': instance.owner_address,
-      'owner_location': instance.owner_location,
-      'owner_email': instance.owner_email,
+      'ownerid': instance.ownerid,
+      'ownername': instance.ownername,
+      'ownerlogo': instance.ownerlogo,
+      'ownerphone': instance.ownerphone,
+      'owneraddress': instance.owneraddress,
+      'ownerlocation': instance.ownerlocation,
+      'owneremail': instance.owneremail,
       'title': instance.title,
       'category': instance.category,
       'price': instance.price,

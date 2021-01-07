@@ -19,6 +19,7 @@ import 'package:cheki_keja/ui/photoViewer.dart';
 import 'package:cheki_keja/ui/reviews.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:cheki_keja/views/floatingButton.dart';
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,7 +28,7 @@ import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Apartdetails extends StatefulWidget {
-  MyApartment apartment;
+  var apartment;
   Apartdetails({Key key, @required this.apartment}) : super(key: key);
 
   final String title = 'apartmentDetails';
@@ -40,7 +41,7 @@ class _MyHomePageState extends State<Apartdetails> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   String userId;
   String apartmentId, ownerId;
-  MyApartment apartment;
+  var apartment;
   MyCompany company;
   Stkpush stkpush;
   final Map<String, Marker> _markers = {};
@@ -79,7 +80,7 @@ class _MyHomePageState extends State<Apartdetails> {
     apartment = widget.apartment;
     userId = '1';
     apartmentId = widget.apartment.id;
-    ownerId = widget.apartment.owner_id;
+    ownerId = widget.apartment.ownerid;
     feature_bloc.fetchFeatures(apartmentId);
     images_bloc.fetchImages(apartmentId);
     company_bloc.fetchCompany(ownerId);
@@ -159,8 +160,8 @@ class _MyHomePageState extends State<Apartdetails> {
         padding: const EdgeInsets.all(8),
         children: <Widget>[
           ConnectionCallback(
-          onlineCall: () {},
-        ),
+            onlineCall: () {},
+          ),
           Center(
             child: apartmentDetails(apartment),
           ),
@@ -198,7 +199,7 @@ class _MyHomePageState extends State<Apartdetails> {
                                 CachedNetworkImage(
                                   fit: BoxFit.cover,
                                   imageUrl: constants.path +
-                                      apartment.owner_id +
+                                      apartment.ownerid +
                                       constants.folder +
                                       url.image,
                                   placeholder: (context, url) => Container(
@@ -356,30 +357,29 @@ class _MyHomePageState extends State<Apartdetails> {
                               );
                             },
                           ),
-                          snapshot.data!=null &&snapshot.data.isNotEmpty ?
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Reviews(
-                                            apartmentId: apartmentId,
-                                            reviews: snapshot.data,
-                                          )));
-                            },
-                            child: Text(
-                              'see all reviews',
-                              style: TextStyle(color: Colors.blue),
-                            ))
-                        : SizedBox()
+                          snapshot.data != null && snapshot.data.isNotEmpty
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Reviews(
+                                                  apartmentId: apartmentId,
+                                                  reviews: snapshot.data,
+                                                )));
+                                  },
+                                  child: Text(
+                                    'see all reviews',
+                                    style: TextStyle(color: Colors.blue),
+                                  ))
+                              : SizedBox()
                         ],
                       );
                     } else if (snapshot.hasError) {
                       return Center(
                         child: Text('No reviews yet'),
                       );
-                    } else if (snapshot.data != null &&
-                        snapshot.data.isEmpty) {
+                    } else if (snapshot.data != null && snapshot.data.isEmpty) {
                       return Center(
                         child: Text('No reviews yet'),
                       );
@@ -457,7 +457,7 @@ class _MyHomePageState extends State<Apartdetails> {
           ),
         ],
       ),
-        floatingActionButton: Builder(
+      floatingActionButton: Builder(
         builder: (context) => floatingButton(
           onPressed: () {
             if (sharedPreferences.getSignedIn()) {
@@ -467,47 +467,57 @@ class _MyHomePageState extends State<Apartdetails> {
             }
           },
         ),
-      ), 
+      ),
     );
   }
 
   Future<void> lipaNaMpesa() async {
     MpesaFlutterPlugin.setConsumerKey('nKhZGNTodZvLjbgSH5yx309SQMS9eAe4');
     MpesaFlutterPlugin.setConsumerSecret('YX9ZO1JZNy5vQSUV');
-     dynamic transactionInitialisation;
-     var queryParameters = {
-  'userId': sharedPreferences.getUserId(),
-  'apartmentId': apartment.id,
-  'type': constants.paymentDeposit,
-  'ownerId': apartment.owner_id,
-};
- //Wrap it with a try-catch
-  try {
-  //Run it
-  transactionInitialisation =
+    dynamic transactionInitialisation;
+    var queryParameters = {
+      'userId': sharedPreferences.getUserId(),
+      'apartmentId': apartment.id,
+      'type': constants.paymentDeposit,
+      'ownerId': apartment.ownerid,
+    };
+    //Wrap it with a try-catch
+    try {
+      //Run it
+      transactionInitialisation =
           await MpesaFlutterPlugin.initializeMpesaSTKPush(
-                  businessShortCode: constants.bizNo,
-                  transactionType: TransactionType.CustomerPayBillOnline,
-                  amount: 1,
-                  partyA: constants.phoneNo,
-                  partyB: constants.bizNo,
-                  callBackURL: Uri(scheme: 'https', host : 'adminkeja.romeofoxalpha.co.ke', 
-                  path: '/chekiKeja/confirmation.php',queryParameters: queryParameters),
-                  accountReference: 'please work',
-                  phoneNumber: constants.phoneNo,
-                  baseUri: Uri(scheme: 'https', host: 'sandbox.safaricom.co.ke'),
-                  transactionDesc: 'booking',
-                  passKey: constants.passKey);
-  print('TRANSACTION RESULT: ' + transactionInitialisation.toString());
+              businessShortCode: constants.bizNo,
+              transactionType: TransactionType.CustomerPayBillOnline,
+              amount: 1,
+              partyA: constants.phoneNo,
+              partyB: constants.bizNo,
+              callBackURL: Uri(
+                  scheme: 'https',
+                  host: 'adminkeja.romeofoxalpha.co.ke',
+                  path: '/chekiKeja/confirmation.php',
+                  queryParameters: queryParameters),
+              accountReference: 'please work',
+              phoneNumber: constants.phoneNo,
+              baseUri: Uri(scheme: 'https', host: 'sandbox.safaricom.co.ke'),
+              transactionDesc: 'booking',
+              passKey: constants.passKey);
+      print('TRANSACTION RESULT: ' + transactionInitialisation.toString());
+      var response =
+          MpesaResponse.fromJson(json.decode(transactionInitialisation));
+      if (response.ResponseCode == '0') {
+        successDialog(context, response.ResponseDescription);
+      } else {
+        errorDialog(context, response.errorMessage);
+      }
 
       /*Update your db with the init data received from initialization response,
       * Remaining bit will be sent via callback url*/
       return transactionInitialisation;
-  } catch (e) {
-  //you can implement your exception handling here.
-  //Network unreachability is a sure exception.
-  print(e.getMessage());
-  }
+    } catch (e) {
+      //you can implement your exception handling here.
+      //Network unreachability is a sure exception.
+      print(e.getMessage());
+    }
   }
 
   SnackBar snack(String message) {
@@ -552,7 +562,7 @@ class _MyHomePageState extends State<Apartdetails> {
               Text('Category: ' + apartment.category,
                   style: TextStyle(color: Colors.white)),
               Text(
-                'Managed by: ' + apartment.owner_name,
+                'Managed by: ' + apartment.ownername,
                 style: TextStyle(color: Colors.white),
               ),
               Text(

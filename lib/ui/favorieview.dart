@@ -146,9 +146,9 @@ class _MyHomePageState extends State<FavoriteView> {
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           child: CachedNetworkImage(
-                                            imageUrl: constants.path +myApartment.owner_id +
+                                            imageUrl: constants.path +myApartment.ownerid +
                                                 constants.folder +
-                                                myApartment.owner_logo,
+                                                myApartment.ownerlogo,
                                             placeholder: (context, url) =>
                                                 Container(
                                                     alignment:
@@ -166,7 +166,7 @@ class _MyHomePageState extends State<FavoriteView> {
                                                             Icons.error))),
                                           ),
                                         ),
-                                        title: Text(myApartment.owner_name),
+                                        title: Text(myApartment.ownername),
                                         subtitle: Text(myApartment.title),
                                         trailing: RatingBarIndicator(
                                           rating: double.parse(myApartment.rating),
@@ -184,7 +184,7 @@ class _MyHomePageState extends State<FavoriteView> {
                                           height: 300,
                       width: MediaQuery.of(context).size.width,
                                           child: CachedNetworkImage(
-                                            imageUrl: constants.path +myApartment.owner_id +
+                                            imageUrl: constants.path +myApartment.ownerid +
                                                 constants.folder +myApartment.banner.first.banner,
                                             fit: BoxFit.fill,
                                             placeholder: (context, url) => Container(

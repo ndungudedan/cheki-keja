@@ -1,17 +1,9 @@
 import 'dart:async';
 import 'package:cheki_keja/constants/constants.dart';
-import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/apartment.dart';
-import 'package:cheki_keja/models/user.dart' as myuser;
 import 'package:cheki_keja/ui/home.dart';
 import 'package:cheki_keja/views/drawer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
-
-final List<String> imageList = [];
-final List<String> tagList = [];
 
 class Index extends StatefulWidget {
   Index({Key key, this.title}) : super(key: key);
@@ -24,11 +16,6 @@ class Index extends StatefulWidget {
 
 class _MyHomePageState extends State<Index>
     with SingleTickerProviderStateMixin {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  auth.User fireuser;
-  myuser.User user;
-  bool signed_in = false;
   AnimationController _controller;
   Animation<double> _scaleAnimation;
   Animation<double> _dashscaleAnimation;
@@ -57,7 +44,6 @@ class _MyHomePageState extends State<Index>
     _dashscaleAnimation = Tween<double>(begin: 0, end: 1).animate(_controller);
     _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0))
         .animate(_controller);
-    initPrefs();
   }
 
   @override
@@ -131,16 +117,5 @@ class _MyHomePageState extends State<Index>
         ],
       ),
     ));
-  }
-
-  Future<void> initPrefs() async {
-    setState(() {
-      if (!sharedPreferences.getSignedIn()) {
-        sharedPreferences.setSignedIn(false);
-        signed_in = false;
-      } else {
-        signed_in = sharedPreferences.getSignedIn();
-      }
-    });
   }
 }

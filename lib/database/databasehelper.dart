@@ -17,7 +17,7 @@ LazyDatabase _openConnection() {
   });
 }
 
-@UseMoor(tables: [MyApartmentTable], daos: [DatabaseDao])
+@UseMoor(tables: [MyApartmentTable,MyHouseDetails,MyHouseArrears,MyHousePayments], daos: [DatabaseDao])
 class DatabaseHelper extends _$DatabaseHelper {
   // we tell the database where to store the data with this constructor
   DatabaseHelper() : super(_openConnection());
@@ -34,6 +34,8 @@ class MyApartmentTable extends Table {
   TextColumn get banner => text()();
   TextColumn get bannertag => text()();
   TextColumn get ownerid => text()();
+  TextColumn get ownername => text()();
+  TextColumn get ownerlogo => text()();
   TextColumn get description => text().nullable()();
   TextColumn get title => text()();
   TextColumn get emailaddress => text().nullable()();
@@ -50,6 +52,44 @@ class MyApartmentTable extends Table {
   TextColumn get likes => text()();
   TextColumn get liked => text()();
   TextColumn get comments => text()();
+}
+class MyHouseDetails extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get onlineid => text()();
+  TextColumn get ownerid => text()();
+  TextColumn get ownername => text()();
+  TextColumn get ownerlogo => text()();
+  TextColumn get owneraddress => text()();
+  TextColumn get owneremail => text()();
+  TextColumn get ownerlocation => text()();
+  TextColumn get ownerphone => text()();
+  TextColumn get category => text()();
+  TextColumn get unit => text().nullable()();
+  TextColumn get deposit => text()();
+  TextColumn get price => text()();
+  TextColumn get title => text()();
+  TextColumn get payed => text()();
+  TextColumn get rating => text()();
+}
+class MyHouseArrears extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get onlineid => text()();
+  TextColumn get amount => text()();
+  TextColumn get year => text()();
+  TextColumn get month => text()();
+}
+class MyHousePayments extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get onlineid => text()();
+  TextColumn get transactionid => text()();
+  TextColumn get category => text()();
+  TextColumn get title => text()();
+  TextColumn get amount => text()();
+  TextColumn get status => text()();
+  TextColumn get time => text()();
+  TextColumn get year => text()();
+  TextColumn get month => text()();
+  TextColumn get type => text()();
 }
 
 final databasehelper = DatabaseHelper();

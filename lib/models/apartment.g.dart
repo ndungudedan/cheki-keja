@@ -21,9 +21,9 @@ Map<String, dynamic> _$BannerToJson(Banner instance) => <String, dynamic>{
 MyApartment _$MyApartmentFromJson(Map<String, dynamic> json) {
   return MyApartment(
     id: json['id'] as String,
-    owner_id: json['owner_id'] as String,
-    owner_name: json['owner_name'] as String,
-    owner_logo: json['owner_logo'] as String,
+    ownerid: json['ownerid'] as String,
+    ownername: json['ownername'] as String,
+    ownerlogo: json['ownerlogo'] as String,
     category: json['category'] as String,
     email: json['email'] as String,
     address: json['address'] as String,
@@ -51,9 +51,9 @@ MyApartment _$MyApartmentFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$MyApartmentToJson(MyApartment instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'owner_id': instance.owner_id,
-      'owner_name': instance.owner_name,
-      'owner_logo': instance.owner_logo,
+      'ownerid': instance.ownerid,
+      'ownername': instance.ownername,
+      'ownerlogo': instance.ownerlogo,
       'description': instance.description,
       'category': instance.category,
       'location': instance.location,

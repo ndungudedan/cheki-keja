@@ -14,6 +14,8 @@ class MyApartmentTableData extends DataClass
   final String banner;
   final String bannertag;
   final String ownerid;
+  final String ownername;
+  final String ownerlogo;
   final String description;
   final String title;
   final String emailaddress;
@@ -36,6 +38,8 @@ class MyApartmentTableData extends DataClass
       @required this.banner,
       @required this.bannertag,
       @required this.ownerid,
+      @required this.ownername,
+      @required this.ownerlogo,
       this.description,
       @required this.title,
       this.emailaddress,
@@ -68,6 +72,10 @@ class MyApartmentTableData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}bannertag']),
       ownerid:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}ownerid']),
+      ownername: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}ownername']),
+      ownerlogo: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}ownerlogo']),
       description: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}description']),
       title:
@@ -119,6 +127,12 @@ class MyApartmentTableData extends DataClass
     }
     if (!nullToAbsent || ownerid != null) {
       map['ownerid'] = Variable<String>(ownerid);
+    }
+    if (!nullToAbsent || ownername != null) {
+      map['ownername'] = Variable<String>(ownername);
+    }
+    if (!nullToAbsent || ownerlogo != null) {
+      map['ownerlogo'] = Variable<String>(ownerlogo);
     }
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
@@ -185,6 +199,12 @@ class MyApartmentTableData extends DataClass
       ownerid: ownerid == null && nullToAbsent
           ? const Value.absent()
           : Value(ownerid),
+      ownername: ownername == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownername),
+      ownerlogo: ownerlogo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerlogo),
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
@@ -237,6 +257,8 @@ class MyApartmentTableData extends DataClass
       banner: serializer.fromJson<String>(json['banner']),
       bannertag: serializer.fromJson<String>(json['bannertag']),
       ownerid: serializer.fromJson<String>(json['ownerid']),
+      ownername: serializer.fromJson<String>(json['ownername']),
+      ownerlogo: serializer.fromJson<String>(json['ownerlogo']),
       description: serializer.fromJson<String>(json['description']),
       title: serializer.fromJson<String>(json['title']),
       emailaddress: serializer.fromJson<String>(json['emailaddress']),
@@ -264,6 +286,8 @@ class MyApartmentTableData extends DataClass
       'banner': serializer.toJson<String>(banner),
       'bannertag': serializer.toJson<String>(bannertag),
       'ownerid': serializer.toJson<String>(ownerid),
+      'ownername': serializer.toJson<String>(ownername),
+      'ownerlogo': serializer.toJson<String>(ownerlogo),
       'description': serializer.toJson<String>(description),
       'title': serializer.toJson<String>(title),
       'emailaddress': serializer.toJson<String>(emailaddress),
@@ -289,6 +313,8 @@ class MyApartmentTableData extends DataClass
           String banner,
           String bannertag,
           String ownerid,
+          String ownername,
+          String ownerlogo,
           String description,
           String title,
           String emailaddress,
@@ -311,6 +337,8 @@ class MyApartmentTableData extends DataClass
         banner: banner ?? this.banner,
         bannertag: bannertag ?? this.bannertag,
         ownerid: ownerid ?? this.ownerid,
+        ownername: ownername ?? this.ownername,
+        ownerlogo: ownerlogo ?? this.ownerlogo,
         description: description ?? this.description,
         title: title ?? this.title,
         emailaddress: emailaddress ?? this.emailaddress,
@@ -336,6 +364,8 @@ class MyApartmentTableData extends DataClass
           ..write('banner: $banner, ')
           ..write('bannertag: $bannertag, ')
           ..write('ownerid: $ownerid, ')
+          ..write('ownername: $ownername, ')
+          ..write('ownerlogo: $ownerlogo, ')
           ..write('description: $description, ')
           ..write('title: $title, ')
           ..write('emailaddress: $emailaddress, ')
@@ -368,37 +398,37 @@ class MyApartmentTableData extends DataClass
                   $mrjc(
                       ownerid.hashCode,
                       $mrjc(
-                          description.hashCode,
+                          ownername.hashCode,
                           $mrjc(
-                              title.hashCode,
+                              ownerlogo.hashCode,
                               $mrjc(
-                                  emailaddress.hashCode,
+                                  description.hashCode,
                                   $mrjc(
-                                      location.hashCode,
+                                      title.hashCode,
                                       $mrjc(
-                                          address.hashCode,
+                                          emailaddress.hashCode,
                                           $mrjc(
-                                              phone.hashCode,
+                                              location.hashCode,
                                               $mrjc(
-                                                  video.hashCode,
+                                                  address.hashCode,
                                                   $mrjc(
-                                                      price.hashCode,
+                                                      phone.hashCode,
                                                       $mrjc(
-                                                          deposit.hashCode,
+                                                          video.hashCode,
                                                           $mrjc(
-                                                              space.hashCode,
+                                                              price.hashCode,
                                                               $mrjc(
-                                                                  latitude
+                                                                  deposit
                                                                       .hashCode,
                                                                   $mrjc(
-                                                                      longitude
+                                                                      space
                                                                           .hashCode,
                                                                       $mrjc(
-                                                                          rating
+                                                                          latitude
                                                                               .hashCode,
                                                                           $mrjc(
-                                                                              likes.hashCode,
-                                                                              $mrjc(liked.hashCode, comments.hashCode)))))))))))))))))))));
+                                                                              longitude.hashCode,
+                                                                              $mrjc(rating.hashCode, $mrjc(likes.hashCode, $mrjc(liked.hashCode, comments.hashCode)))))))))))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -408,6 +438,8 @@ class MyApartmentTableData extends DataClass
           other.banner == this.banner &&
           other.bannertag == this.bannertag &&
           other.ownerid == this.ownerid &&
+          other.ownername == this.ownername &&
+          other.ownerlogo == this.ownerlogo &&
           other.description == this.description &&
           other.title == this.title &&
           other.emailaddress == this.emailaddress &&
@@ -432,6 +464,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
   final Value<String> banner;
   final Value<String> bannertag;
   final Value<String> ownerid;
+  final Value<String> ownername;
+  final Value<String> ownerlogo;
   final Value<String> description;
   final Value<String> title;
   final Value<String> emailaddress;
@@ -454,6 +488,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     this.banner = const Value.absent(),
     this.bannertag = const Value.absent(),
     this.ownerid = const Value.absent(),
+    this.ownername = const Value.absent(),
+    this.ownerlogo = const Value.absent(),
     this.description = const Value.absent(),
     this.title = const Value.absent(),
     this.emailaddress = const Value.absent(),
@@ -477,6 +513,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     @required String banner,
     @required String bannertag,
     @required String ownerid,
+    @required String ownername,
+    @required String ownerlogo,
     this.description = const Value.absent(),
     @required String title,
     this.emailaddress = const Value.absent(),
@@ -497,6 +535,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
         banner = Value(banner),
         bannertag = Value(bannertag),
         ownerid = Value(ownerid),
+        ownername = Value(ownername),
+        ownerlogo = Value(ownerlogo),
         title = Value(title),
         price = Value(price),
         deposit = Value(deposit),
@@ -513,6 +553,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     Expression<String> banner,
     Expression<String> bannertag,
     Expression<String> ownerid,
+    Expression<String> ownername,
+    Expression<String> ownerlogo,
     Expression<String> description,
     Expression<String> title,
     Expression<String> emailaddress,
@@ -536,6 +578,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       if (banner != null) 'banner': banner,
       if (bannertag != null) 'bannertag': bannertag,
       if (ownerid != null) 'ownerid': ownerid,
+      if (ownername != null) 'ownername': ownername,
+      if (ownerlogo != null) 'ownerlogo': ownerlogo,
       if (description != null) 'description': description,
       if (title != null) 'title': title,
       if (emailaddress != null) 'emailaddress': emailaddress,
@@ -561,6 +605,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       Value<String> banner,
       Value<String> bannertag,
       Value<String> ownerid,
+      Value<String> ownername,
+      Value<String> ownerlogo,
       Value<String> description,
       Value<String> title,
       Value<String> emailaddress,
@@ -583,6 +629,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       banner: banner ?? this.banner,
       bannertag: bannertag ?? this.bannertag,
       ownerid: ownerid ?? this.ownerid,
+      ownername: ownername ?? this.ownername,
+      ownerlogo: ownerlogo ?? this.ownerlogo,
       description: description ?? this.description,
       title: title ?? this.title,
       emailaddress: emailaddress ?? this.emailaddress,
@@ -619,6 +667,12 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     }
     if (ownerid.present) {
       map['ownerid'] = Variable<String>(ownerid.value);
+    }
+    if (ownername.present) {
+      map['ownername'] = Variable<String>(ownername.value);
+    }
+    if (ownerlogo.present) {
+      map['ownerlogo'] = Variable<String>(ownerlogo.value);
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
@@ -679,6 +733,8 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
           ..write('banner: $banner, ')
           ..write('bannertag: $bannertag, ')
           ..write('ownerid: $ownerid, ')
+          ..write('ownername: $ownername, ')
+          ..write('ownerlogo: $ownerlogo, ')
           ..write('description: $description, ')
           ..write('title: $title, ')
           ..write('emailaddress: $emailaddress, ')
@@ -757,6 +813,30 @@ class $MyApartmentTableTable extends MyApartmentTable
   GeneratedTextColumn _constructOwnerid() {
     return GeneratedTextColumn(
       'ownerid',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ownernameMeta = const VerificationMeta('ownername');
+  GeneratedTextColumn _ownername;
+  @override
+  GeneratedTextColumn get ownername => _ownername ??= _constructOwnername();
+  GeneratedTextColumn _constructOwnername() {
+    return GeneratedTextColumn(
+      'ownername',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ownerlogoMeta = const VerificationMeta('ownerlogo');
+  GeneratedTextColumn _ownerlogo;
+  @override
+  GeneratedTextColumn get ownerlogo => _ownerlogo ??= _constructOwnerlogo();
+  GeneratedTextColumn _constructOwnerlogo() {
+    return GeneratedTextColumn(
+      'ownerlogo',
       $tableName,
       false,
     );
@@ -965,6 +1045,8 @@ class $MyApartmentTableTable extends MyApartmentTable
         banner,
         bannertag,
         ownerid,
+        ownername,
+        ownerlogo,
         description,
         title,
         emailaddress,
@@ -1020,6 +1102,18 @@ class $MyApartmentTableTable extends MyApartmentTable
           ownerid.isAcceptableOrUnknown(data['ownerid'], _owneridMeta));
     } else if (isInserting) {
       context.missing(_owneridMeta);
+    }
+    if (data.containsKey('ownername')) {
+      context.handle(_ownernameMeta,
+          ownername.isAcceptableOrUnknown(data['ownername'], _ownernameMeta));
+    } else if (isInserting) {
+      context.missing(_ownernameMeta);
+    }
+    if (data.containsKey('ownerlogo')) {
+      context.handle(_ownerlogoMeta,
+          ownerlogo.isAcceptableOrUnknown(data['ownerlogo'], _ownerlogoMeta));
+    } else if (isInserting) {
+      context.missing(_ownerlogoMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
@@ -1126,16 +1220,1889 @@ class $MyApartmentTableTable extends MyApartmentTable
   }
 }
 
+class MyHouseDetail extends DataClass implements Insertable<MyHouseDetail> {
+  final int id;
+  final String onlineid;
+  final String ownerid;
+  final String ownername;
+  final String ownerlogo;
+  final String owneraddress;
+  final String owneremail;
+  final String ownerlocation;
+  final String ownerphone;
+  final String category;
+  final String unit;
+  final String deposit;
+  final String price;
+  final String title;
+  final String payed;
+  final String rating;
+  MyHouseDetail(
+      {@required this.id,
+      @required this.onlineid,
+      @required this.ownerid,
+      @required this.ownername,
+      @required this.ownerlogo,
+      @required this.owneraddress,
+      @required this.owneremail,
+      @required this.ownerlocation,
+      @required this.ownerphone,
+      @required this.category,
+      this.unit,
+      @required this.deposit,
+      @required this.price,
+      @required this.title,
+      @required this.payed,
+      @required this.rating});
+  factory MyHouseDetail.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return MyHouseDetail(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      onlineid: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}onlineid']),
+      ownerid:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}ownerid']),
+      ownername: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}ownername']),
+      ownerlogo: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}ownerlogo']),
+      owneraddress: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}owneraddress']),
+      owneremail: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}owneremail']),
+      ownerlocation: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}ownerlocation']),
+      ownerphone: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}ownerphone']),
+      category: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}category']),
+      unit: stringType.mapFromDatabaseResponse(data['${effectivePrefix}unit']),
+      deposit:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}deposit']),
+      price:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}price']),
+      title:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
+      payed:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}payed']),
+      rating:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}rating']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || onlineid != null) {
+      map['onlineid'] = Variable<String>(onlineid);
+    }
+    if (!nullToAbsent || ownerid != null) {
+      map['ownerid'] = Variable<String>(ownerid);
+    }
+    if (!nullToAbsent || ownername != null) {
+      map['ownername'] = Variable<String>(ownername);
+    }
+    if (!nullToAbsent || ownerlogo != null) {
+      map['ownerlogo'] = Variable<String>(ownerlogo);
+    }
+    if (!nullToAbsent || owneraddress != null) {
+      map['owneraddress'] = Variable<String>(owneraddress);
+    }
+    if (!nullToAbsent || owneremail != null) {
+      map['owneremail'] = Variable<String>(owneremail);
+    }
+    if (!nullToAbsent || ownerlocation != null) {
+      map['ownerlocation'] = Variable<String>(ownerlocation);
+    }
+    if (!nullToAbsent || ownerphone != null) {
+      map['ownerphone'] = Variable<String>(ownerphone);
+    }
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(category);
+    }
+    if (!nullToAbsent || unit != null) {
+      map['unit'] = Variable<String>(unit);
+    }
+    if (!nullToAbsent || deposit != null) {
+      map['deposit'] = Variable<String>(deposit);
+    }
+    if (!nullToAbsent || price != null) {
+      map['price'] = Variable<String>(price);
+    }
+    if (!nullToAbsent || title != null) {
+      map['title'] = Variable<String>(title);
+    }
+    if (!nullToAbsent || payed != null) {
+      map['payed'] = Variable<String>(payed);
+    }
+    if (!nullToAbsent || rating != null) {
+      map['rating'] = Variable<String>(rating);
+    }
+    return map;
+  }
+
+  MyHouseDetailsCompanion toCompanion(bool nullToAbsent) {
+    return MyHouseDetailsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      onlineid: onlineid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(onlineid),
+      ownerid: ownerid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerid),
+      ownername: ownername == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownername),
+      ownerlogo: ownerlogo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerlogo),
+      owneraddress: owneraddress == null && nullToAbsent
+          ? const Value.absent()
+          : Value(owneraddress),
+      owneremail: owneremail == null && nullToAbsent
+          ? const Value.absent()
+          : Value(owneremail),
+      ownerlocation: ownerlocation == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerlocation),
+      ownerphone: ownerphone == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerphone),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
+      unit: unit == null && nullToAbsent ? const Value.absent() : Value(unit),
+      deposit: deposit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deposit),
+      price:
+          price == null && nullToAbsent ? const Value.absent() : Value(price),
+      title:
+          title == null && nullToAbsent ? const Value.absent() : Value(title),
+      payed:
+          payed == null && nullToAbsent ? const Value.absent() : Value(payed),
+      rating:
+          rating == null && nullToAbsent ? const Value.absent() : Value(rating),
+    );
+  }
+
+  factory MyHouseDetail.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MyHouseDetail(
+      id: serializer.fromJson<int>(json['id']),
+      onlineid: serializer.fromJson<String>(json['onlineid']),
+      ownerid: serializer.fromJson<String>(json['ownerid']),
+      ownername: serializer.fromJson<String>(json['ownername']),
+      ownerlogo: serializer.fromJson<String>(json['ownerlogo']),
+      owneraddress: serializer.fromJson<String>(json['owneraddress']),
+      owneremail: serializer.fromJson<String>(json['owneremail']),
+      ownerlocation: serializer.fromJson<String>(json['ownerlocation']),
+      ownerphone: serializer.fromJson<String>(json['ownerphone']),
+      category: serializer.fromJson<String>(json['category']),
+      unit: serializer.fromJson<String>(json['unit']),
+      deposit: serializer.fromJson<String>(json['deposit']),
+      price: serializer.fromJson<String>(json['price']),
+      title: serializer.fromJson<String>(json['title']),
+      payed: serializer.fromJson<String>(json['payed']),
+      rating: serializer.fromJson<String>(json['rating']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'onlineid': serializer.toJson<String>(onlineid),
+      'ownerid': serializer.toJson<String>(ownerid),
+      'ownername': serializer.toJson<String>(ownername),
+      'ownerlogo': serializer.toJson<String>(ownerlogo),
+      'owneraddress': serializer.toJson<String>(owneraddress),
+      'owneremail': serializer.toJson<String>(owneremail),
+      'ownerlocation': serializer.toJson<String>(ownerlocation),
+      'ownerphone': serializer.toJson<String>(ownerphone),
+      'category': serializer.toJson<String>(category),
+      'unit': serializer.toJson<String>(unit),
+      'deposit': serializer.toJson<String>(deposit),
+      'price': serializer.toJson<String>(price),
+      'title': serializer.toJson<String>(title),
+      'payed': serializer.toJson<String>(payed),
+      'rating': serializer.toJson<String>(rating),
+    };
+  }
+
+  MyHouseDetail copyWith(
+          {int id,
+          String onlineid,
+          String ownerid,
+          String ownername,
+          String ownerlogo,
+          String owneraddress,
+          String owneremail,
+          String ownerlocation,
+          String ownerphone,
+          String category,
+          String unit,
+          String deposit,
+          String price,
+          String title,
+          String payed,
+          String rating}) =>
+      MyHouseDetail(
+        id: id ?? this.id,
+        onlineid: onlineid ?? this.onlineid,
+        ownerid: ownerid ?? this.ownerid,
+        ownername: ownername ?? this.ownername,
+        ownerlogo: ownerlogo ?? this.ownerlogo,
+        owneraddress: owneraddress ?? this.owneraddress,
+        owneremail: owneremail ?? this.owneremail,
+        ownerlocation: ownerlocation ?? this.ownerlocation,
+        ownerphone: ownerphone ?? this.ownerphone,
+        category: category ?? this.category,
+        unit: unit ?? this.unit,
+        deposit: deposit ?? this.deposit,
+        price: price ?? this.price,
+        title: title ?? this.title,
+        payed: payed ?? this.payed,
+        rating: rating ?? this.rating,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MyHouseDetail(')
+          ..write('id: $id, ')
+          ..write('onlineid: $onlineid, ')
+          ..write('ownerid: $ownerid, ')
+          ..write('ownername: $ownername, ')
+          ..write('ownerlogo: $ownerlogo, ')
+          ..write('owneraddress: $owneraddress, ')
+          ..write('owneremail: $owneremail, ')
+          ..write('ownerlocation: $ownerlocation, ')
+          ..write('ownerphone: $ownerphone, ')
+          ..write('category: $category, ')
+          ..write('unit: $unit, ')
+          ..write('deposit: $deposit, ')
+          ..write('price: $price, ')
+          ..write('title: $title, ')
+          ..write('payed: $payed, ')
+          ..write('rating: $rating')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          onlineid.hashCode,
+          $mrjc(
+              ownerid.hashCode,
+              $mrjc(
+                  ownername.hashCode,
+                  $mrjc(
+                      ownerlogo.hashCode,
+                      $mrjc(
+                          owneraddress.hashCode,
+                          $mrjc(
+                              owneremail.hashCode,
+                              $mrjc(
+                                  ownerlocation.hashCode,
+                                  $mrjc(
+                                      ownerphone.hashCode,
+                                      $mrjc(
+                                          category.hashCode,
+                                          $mrjc(
+                                              unit.hashCode,
+                                              $mrjc(
+                                                  deposit.hashCode,
+                                                  $mrjc(
+                                                      price.hashCode,
+                                                      $mrjc(
+                                                          title.hashCode,
+                                                          $mrjc(
+                                                              payed.hashCode,
+                                                              rating
+                                                                  .hashCode))))))))))))))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is MyHouseDetail &&
+          other.id == this.id &&
+          other.onlineid == this.onlineid &&
+          other.ownerid == this.ownerid &&
+          other.ownername == this.ownername &&
+          other.ownerlogo == this.ownerlogo &&
+          other.owneraddress == this.owneraddress &&
+          other.owneremail == this.owneremail &&
+          other.ownerlocation == this.ownerlocation &&
+          other.ownerphone == this.ownerphone &&
+          other.category == this.category &&
+          other.unit == this.unit &&
+          other.deposit == this.deposit &&
+          other.price == this.price &&
+          other.title == this.title &&
+          other.payed == this.payed &&
+          other.rating == this.rating);
+}
+
+class MyHouseDetailsCompanion extends UpdateCompanion<MyHouseDetail> {
+  final Value<int> id;
+  final Value<String> onlineid;
+  final Value<String> ownerid;
+  final Value<String> ownername;
+  final Value<String> ownerlogo;
+  final Value<String> owneraddress;
+  final Value<String> owneremail;
+  final Value<String> ownerlocation;
+  final Value<String> ownerphone;
+  final Value<String> category;
+  final Value<String> unit;
+  final Value<String> deposit;
+  final Value<String> price;
+  final Value<String> title;
+  final Value<String> payed;
+  final Value<String> rating;
+  const MyHouseDetailsCompanion({
+    this.id = const Value.absent(),
+    this.onlineid = const Value.absent(),
+    this.ownerid = const Value.absent(),
+    this.ownername = const Value.absent(),
+    this.ownerlogo = const Value.absent(),
+    this.owneraddress = const Value.absent(),
+    this.owneremail = const Value.absent(),
+    this.ownerlocation = const Value.absent(),
+    this.ownerphone = const Value.absent(),
+    this.category = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.deposit = const Value.absent(),
+    this.price = const Value.absent(),
+    this.title = const Value.absent(),
+    this.payed = const Value.absent(),
+    this.rating = const Value.absent(),
+  });
+  MyHouseDetailsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String onlineid,
+    @required String ownerid,
+    @required String ownername,
+    @required String ownerlogo,
+    @required String owneraddress,
+    @required String owneremail,
+    @required String ownerlocation,
+    @required String ownerphone,
+    @required String category,
+    this.unit = const Value.absent(),
+    @required String deposit,
+    @required String price,
+    @required String title,
+    @required String payed,
+    @required String rating,
+  })  : onlineid = Value(onlineid),
+        ownerid = Value(ownerid),
+        ownername = Value(ownername),
+        ownerlogo = Value(ownerlogo),
+        owneraddress = Value(owneraddress),
+        owneremail = Value(owneremail),
+        ownerlocation = Value(ownerlocation),
+        ownerphone = Value(ownerphone),
+        category = Value(category),
+        deposit = Value(deposit),
+        price = Value(price),
+        title = Value(title),
+        payed = Value(payed),
+        rating = Value(rating);
+  static Insertable<MyHouseDetail> custom({
+    Expression<int> id,
+    Expression<String> onlineid,
+    Expression<String> ownerid,
+    Expression<String> ownername,
+    Expression<String> ownerlogo,
+    Expression<String> owneraddress,
+    Expression<String> owneremail,
+    Expression<String> ownerlocation,
+    Expression<String> ownerphone,
+    Expression<String> category,
+    Expression<String> unit,
+    Expression<String> deposit,
+    Expression<String> price,
+    Expression<String> title,
+    Expression<String> payed,
+    Expression<String> rating,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (onlineid != null) 'onlineid': onlineid,
+      if (ownerid != null) 'ownerid': ownerid,
+      if (ownername != null) 'ownername': ownername,
+      if (ownerlogo != null) 'ownerlogo': ownerlogo,
+      if (owneraddress != null) 'owneraddress': owneraddress,
+      if (owneremail != null) 'owneremail': owneremail,
+      if (ownerlocation != null) 'ownerlocation': ownerlocation,
+      if (ownerphone != null) 'ownerphone': ownerphone,
+      if (category != null) 'category': category,
+      if (unit != null) 'unit': unit,
+      if (deposit != null) 'deposit': deposit,
+      if (price != null) 'price': price,
+      if (title != null) 'title': title,
+      if (payed != null) 'payed': payed,
+      if (rating != null) 'rating': rating,
+    });
+  }
+
+  MyHouseDetailsCompanion copyWith(
+      {Value<int> id,
+      Value<String> onlineid,
+      Value<String> ownerid,
+      Value<String> ownername,
+      Value<String> ownerlogo,
+      Value<String> owneraddress,
+      Value<String> owneremail,
+      Value<String> ownerlocation,
+      Value<String> ownerphone,
+      Value<String> category,
+      Value<String> unit,
+      Value<String> deposit,
+      Value<String> price,
+      Value<String> title,
+      Value<String> payed,
+      Value<String> rating}) {
+    return MyHouseDetailsCompanion(
+      id: id ?? this.id,
+      onlineid: onlineid ?? this.onlineid,
+      ownerid: ownerid ?? this.ownerid,
+      ownername: ownername ?? this.ownername,
+      ownerlogo: ownerlogo ?? this.ownerlogo,
+      owneraddress: owneraddress ?? this.owneraddress,
+      owneremail: owneremail ?? this.owneremail,
+      ownerlocation: ownerlocation ?? this.ownerlocation,
+      ownerphone: ownerphone ?? this.ownerphone,
+      category: category ?? this.category,
+      unit: unit ?? this.unit,
+      deposit: deposit ?? this.deposit,
+      price: price ?? this.price,
+      title: title ?? this.title,
+      payed: payed ?? this.payed,
+      rating: rating ?? this.rating,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (onlineid.present) {
+      map['onlineid'] = Variable<String>(onlineid.value);
+    }
+    if (ownerid.present) {
+      map['ownerid'] = Variable<String>(ownerid.value);
+    }
+    if (ownername.present) {
+      map['ownername'] = Variable<String>(ownername.value);
+    }
+    if (ownerlogo.present) {
+      map['ownerlogo'] = Variable<String>(ownerlogo.value);
+    }
+    if (owneraddress.present) {
+      map['owneraddress'] = Variable<String>(owneraddress.value);
+    }
+    if (owneremail.present) {
+      map['owneremail'] = Variable<String>(owneremail.value);
+    }
+    if (ownerlocation.present) {
+      map['ownerlocation'] = Variable<String>(ownerlocation.value);
+    }
+    if (ownerphone.present) {
+      map['ownerphone'] = Variable<String>(ownerphone.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
+    }
+    if (deposit.present) {
+      map['deposit'] = Variable<String>(deposit.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<String>(price.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (payed.present) {
+      map['payed'] = Variable<String>(payed.value);
+    }
+    if (rating.present) {
+      map['rating'] = Variable<String>(rating.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MyHouseDetailsCompanion(')
+          ..write('id: $id, ')
+          ..write('onlineid: $onlineid, ')
+          ..write('ownerid: $ownerid, ')
+          ..write('ownername: $ownername, ')
+          ..write('ownerlogo: $ownerlogo, ')
+          ..write('owneraddress: $owneraddress, ')
+          ..write('owneremail: $owneremail, ')
+          ..write('ownerlocation: $ownerlocation, ')
+          ..write('ownerphone: $ownerphone, ')
+          ..write('category: $category, ')
+          ..write('unit: $unit, ')
+          ..write('deposit: $deposit, ')
+          ..write('price: $price, ')
+          ..write('title: $title, ')
+          ..write('payed: $payed, ')
+          ..write('rating: $rating')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MyHouseDetailsTable extends MyHouseDetails
+    with TableInfo<$MyHouseDetailsTable, MyHouseDetail> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $MyHouseDetailsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _onlineidMeta = const VerificationMeta('onlineid');
+  GeneratedTextColumn _onlineid;
+  @override
+  GeneratedTextColumn get onlineid => _onlineid ??= _constructOnlineid();
+  GeneratedTextColumn _constructOnlineid() {
+    return GeneratedTextColumn(
+      'onlineid',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _owneridMeta = const VerificationMeta('ownerid');
+  GeneratedTextColumn _ownerid;
+  @override
+  GeneratedTextColumn get ownerid => _ownerid ??= _constructOwnerid();
+  GeneratedTextColumn _constructOwnerid() {
+    return GeneratedTextColumn(
+      'ownerid',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ownernameMeta = const VerificationMeta('ownername');
+  GeneratedTextColumn _ownername;
+  @override
+  GeneratedTextColumn get ownername => _ownername ??= _constructOwnername();
+  GeneratedTextColumn _constructOwnername() {
+    return GeneratedTextColumn(
+      'ownername',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ownerlogoMeta = const VerificationMeta('ownerlogo');
+  GeneratedTextColumn _ownerlogo;
+  @override
+  GeneratedTextColumn get ownerlogo => _ownerlogo ??= _constructOwnerlogo();
+  GeneratedTextColumn _constructOwnerlogo() {
+    return GeneratedTextColumn(
+      'ownerlogo',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _owneraddressMeta =
+      const VerificationMeta('owneraddress');
+  GeneratedTextColumn _owneraddress;
+  @override
+  GeneratedTextColumn get owneraddress =>
+      _owneraddress ??= _constructOwneraddress();
+  GeneratedTextColumn _constructOwneraddress() {
+    return GeneratedTextColumn(
+      'owneraddress',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _owneremailMeta = const VerificationMeta('owneremail');
+  GeneratedTextColumn _owneremail;
+  @override
+  GeneratedTextColumn get owneremail => _owneremail ??= _constructOwneremail();
+  GeneratedTextColumn _constructOwneremail() {
+    return GeneratedTextColumn(
+      'owneremail',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ownerlocationMeta =
+      const VerificationMeta('ownerlocation');
+  GeneratedTextColumn _ownerlocation;
+  @override
+  GeneratedTextColumn get ownerlocation =>
+      _ownerlocation ??= _constructOwnerlocation();
+  GeneratedTextColumn _constructOwnerlocation() {
+    return GeneratedTextColumn(
+      'ownerlocation',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ownerphoneMeta = const VerificationMeta('ownerphone');
+  GeneratedTextColumn _ownerphone;
+  @override
+  GeneratedTextColumn get ownerphone => _ownerphone ??= _constructOwnerphone();
+  GeneratedTextColumn _constructOwnerphone() {
+    return GeneratedTextColumn(
+      'ownerphone',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  GeneratedTextColumn _category;
+  @override
+  GeneratedTextColumn get category => _category ??= _constructCategory();
+  GeneratedTextColumn _constructCategory() {
+    return GeneratedTextColumn(
+      'category',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _unitMeta = const VerificationMeta('unit');
+  GeneratedTextColumn _unit;
+  @override
+  GeneratedTextColumn get unit => _unit ??= _constructUnit();
+  GeneratedTextColumn _constructUnit() {
+    return GeneratedTextColumn(
+      'unit',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _depositMeta = const VerificationMeta('deposit');
+  GeneratedTextColumn _deposit;
+  @override
+  GeneratedTextColumn get deposit => _deposit ??= _constructDeposit();
+  GeneratedTextColumn _constructDeposit() {
+    return GeneratedTextColumn(
+      'deposit',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _priceMeta = const VerificationMeta('price');
+  GeneratedTextColumn _price;
+  @override
+  GeneratedTextColumn get price => _price ??= _constructPrice();
+  GeneratedTextColumn _constructPrice() {
+    return GeneratedTextColumn(
+      'price',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _titleMeta = const VerificationMeta('title');
+  GeneratedTextColumn _title;
+  @override
+  GeneratedTextColumn get title => _title ??= _constructTitle();
+  GeneratedTextColumn _constructTitle() {
+    return GeneratedTextColumn(
+      'title',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _payedMeta = const VerificationMeta('payed');
+  GeneratedTextColumn _payed;
+  @override
+  GeneratedTextColumn get payed => _payed ??= _constructPayed();
+  GeneratedTextColumn _constructPayed() {
+    return GeneratedTextColumn(
+      'payed',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ratingMeta = const VerificationMeta('rating');
+  GeneratedTextColumn _rating;
+  @override
+  GeneratedTextColumn get rating => _rating ??= _constructRating();
+  GeneratedTextColumn _constructRating() {
+    return GeneratedTextColumn(
+      'rating',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        onlineid,
+        ownerid,
+        ownername,
+        ownerlogo,
+        owneraddress,
+        owneremail,
+        ownerlocation,
+        ownerphone,
+        category,
+        unit,
+        deposit,
+        price,
+        title,
+        payed,
+        rating
+      ];
+  @override
+  $MyHouseDetailsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'my_house_details';
+  @override
+  final String actualTableName = 'my_house_details';
+  @override
+  VerificationContext validateIntegrity(Insertable<MyHouseDetail> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('onlineid')) {
+      context.handle(_onlineidMeta,
+          onlineid.isAcceptableOrUnknown(data['onlineid'], _onlineidMeta));
+    } else if (isInserting) {
+      context.missing(_onlineidMeta);
+    }
+    if (data.containsKey('ownerid')) {
+      context.handle(_owneridMeta,
+          ownerid.isAcceptableOrUnknown(data['ownerid'], _owneridMeta));
+    } else if (isInserting) {
+      context.missing(_owneridMeta);
+    }
+    if (data.containsKey('ownername')) {
+      context.handle(_ownernameMeta,
+          ownername.isAcceptableOrUnknown(data['ownername'], _ownernameMeta));
+    } else if (isInserting) {
+      context.missing(_ownernameMeta);
+    }
+    if (data.containsKey('ownerlogo')) {
+      context.handle(_ownerlogoMeta,
+          ownerlogo.isAcceptableOrUnknown(data['ownerlogo'], _ownerlogoMeta));
+    } else if (isInserting) {
+      context.missing(_ownerlogoMeta);
+    }
+    if (data.containsKey('owneraddress')) {
+      context.handle(
+          _owneraddressMeta,
+          owneraddress.isAcceptableOrUnknown(
+              data['owneraddress'], _owneraddressMeta));
+    } else if (isInserting) {
+      context.missing(_owneraddressMeta);
+    }
+    if (data.containsKey('owneremail')) {
+      context.handle(
+          _owneremailMeta,
+          owneremail.isAcceptableOrUnknown(
+              data['owneremail'], _owneremailMeta));
+    } else if (isInserting) {
+      context.missing(_owneremailMeta);
+    }
+    if (data.containsKey('ownerlocation')) {
+      context.handle(
+          _ownerlocationMeta,
+          ownerlocation.isAcceptableOrUnknown(
+              data['ownerlocation'], _ownerlocationMeta));
+    } else if (isInserting) {
+      context.missing(_ownerlocationMeta);
+    }
+    if (data.containsKey('ownerphone')) {
+      context.handle(
+          _ownerphoneMeta,
+          ownerphone.isAcceptableOrUnknown(
+              data['ownerphone'], _ownerphoneMeta));
+    } else if (isInserting) {
+      context.missing(_ownerphoneMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category'], _categoryMeta));
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('unit')) {
+      context.handle(
+          _unitMeta, unit.isAcceptableOrUnknown(data['unit'], _unitMeta));
+    }
+    if (data.containsKey('deposit')) {
+      context.handle(_depositMeta,
+          deposit.isAcceptableOrUnknown(data['deposit'], _depositMeta));
+    } else if (isInserting) {
+      context.missing(_depositMeta);
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+          _priceMeta, price.isAcceptableOrUnknown(data['price'], _priceMeta));
+    } else if (isInserting) {
+      context.missing(_priceMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('payed')) {
+      context.handle(
+          _payedMeta, payed.isAcceptableOrUnknown(data['payed'], _payedMeta));
+    } else if (isInserting) {
+      context.missing(_payedMeta);
+    }
+    if (data.containsKey('rating')) {
+      context.handle(_ratingMeta,
+          rating.isAcceptableOrUnknown(data['rating'], _ratingMeta));
+    } else if (isInserting) {
+      context.missing(_ratingMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MyHouseDetail map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return MyHouseDetail.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $MyHouseDetailsTable createAlias(String alias) {
+    return $MyHouseDetailsTable(_db, alias);
+  }
+}
+
+class MyHouseArrear extends DataClass implements Insertable<MyHouseArrear> {
+  final int id;
+  final String onlineid;
+  final String amount;
+  final String year;
+  final String month;
+  MyHouseArrear(
+      {@required this.id,
+      @required this.onlineid,
+      @required this.amount,
+      @required this.year,
+      @required this.month});
+  factory MyHouseArrear.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return MyHouseArrear(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      onlineid: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}onlineid']),
+      amount:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}amount']),
+      year: stringType.mapFromDatabaseResponse(data['${effectivePrefix}year']),
+      month:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}month']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || onlineid != null) {
+      map['onlineid'] = Variable<String>(onlineid);
+    }
+    if (!nullToAbsent || amount != null) {
+      map['amount'] = Variable<String>(amount);
+    }
+    if (!nullToAbsent || year != null) {
+      map['year'] = Variable<String>(year);
+    }
+    if (!nullToAbsent || month != null) {
+      map['month'] = Variable<String>(month);
+    }
+    return map;
+  }
+
+  MyHouseArrearsCompanion toCompanion(bool nullToAbsent) {
+    return MyHouseArrearsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      onlineid: onlineid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(onlineid),
+      amount:
+          amount == null && nullToAbsent ? const Value.absent() : Value(amount),
+      year: year == null && nullToAbsent ? const Value.absent() : Value(year),
+      month:
+          month == null && nullToAbsent ? const Value.absent() : Value(month),
+    );
+  }
+
+  factory MyHouseArrear.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MyHouseArrear(
+      id: serializer.fromJson<int>(json['id']),
+      onlineid: serializer.fromJson<String>(json['onlineid']),
+      amount: serializer.fromJson<String>(json['amount']),
+      year: serializer.fromJson<String>(json['year']),
+      month: serializer.fromJson<String>(json['month']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'onlineid': serializer.toJson<String>(onlineid),
+      'amount': serializer.toJson<String>(amount),
+      'year': serializer.toJson<String>(year),
+      'month': serializer.toJson<String>(month),
+    };
+  }
+
+  MyHouseArrear copyWith(
+          {int id,
+          String onlineid,
+          String amount,
+          String year,
+          String month}) =>
+      MyHouseArrear(
+        id: id ?? this.id,
+        onlineid: onlineid ?? this.onlineid,
+        amount: amount ?? this.amount,
+        year: year ?? this.year,
+        month: month ?? this.month,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MyHouseArrear(')
+          ..write('id: $id, ')
+          ..write('onlineid: $onlineid, ')
+          ..write('amount: $amount, ')
+          ..write('year: $year, ')
+          ..write('month: $month')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(onlineid.hashCode,
+          $mrjc(amount.hashCode, $mrjc(year.hashCode, month.hashCode)))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is MyHouseArrear &&
+          other.id == this.id &&
+          other.onlineid == this.onlineid &&
+          other.amount == this.amount &&
+          other.year == this.year &&
+          other.month == this.month);
+}
+
+class MyHouseArrearsCompanion extends UpdateCompanion<MyHouseArrear> {
+  final Value<int> id;
+  final Value<String> onlineid;
+  final Value<String> amount;
+  final Value<String> year;
+  final Value<String> month;
+  const MyHouseArrearsCompanion({
+    this.id = const Value.absent(),
+    this.onlineid = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.year = const Value.absent(),
+    this.month = const Value.absent(),
+  });
+  MyHouseArrearsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String onlineid,
+    @required String amount,
+    @required String year,
+    @required String month,
+  })  : onlineid = Value(onlineid),
+        amount = Value(amount),
+        year = Value(year),
+        month = Value(month);
+  static Insertable<MyHouseArrear> custom({
+    Expression<int> id,
+    Expression<String> onlineid,
+    Expression<String> amount,
+    Expression<String> year,
+    Expression<String> month,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (onlineid != null) 'onlineid': onlineid,
+      if (amount != null) 'amount': amount,
+      if (year != null) 'year': year,
+      if (month != null) 'month': month,
+    });
+  }
+
+  MyHouseArrearsCompanion copyWith(
+      {Value<int> id,
+      Value<String> onlineid,
+      Value<String> amount,
+      Value<String> year,
+      Value<String> month}) {
+    return MyHouseArrearsCompanion(
+      id: id ?? this.id,
+      onlineid: onlineid ?? this.onlineid,
+      amount: amount ?? this.amount,
+      year: year ?? this.year,
+      month: month ?? this.month,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (onlineid.present) {
+      map['onlineid'] = Variable<String>(onlineid.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<String>(amount.value);
+    }
+    if (year.present) {
+      map['year'] = Variable<String>(year.value);
+    }
+    if (month.present) {
+      map['month'] = Variable<String>(month.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MyHouseArrearsCompanion(')
+          ..write('id: $id, ')
+          ..write('onlineid: $onlineid, ')
+          ..write('amount: $amount, ')
+          ..write('year: $year, ')
+          ..write('month: $month')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MyHouseArrearsTable extends MyHouseArrears
+    with TableInfo<$MyHouseArrearsTable, MyHouseArrear> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $MyHouseArrearsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _onlineidMeta = const VerificationMeta('onlineid');
+  GeneratedTextColumn _onlineid;
+  @override
+  GeneratedTextColumn get onlineid => _onlineid ??= _constructOnlineid();
+  GeneratedTextColumn _constructOnlineid() {
+    return GeneratedTextColumn(
+      'onlineid',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _amountMeta = const VerificationMeta('amount');
+  GeneratedTextColumn _amount;
+  @override
+  GeneratedTextColumn get amount => _amount ??= _constructAmount();
+  GeneratedTextColumn _constructAmount() {
+    return GeneratedTextColumn(
+      'amount',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _yearMeta = const VerificationMeta('year');
+  GeneratedTextColumn _year;
+  @override
+  GeneratedTextColumn get year => _year ??= _constructYear();
+  GeneratedTextColumn _constructYear() {
+    return GeneratedTextColumn(
+      'year',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _monthMeta = const VerificationMeta('month');
+  GeneratedTextColumn _month;
+  @override
+  GeneratedTextColumn get month => _month ??= _constructMonth();
+  GeneratedTextColumn _constructMonth() {
+    return GeneratedTextColumn(
+      'month',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, onlineid, amount, year, month];
+  @override
+  $MyHouseArrearsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'my_house_arrears';
+  @override
+  final String actualTableName = 'my_house_arrears';
+  @override
+  VerificationContext validateIntegrity(Insertable<MyHouseArrear> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('onlineid')) {
+      context.handle(_onlineidMeta,
+          onlineid.isAcceptableOrUnknown(data['onlineid'], _onlineidMeta));
+    } else if (isInserting) {
+      context.missing(_onlineidMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount'], _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('year')) {
+      context.handle(
+          _yearMeta, year.isAcceptableOrUnknown(data['year'], _yearMeta));
+    } else if (isInserting) {
+      context.missing(_yearMeta);
+    }
+    if (data.containsKey('month')) {
+      context.handle(
+          _monthMeta, month.isAcceptableOrUnknown(data['month'], _monthMeta));
+    } else if (isInserting) {
+      context.missing(_monthMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MyHouseArrear map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return MyHouseArrear.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $MyHouseArrearsTable createAlias(String alias) {
+    return $MyHouseArrearsTable(_db, alias);
+  }
+}
+
+class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
+  final int id;
+  final String onlineid;
+  final String transactionid;
+  final String category;
+  final String title;
+  final String amount;
+  final String status;
+  final String time;
+  final String year;
+  final String month;
+  final String type;
+  MyHousePayment(
+      {@required this.id,
+      @required this.onlineid,
+      @required this.transactionid,
+      @required this.category,
+      @required this.title,
+      @required this.amount,
+      @required this.status,
+      @required this.time,
+      @required this.year,
+      @required this.month,
+      @required this.type});
+  factory MyHousePayment.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return MyHousePayment(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      onlineid: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}onlineid']),
+      transactionid: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}transactionid']),
+      category: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}category']),
+      title:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
+      amount:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}amount']),
+      status:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}status']),
+      time: stringType.mapFromDatabaseResponse(data['${effectivePrefix}time']),
+      year: stringType.mapFromDatabaseResponse(data['${effectivePrefix}year']),
+      month:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}month']),
+      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || onlineid != null) {
+      map['onlineid'] = Variable<String>(onlineid);
+    }
+    if (!nullToAbsent || transactionid != null) {
+      map['transactionid'] = Variable<String>(transactionid);
+    }
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(category);
+    }
+    if (!nullToAbsent || title != null) {
+      map['title'] = Variable<String>(title);
+    }
+    if (!nullToAbsent || amount != null) {
+      map['amount'] = Variable<String>(amount);
+    }
+    if (!nullToAbsent || status != null) {
+      map['status'] = Variable<String>(status);
+    }
+    if (!nullToAbsent || time != null) {
+      map['time'] = Variable<String>(time);
+    }
+    if (!nullToAbsent || year != null) {
+      map['year'] = Variable<String>(year);
+    }
+    if (!nullToAbsent || month != null) {
+      map['month'] = Variable<String>(month);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
+    return map;
+  }
+
+  MyHousePaymentsCompanion toCompanion(bool nullToAbsent) {
+    return MyHousePaymentsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      onlineid: onlineid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(onlineid),
+      transactionid: transactionid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transactionid),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
+      title:
+          title == null && nullToAbsent ? const Value.absent() : Value(title),
+      amount:
+          amount == null && nullToAbsent ? const Value.absent() : Value(amount),
+      status:
+          status == null && nullToAbsent ? const Value.absent() : Value(status),
+      time: time == null && nullToAbsent ? const Value.absent() : Value(time),
+      year: year == null && nullToAbsent ? const Value.absent() : Value(year),
+      month:
+          month == null && nullToAbsent ? const Value.absent() : Value(month),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+    );
+  }
+
+  factory MyHousePayment.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return MyHousePayment(
+      id: serializer.fromJson<int>(json['id']),
+      onlineid: serializer.fromJson<String>(json['onlineid']),
+      transactionid: serializer.fromJson<String>(json['transactionid']),
+      category: serializer.fromJson<String>(json['category']),
+      title: serializer.fromJson<String>(json['title']),
+      amount: serializer.fromJson<String>(json['amount']),
+      status: serializer.fromJson<String>(json['status']),
+      time: serializer.fromJson<String>(json['time']),
+      year: serializer.fromJson<String>(json['year']),
+      month: serializer.fromJson<String>(json['month']),
+      type: serializer.fromJson<String>(json['type']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'onlineid': serializer.toJson<String>(onlineid),
+      'transactionid': serializer.toJson<String>(transactionid),
+      'category': serializer.toJson<String>(category),
+      'title': serializer.toJson<String>(title),
+      'amount': serializer.toJson<String>(amount),
+      'status': serializer.toJson<String>(status),
+      'time': serializer.toJson<String>(time),
+      'year': serializer.toJson<String>(year),
+      'month': serializer.toJson<String>(month),
+      'type': serializer.toJson<String>(type),
+    };
+  }
+
+  MyHousePayment copyWith(
+          {int id,
+          String onlineid,
+          String transactionid,
+          String category,
+          String title,
+          String amount,
+          String status,
+          String time,
+          String year,
+          String month,
+          String type}) =>
+      MyHousePayment(
+        id: id ?? this.id,
+        onlineid: onlineid ?? this.onlineid,
+        transactionid: transactionid ?? this.transactionid,
+        category: category ?? this.category,
+        title: title ?? this.title,
+        amount: amount ?? this.amount,
+        status: status ?? this.status,
+        time: time ?? this.time,
+        year: year ?? this.year,
+        month: month ?? this.month,
+        type: type ?? this.type,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('MyHousePayment(')
+          ..write('id: $id, ')
+          ..write('onlineid: $onlineid, ')
+          ..write('transactionid: $transactionid, ')
+          ..write('category: $category, ')
+          ..write('title: $title, ')
+          ..write('amount: $amount, ')
+          ..write('status: $status, ')
+          ..write('time: $time, ')
+          ..write('year: $year, ')
+          ..write('month: $month, ')
+          ..write('type: $type')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          onlineid.hashCode,
+          $mrjc(
+              transactionid.hashCode,
+              $mrjc(
+                  category.hashCode,
+                  $mrjc(
+                      title.hashCode,
+                      $mrjc(
+                          amount.hashCode,
+                          $mrjc(
+                              status.hashCode,
+                              $mrjc(
+                                  time.hashCode,
+                                  $mrjc(
+                                      year.hashCode,
+                                      $mrjc(month.hashCode,
+                                          type.hashCode)))))))))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is MyHousePayment &&
+          other.id == this.id &&
+          other.onlineid == this.onlineid &&
+          other.transactionid == this.transactionid &&
+          other.category == this.category &&
+          other.title == this.title &&
+          other.amount == this.amount &&
+          other.status == this.status &&
+          other.time == this.time &&
+          other.year == this.year &&
+          other.month == this.month &&
+          other.type == this.type);
+}
+
+class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
+  final Value<int> id;
+  final Value<String> onlineid;
+  final Value<String> transactionid;
+  final Value<String> category;
+  final Value<String> title;
+  final Value<String> amount;
+  final Value<String> status;
+  final Value<String> time;
+  final Value<String> year;
+  final Value<String> month;
+  final Value<String> type;
+  const MyHousePaymentsCompanion({
+    this.id = const Value.absent(),
+    this.onlineid = const Value.absent(),
+    this.transactionid = const Value.absent(),
+    this.category = const Value.absent(),
+    this.title = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.status = const Value.absent(),
+    this.time = const Value.absent(),
+    this.year = const Value.absent(),
+    this.month = const Value.absent(),
+    this.type = const Value.absent(),
+  });
+  MyHousePaymentsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String onlineid,
+    @required String transactionid,
+    @required String category,
+    @required String title,
+    @required String amount,
+    @required String status,
+    @required String time,
+    @required String year,
+    @required String month,
+    @required String type,
+  })  : onlineid = Value(onlineid),
+        transactionid = Value(transactionid),
+        category = Value(category),
+        title = Value(title),
+        amount = Value(amount),
+        status = Value(status),
+        time = Value(time),
+        year = Value(year),
+        month = Value(month),
+        type = Value(type);
+  static Insertable<MyHousePayment> custom({
+    Expression<int> id,
+    Expression<String> onlineid,
+    Expression<String> transactionid,
+    Expression<String> category,
+    Expression<String> title,
+    Expression<String> amount,
+    Expression<String> status,
+    Expression<String> time,
+    Expression<String> year,
+    Expression<String> month,
+    Expression<String> type,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (onlineid != null) 'onlineid': onlineid,
+      if (transactionid != null) 'transactionid': transactionid,
+      if (category != null) 'category': category,
+      if (title != null) 'title': title,
+      if (amount != null) 'amount': amount,
+      if (status != null) 'status': status,
+      if (time != null) 'time': time,
+      if (year != null) 'year': year,
+      if (month != null) 'month': month,
+      if (type != null) 'type': type,
+    });
+  }
+
+  MyHousePaymentsCompanion copyWith(
+      {Value<int> id,
+      Value<String> onlineid,
+      Value<String> transactionid,
+      Value<String> category,
+      Value<String> title,
+      Value<String> amount,
+      Value<String> status,
+      Value<String> time,
+      Value<String> year,
+      Value<String> month,
+      Value<String> type}) {
+    return MyHousePaymentsCompanion(
+      id: id ?? this.id,
+      onlineid: onlineid ?? this.onlineid,
+      transactionid: transactionid ?? this.transactionid,
+      category: category ?? this.category,
+      title: title ?? this.title,
+      amount: amount ?? this.amount,
+      status: status ?? this.status,
+      time: time ?? this.time,
+      year: year ?? this.year,
+      month: month ?? this.month,
+      type: type ?? this.type,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (onlineid.present) {
+      map['onlineid'] = Variable<String>(onlineid.value);
+    }
+    if (transactionid.present) {
+      map['transactionid'] = Variable<String>(transactionid.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<String>(amount.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (time.present) {
+      map['time'] = Variable<String>(time.value);
+    }
+    if (year.present) {
+      map['year'] = Variable<String>(year.value);
+    }
+    if (month.present) {
+      map['month'] = Variable<String>(month.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MyHousePaymentsCompanion(')
+          ..write('id: $id, ')
+          ..write('onlineid: $onlineid, ')
+          ..write('transactionid: $transactionid, ')
+          ..write('category: $category, ')
+          ..write('title: $title, ')
+          ..write('amount: $amount, ')
+          ..write('status: $status, ')
+          ..write('time: $time, ')
+          ..write('year: $year, ')
+          ..write('month: $month, ')
+          ..write('type: $type')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MyHousePaymentsTable extends MyHousePayments
+    with TableInfo<$MyHousePaymentsTable, MyHousePayment> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $MyHousePaymentsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _onlineidMeta = const VerificationMeta('onlineid');
+  GeneratedTextColumn _onlineid;
+  @override
+  GeneratedTextColumn get onlineid => _onlineid ??= _constructOnlineid();
+  GeneratedTextColumn _constructOnlineid() {
+    return GeneratedTextColumn(
+      'onlineid',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _transactionidMeta =
+      const VerificationMeta('transactionid');
+  GeneratedTextColumn _transactionid;
+  @override
+  GeneratedTextColumn get transactionid =>
+      _transactionid ??= _constructTransactionid();
+  GeneratedTextColumn _constructTransactionid() {
+    return GeneratedTextColumn(
+      'transactionid',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  GeneratedTextColumn _category;
+  @override
+  GeneratedTextColumn get category => _category ??= _constructCategory();
+  GeneratedTextColumn _constructCategory() {
+    return GeneratedTextColumn(
+      'category',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _titleMeta = const VerificationMeta('title');
+  GeneratedTextColumn _title;
+  @override
+  GeneratedTextColumn get title => _title ??= _constructTitle();
+  GeneratedTextColumn _constructTitle() {
+    return GeneratedTextColumn(
+      'title',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _amountMeta = const VerificationMeta('amount');
+  GeneratedTextColumn _amount;
+  @override
+  GeneratedTextColumn get amount => _amount ??= _constructAmount();
+  GeneratedTextColumn _constructAmount() {
+    return GeneratedTextColumn(
+      'amount',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _statusMeta = const VerificationMeta('status');
+  GeneratedTextColumn _status;
+  @override
+  GeneratedTextColumn get status => _status ??= _constructStatus();
+  GeneratedTextColumn _constructStatus() {
+    return GeneratedTextColumn(
+      'status',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _timeMeta = const VerificationMeta('time');
+  GeneratedTextColumn _time;
+  @override
+  GeneratedTextColumn get time => _time ??= _constructTime();
+  GeneratedTextColumn _constructTime() {
+    return GeneratedTextColumn(
+      'time',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _yearMeta = const VerificationMeta('year');
+  GeneratedTextColumn _year;
+  @override
+  GeneratedTextColumn get year => _year ??= _constructYear();
+  GeneratedTextColumn _constructYear() {
+    return GeneratedTextColumn(
+      'year',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _monthMeta = const VerificationMeta('month');
+  GeneratedTextColumn _month;
+  @override
+  GeneratedTextColumn get month => _month ??= _constructMonth();
+  GeneratedTextColumn _constructMonth() {
+    return GeneratedTextColumn(
+      'month',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedTextColumn _type;
+  @override
+  GeneratedTextColumn get type => _type ??= _constructType();
+  GeneratedTextColumn _constructType() {
+    return GeneratedTextColumn(
+      'type',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        onlineid,
+        transactionid,
+        category,
+        title,
+        amount,
+        status,
+        time,
+        year,
+        month,
+        type
+      ];
+  @override
+  $MyHousePaymentsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'my_house_payments';
+  @override
+  final String actualTableName = 'my_house_payments';
+  @override
+  VerificationContext validateIntegrity(Insertable<MyHousePayment> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('onlineid')) {
+      context.handle(_onlineidMeta,
+          onlineid.isAcceptableOrUnknown(data['onlineid'], _onlineidMeta));
+    } else if (isInserting) {
+      context.missing(_onlineidMeta);
+    }
+    if (data.containsKey('transactionid')) {
+      context.handle(
+          _transactionidMeta,
+          transactionid.isAcceptableOrUnknown(
+              data['transactionid'], _transactionidMeta));
+    } else if (isInserting) {
+      context.missing(_transactionidMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category'], _categoryMeta));
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount'], _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(_statusMeta,
+          status.isAcceptableOrUnknown(data['status'], _statusMeta));
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('time')) {
+      context.handle(
+          _timeMeta, time.isAcceptableOrUnknown(data['time'], _timeMeta));
+    } else if (isInserting) {
+      context.missing(_timeMeta);
+    }
+    if (data.containsKey('year')) {
+      context.handle(
+          _yearMeta, year.isAcceptableOrUnknown(data['year'], _yearMeta));
+    } else if (isInserting) {
+      context.missing(_yearMeta);
+    }
+    if (data.containsKey('month')) {
+      context.handle(
+          _monthMeta, month.isAcceptableOrUnknown(data['month'], _monthMeta));
+    } else if (isInserting) {
+      context.missing(_monthMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MyHousePayment map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return MyHousePayment.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $MyHousePaymentsTable createAlias(String alias) {
+    return $MyHousePaymentsTable(_db, alias);
+  }
+}
+
 abstract class _$DatabaseHelper extends GeneratedDatabase {
   _$DatabaseHelper(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $MyApartmentTableTable _myApartmentTable;
   $MyApartmentTableTable get myApartmentTable =>
       _myApartmentTable ??= $MyApartmentTableTable(this);
+  $MyHouseDetailsTable _myHouseDetails;
+  $MyHouseDetailsTable get myHouseDetails =>
+      _myHouseDetails ??= $MyHouseDetailsTable(this);
+  $MyHouseArrearsTable _myHouseArrears;
+  $MyHouseArrearsTable get myHouseArrears =>
+      _myHouseArrears ??= $MyHouseArrearsTable(this);
+  $MyHousePaymentsTable _myHousePayments;
+  $MyHousePaymentsTable get myHousePayments =>
+      _myHousePayments ??= $MyHousePaymentsTable(this);
   DatabaseDao _databaseDao;
   DatabaseDao get databaseDao =>
       _databaseDao ??= DatabaseDao(this as DatabaseHelper);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [myApartmentTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [myApartmentTable, myHouseDetails, myHouseArrears, myHousePayments];
 }

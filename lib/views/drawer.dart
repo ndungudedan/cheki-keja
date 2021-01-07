@@ -158,7 +158,7 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
               color: Colors.white,
             ),
             onTap: () =>sharedPreferences.getSignedIn() ? Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => myhouse()))
+                .push(MaterialPageRoute(builder: (context) => MyHouse()))
                 : dialog(),
           ),
           ListTile(

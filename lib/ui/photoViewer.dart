@@ -57,7 +57,7 @@ void onPageChanged(int index) {
       builder: (BuildContext context, int index) {
         return PhotoViewGalleryPageOptions(
           imageProvider: CachedNetworkImageProvider(constants.path +
-                                      apartment.owner_id +
+                                      apartment.ownerid +
                                       constants.folder +widget.picList[index].image),
           initialScale: PhotoViewComputedScale.contained * 0.8,
           heroAttributes: PhotoViewHeroAttributes(tag: currentIndex),

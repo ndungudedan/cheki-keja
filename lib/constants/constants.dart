@@ -23,11 +23,12 @@ class Constants {
   static final fail = '0'; //network query failed
   static final success = '1'; //network query successful
 
-   final bizNo = '174379';
-   final passKey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
-   final phoneNo = '254700314700';
-   final paymentDeposit = 'deposit';
-   final paymentRent = 'rent';
+  final bizNo = '174379';
+  final passKey =
+      'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+  final phoneNo = '254700314700';
+  final paymentDeposit = 'deposit';
+  final paymentRent = 'rent';
 
   static final jan = '1';
   static final dec = '12';
@@ -80,21 +81,21 @@ class UploadData {
 }
 
 class ApartmentCategory {
-   static final singles = 'Single Room';
-   static final doubles = 'Double Room';
+  static final singles = 'Single Room';
+  static final doubles = 'Double Room';
   static final bedsitter = 'Bed Sitter';
-   static final one_bed = 'One Bedroom';
-    static final two_bed = 'Two Bedroom';
-     static final three_bed = 'Three Bedroom';
-      //static final four_bed = 'Four Bedroom';
+  static final one_bed = 'One Bedroom';
+  static final two_bed = 'Two Bedroom';
+  static final three_bed = 'Three Bedroom';
+  //static final four_bed = 'Four Bedroom';
 
-      static final single_id = '1';
-      static final double_id = '2';
+  static final single_id = '1';
+  static final double_id = '2';
   static final bedsitter_id = '4';
-   static final one_bed_id = '5';
-    static final two_bed_id = '11';
-     static final three_bed_id = '12';
-      //static final four_bed_id = 'Four Bedroom';
+  static final one_bed_id = '5';
+  static final two_bed_id = '11';
+  static final three_bed_id = '12';
+  //static final four_bed_id = 'Four Bedroom';
 }
 
 // list of colors that we use in our app
@@ -104,6 +105,8 @@ const kSecondaryColor = Color(0xFFFFA41B);
 const kTextColor = Color(0xFF000839);
 const kTextLightColor = Color(0xFF747474);
 const kBlueColor = Color(0xFF40BAD5);
+const greyPlaceHolder = Color.fromARGB(255,128, 128, 128);
+const lightgreyPlaceHolder = Color.fromARGB(255,207, 212, 219);
 
 const kDefaultPadding = 20.0;
 

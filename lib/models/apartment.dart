@@ -1,3 +1,4 @@
+import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/models/status.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'apartment.g.dart';
@@ -20,9 +21,9 @@ class Banner {
 @JsonSerializable()
 class MyApartment {
   String id;
-  String owner_id;
-  String owner_name;
-  String owner_logo;
+  String ownerid;
+  String ownername;
+  String ownerlogo;
   String description;
   String category;
   String location;
@@ -44,9 +45,9 @@ class MyApartment {
 
   MyApartment({
     this.id,
-    this.owner_id,
-    this.owner_name,
-    this.owner_logo,
+    this.ownerid,
+    this.ownername,
+    this.ownerlogo,
     this.category,
     this.email,
     this.address,
@@ -98,7 +99,7 @@ class MyApartment {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
       "online_id": id,
-      "owner_id": owner_id,
+      "owner_id": ownerid,
       "banner": banner,
       "category": category,
       "title": title,
@@ -129,7 +130,7 @@ class MyApartment {
     MyApartment myApartment = MyApartment();
     //myApartment.id = map["id"].toString();
     myApartment.id = map["online_id"];
-    myApartment.owner_id = map["owner_id"];
+    myApartment.ownerid = map["owner_id"];
     myApartment.banner = map["banner"];
     myApartment.category = map["category"];
     myApartment.title = map["title"];

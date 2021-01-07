@@ -9,4 +9,7 @@ part of 'dao.dart';
 mixin _$DatabaseDaoMixin on DatabaseAccessor<DatabaseHelper> {
   $MyApartmentTableTable get myApartmentTable =>
       attachedDatabase.myApartmentTable;
+  $MyHouseDetailsTable get myHouseDetails => attachedDatabase.myHouseDetails;
+  $MyHousePaymentsTable get myHousePayments => attachedDatabase.myHousePayments;
+  $MyHouseArrearsTable get myHouseArrears => attachedDatabase.myHouseArrears;
 }

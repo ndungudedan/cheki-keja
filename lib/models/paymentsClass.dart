@@ -4,7 +4,7 @@ part 'paymentsClass.g.dart';
 @JsonSerializable()
 class Payments {
   String id;
-  String transaction_id;
+  String transactionid;
   String category;
   String title;
   String amount;
@@ -16,7 +16,7 @@ class Payments {
 
   Payments({
     this.id,
-    this.transaction_id,
+    this.transactionid,
     this.category,
     this.title,
     this.amount,
@@ -102,13 +102,13 @@ class ArrearsList {
 @JsonSerializable()
 class Details {
   String id;
-  String owner_id;
-  String owner_name;
-  String owner_logo;
-  String owner_phone;
-  String owner_address;
-  String owner_location;
-  String owner_email;
+  String ownerid;
+  String ownername;
+  String ownerlogo;
+  String ownerphone;
+  String owneraddress;
+  String ownerlocation;
+  String owneremail;
   String title;
   String category;
   String price;
@@ -119,13 +119,13 @@ class Details {
 
   Details({
     this.id,
-    this.owner_id,
-    this.owner_name,
-    this.owner_logo,
-    this.owner_address,
-    this.owner_email,
-    this.owner_location,
-    this.owner_phone,
+    this.ownerid,
+    this.ownername,
+    this.ownerlogo,
+    this.owneraddress,
+    this.owneremail,
+    this.ownerlocation,
+    this.ownerphone,
     this.category,
     this.unit,
     this.deposit,

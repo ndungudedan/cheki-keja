@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cheki_keja/blocs/myhousebloc.dart';
 import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/database/dao.dart';
+import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/paymentsClass.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class myhouse extends StatefulWidget {
-  myhouse({Key key, this.title}) : super(key: key);
+class MyHouse extends StatefulWidget {
+  MyHouse({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -16,9 +18,10 @@ class myhouse extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<myhouse> {
+class _MyHomePageState extends State<MyHouse> {
   Constants constants = Constants();
   MyhouseBloc myhouseBloc;
+  var dao = DatabaseDao(databasehelper);
   var userId;
 
   @override
@@ -46,18 +49,20 @@ class _MyHomePageState extends State<myhouse> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: StreamBuilder(
-          stream: myhouseBloc.result,
-          builder: (BuildContext context, AsyncSnapshot<Myhouse> snapshot) {
-            if (snapshot.hasData) {
-              return snapshot.data.details != null
-                  ? ListView(
+        body: ListView(
                       shrinkWrap: true,
                       children: <Widget>[
                         ConnectionCallback(
                           onlineCall: () {},
                         ),
-                        Container(
+                        StreamBuilder(
+                              stream: dao.watchMyHouseDetails(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView(
+                                    children: [
+                                      Container(
                           color: Colors.white,
                           child: ListTile(
                               trailing: RatingBarIndicator(
@@ -75,9 +80,9 @@ class _MyHomePageState extends State<myhouse> {
                                 borderRadius: BorderRadius.circular(50),
                                 child: CachedNetworkImage(
                                   imageUrl: constants.path +
-                                      snapshot.data.details.owner_id +
+                                      snapshot.data.details.ownerid +
                                       constants.folder +
-                                      snapshot.data.details.owner_logo,
+                                      snapshot.data.details.ownerlogo,
                                   placeholder: (context, url) => Container(
                                       alignment: Alignment(0.0, 2.0),
                                       child: Center(
@@ -89,7 +94,7 @@ class _MyHomePageState extends State<myhouse> {
                                               Center(child: Icon(Icons.error))),
                                 ),
                               ),
-                              title: Text(snapshot.data.details.owner_name +
+                              title: Text(snapshot.data.details.ownername +
                                   '\n' +
                                   snapshot.data.details.title +
                                   '\n' +
@@ -111,27 +116,50 @@ class _MyHomePageState extends State<myhouse> {
                                 title: Text('Phone'),
                                 leading: Icon(Icons.call),
                                 subtitle:
-                                    Text(snapshot.data.details.owner_phone),
+                                    Text(snapshot.data.details.ownerphone),
                               ),
                               ListTile(
                                 title: Text('Email'),
                                 leading: Icon(Icons.email),
                                 subtitle:
-                                    Text(snapshot.data.details.owner_email),
+                                    Text(snapshot.data.details.owneremail),
                               ),
                               ListTile(
                                 title: Text('Address'),
                                 leading: Icon(Icons.account_box),
                                 subtitle: Text(
-                                    snapshot.data.details.owner_address +
+                                    snapshot.data.details.owneraddress +
                                         '\n' +
-                                        snapshot.data.details.owner_location),
+                                        snapshot.data.details.ownerlocation),
                               ),
                             ],
                           ),
                         ),
-                        snapshot.data.arrearsList.arrears.isNotEmpty
-                            ? Container(
+                                    ],
+                                                                    );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            ),
+                        StreamBuilder(
+                              stream: dao.watchMyHouseArrears(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView(
+                                    children: [
+                                      Container(
                                 color: Colors.redAccent,
                                 child: Column(
                                   children: <Widget>[
@@ -171,9 +199,6 @@ class _MyHomePageState extends State<myhouse> {
                                     )
                                   ],
                                 ),
-                              )
-                            : SizedBox(
-                                height: 20,
                               ),
                         int.parse(snapshot.data.details.payed) == 0
                             ? FlatButton(
@@ -189,6 +214,32 @@ class _MyHomePageState extends State<myhouse> {
                             : SizedBox(
                                 height: 20,
                               ),
+                                    ],
+                                                                    );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            ),
+                        
+                        StreamBuilder(
+                              stream: dao.watchMyHousePayments(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data.isNotEmpty) {
+                                  return ListView(
+                                    children: [
+                                      
                         Center(child: Text('Payment history')),
                         snapshot.data.paymentsList.payments != null
                             ? DataTable(
@@ -215,7 +266,7 @@ class _MyHomePageState extends State<myhouse> {
                                     .map(
                                       (Payments) => DataRow(cells: [
                                         DataCell(
-                                          Text(Payments.transaction_id),
+                                          Text(Payments.transactionid),
                                         ),
                                         DataCell(
                                           Text(Payments.time),
@@ -231,15 +282,28 @@ class _MyHomePageState extends State<myhouse> {
                                     .toList(),
                               )
                             : CircularProgressIndicator(),
+                                    ],
+                                   );
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                } else if (snapshot.data != null &&
+                                    snapshot.data.isEmpty) {
+                                  return Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            )
+                        
+                      
                       ],
                     )
-                  : Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {}
-            return Center(
-              child: CircularProgressIndicator(),
             );
-          },
-        ));
   }
 
   Text arreardetails(var arrearList) {

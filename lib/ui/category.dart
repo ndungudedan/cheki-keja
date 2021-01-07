@@ -320,9 +320,9 @@ class Category extends StatefulWidget {
                       borderRadius: BorderRadius.circular(100),
                       child: CachedNetworkImage(
                         imageUrl: constants.path +
-                            myApartment.owner_id +
+                            myApartment.ownerid +
                             constants.folder +
-                            myApartment.owner_logo,
+                            myApartment.ownerlogo,
                         placeholder: (context, url) => Container(
                             alignment: Alignment(0.0, 2.0),
                             child:
@@ -333,7 +333,7 @@ class Category extends StatefulWidget {
                       ),
                     ),
                     title: Text(
-                      myApartment.owner_name,
+                      myApartment.ownername,
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
                     ),
@@ -361,7 +361,7 @@ class Category extends StatefulWidget {
                           width: MediaQuery.of(context).size.width,
                           child: CachedNetworkImage(
                             imageUrl: constants.path +
-                                myApartment.owner_id +
+                                myApartment.ownerid +
                                 constants.folder +
                                 myApartment.banner.first.banner,
                             fit: BoxFit.fill,
