@@ -7,6 +7,7 @@ import 'package:cheki_keja/models/status.dart';
 import 'package:cheki_keja/ui/apartdetails.dart';
 import 'package:cheki_keja/ui/reviews.dart';
 import 'package:cheki_keja/ui/viewonmap.dart';
+import 'package:cheki_keja/views/postWidgetTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:like_button/like_button.dart';
@@ -55,50 +56,11 @@ class _DrawState extends State<PostWidget> {
             child: Card(
               child: Column(
                 children: <Widget>[
-                  ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: CachedNetworkImage(
-                        imageUrl: constants.path +
-                            myApartment.ownerid +
-                            constants.folder +
-                            myApartment.ownerlogo,
-                        placeholder: (context, url) => Container(
-                            color: greyPlaceHolder,
-                            alignment: Alignment(0.0, 2.0),
-                            child: Center(child: CircularProgressIndicator())),
-                        errorWidget: (context, url, error) => Container(
-                            color: lightgreyPlaceHolder,
-                            alignment: Alignment(0.0, 2.0),
-                            child: Center(
-                                child: Icon(
-                              Icons.error,
-                              size: 50,
-                            ))),
-                      ),
-                    ),
-                    title: Text(
-                      myApartment.ownername,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                    subtitle: Text(
-                      myApartment.title,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                    ),
-                    trailing: RatingBarIndicator(
-                      rating: double.parse(myApartment.rating),
-                      itemBuilder: (context, index) => Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      itemCount: 5,
-                      itemSize: 20.0,
-                      direction: Axis.horizontal,
-                    ),
+                  PostWIdgetTopBar(title: myApartment.title, ownerid: myApartment.ownerid, 
+                  ownerlogo: myApartment.ownerlogo, ownername: myApartment.ownername, 
+                  rating: myApartment.rating,
                   ),
-                  Center(
+                   Center(
                     child: Stack(
                       children: [
                         Container(
@@ -114,6 +76,7 @@ class _DrawState extends State<PostWidget> {
                                     constants.folder +myApartment.banner,
                             fit: BoxFit.fill,
                             placeholder: (context, url) => Container(
+                              color: greyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
                                 child: Center(
                                     child: SizedBox(
@@ -121,8 +84,9 @@ class _DrawState extends State<PostWidget> {
                                         width: 30,
                                         child: CircularProgressIndicator()))),
                             errorWidget: (context, url, error) => Container(
+                              color: lightgreyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
-                                child: Center(child: Icon(Icons.error))),
+                                child: Center(child: Icon(Icons.error,size: 50,))),
                           ),
                         ),
                         Positioned(

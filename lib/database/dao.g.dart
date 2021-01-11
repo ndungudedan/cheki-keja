@@ -12,4 +12,5 @@ mixin _$DatabaseDaoMixin on DatabaseAccessor<DatabaseHelper> {
   $MyHouseDetailsTable get myHouseDetails => attachedDatabase.myHouseDetails;
   $MyHousePaymentsTable get myHousePayments => attachedDatabase.myHousePayments;
   $MyHouseArrearsTable get myHouseArrears => attachedDatabase.myHouseArrears;
+  $ContactsTable get contacts => attachedDatabase.contacts;
 }

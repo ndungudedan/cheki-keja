@@ -435,7 +435,7 @@ class _MyHomePageState extends State<Apartdetails> {
                       ListTile(
                         title: Text('Phone'),
                         leading: Icon(Icons.call),
-                        subtitle: Text(snapshot.data.phone),
+                        subtitle: Text(apartment.phone ?? snapshot.data.phone),
                       ),
                       ListTile(
                         title: Text('Email'),
@@ -445,7 +445,7 @@ class _MyHomePageState extends State<Apartdetails> {
                       ListTile(
                         title: Text('Address'),
                         leading: Icon(Icons.account_box),
-                        subtitle: Text(snapshot.data.address),
+                        subtitle: Text(apartment.address ?? snapshot.data.address),
                       ),
                     ],
                   ),

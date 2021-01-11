@@ -1295,7 +1295,7 @@ class MyHouseDetail extends DataClass implements Insertable<MyHouseDetail> {
       @required this.ownerlocation,
       @required this.ownerphone,
       @required this.category,
-      this.unit,
+      @required this.unit,
       @required this.deposit,
       @required this.price,
       @required this.title,
@@ -1643,7 +1643,7 @@ class MyHouseDetailsCompanion extends UpdateCompanion<MyHouseDetail> {
     @required String ownerlocation,
     @required String ownerphone,
     @required String category,
-    this.unit = const Value.absent(),
+    @required String unit,
     @required String deposit,
     @required String price,
     @required String title,
@@ -1658,6 +1658,7 @@ class MyHouseDetailsCompanion extends UpdateCompanion<MyHouseDetail> {
         ownerlocation = Value(ownerlocation),
         ownerphone = Value(ownerphone),
         category = Value(category),
+        unit = Value(unit),
         deposit = Value(deposit),
         price = Value(price),
         title = Value(title),
@@ -1950,7 +1951,7 @@ class $MyHouseDetailsTable extends MyHouseDetails
     return GeneratedTextColumn(
       'unit',
       $tableName,
-      true,
+      false,
     );
   }
 
@@ -2112,6 +2113,8 @@ class $MyHouseDetailsTable extends MyHouseDetails
     if (data.containsKey('unit')) {
       context.handle(
           _unitMeta, unit.isAcceptableOrUnknown(data['unit'], _unitMeta));
+    } else if (isInserting) {
+      context.missing(_unitMeta);
     }
     if (data.containsKey('deposit')) {
       context.handle(_depositMeta,
@@ -3022,6 +3025,533 @@ class $MyHousePaymentsTable extends MyHousePayments
   }
 }
 
+class Contact extends DataClass implements Insertable<Contact> {
+  final int id;
+  final String onlineid;
+  final String phone;
+  final String address;
+  final String location;
+  final String email;
+  final String twitter;
+  final String facebook;
+  final String instagram;
+  Contact(
+      {@required this.id,
+      @required this.onlineid,
+      @required this.phone,
+      this.address,
+      this.location,
+      @required this.email,
+      this.twitter,
+      this.facebook,
+      this.instagram});
+  factory Contact.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Contact(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      onlineid: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}onlineid']),
+      phone:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}phone']),
+      address:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}address']),
+      location: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}location']),
+      email:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}email']),
+      twitter:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}twitter']),
+      facebook: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}facebook']),
+      instagram: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}instagram']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || onlineid != null) {
+      map['onlineid'] = Variable<String>(onlineid);
+    }
+    if (!nullToAbsent || phone != null) {
+      map['phone'] = Variable<String>(phone);
+    }
+    if (!nullToAbsent || address != null) {
+      map['address'] = Variable<String>(address);
+    }
+    if (!nullToAbsent || location != null) {
+      map['location'] = Variable<String>(location);
+    }
+    if (!nullToAbsent || email != null) {
+      map['email'] = Variable<String>(email);
+    }
+    if (!nullToAbsent || twitter != null) {
+      map['twitter'] = Variable<String>(twitter);
+    }
+    if (!nullToAbsent || facebook != null) {
+      map['facebook'] = Variable<String>(facebook);
+    }
+    if (!nullToAbsent || instagram != null) {
+      map['instagram'] = Variable<String>(instagram);
+    }
+    return map;
+  }
+
+  ContactsCompanion toCompanion(bool nullToAbsent) {
+    return ContactsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      onlineid: onlineid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(onlineid),
+      phone:
+          phone == null && nullToAbsent ? const Value.absent() : Value(phone),
+      address: address == null && nullToAbsent
+          ? const Value.absent()
+          : Value(address),
+      location: location == null && nullToAbsent
+          ? const Value.absent()
+          : Value(location),
+      email:
+          email == null && nullToAbsent ? const Value.absent() : Value(email),
+      twitter: twitter == null && nullToAbsent
+          ? const Value.absent()
+          : Value(twitter),
+      facebook: facebook == null && nullToAbsent
+          ? const Value.absent()
+          : Value(facebook),
+      instagram: instagram == null && nullToAbsent
+          ? const Value.absent()
+          : Value(instagram),
+    );
+  }
+
+  factory Contact.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Contact(
+      id: serializer.fromJson<int>(json['id']),
+      onlineid: serializer.fromJson<String>(json['onlineid']),
+      phone: serializer.fromJson<String>(json['phone']),
+      address: serializer.fromJson<String>(json['address']),
+      location: serializer.fromJson<String>(json['location']),
+      email: serializer.fromJson<String>(json['email']),
+      twitter: serializer.fromJson<String>(json['twitter']),
+      facebook: serializer.fromJson<String>(json['facebook']),
+      instagram: serializer.fromJson<String>(json['instagram']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'onlineid': serializer.toJson<String>(onlineid),
+      'phone': serializer.toJson<String>(phone),
+      'address': serializer.toJson<String>(address),
+      'location': serializer.toJson<String>(location),
+      'email': serializer.toJson<String>(email),
+      'twitter': serializer.toJson<String>(twitter),
+      'facebook': serializer.toJson<String>(facebook),
+      'instagram': serializer.toJson<String>(instagram),
+    };
+  }
+
+  Contact copyWith(
+          {int id,
+          String onlineid,
+          String phone,
+          String address,
+          String location,
+          String email,
+          String twitter,
+          String facebook,
+          String instagram}) =>
+      Contact(
+        id: id ?? this.id,
+        onlineid: onlineid ?? this.onlineid,
+        phone: phone ?? this.phone,
+        address: address ?? this.address,
+        location: location ?? this.location,
+        email: email ?? this.email,
+        twitter: twitter ?? this.twitter,
+        facebook: facebook ?? this.facebook,
+        instagram: instagram ?? this.instagram,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Contact(')
+          ..write('id: $id, ')
+          ..write('onlineid: $onlineid, ')
+          ..write('phone: $phone, ')
+          ..write('address: $address, ')
+          ..write('location: $location, ')
+          ..write('email: $email, ')
+          ..write('twitter: $twitter, ')
+          ..write('facebook: $facebook, ')
+          ..write('instagram: $instagram')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          onlineid.hashCode,
+          $mrjc(
+              phone.hashCode,
+              $mrjc(
+                  address.hashCode,
+                  $mrjc(
+                      location.hashCode,
+                      $mrjc(
+                          email.hashCode,
+                          $mrjc(
+                              twitter.hashCode,
+                              $mrjc(facebook.hashCode,
+                                  instagram.hashCode)))))))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Contact &&
+          other.id == this.id &&
+          other.onlineid == this.onlineid &&
+          other.phone == this.phone &&
+          other.address == this.address &&
+          other.location == this.location &&
+          other.email == this.email &&
+          other.twitter == this.twitter &&
+          other.facebook == this.facebook &&
+          other.instagram == this.instagram);
+}
+
+class ContactsCompanion extends UpdateCompanion<Contact> {
+  final Value<int> id;
+  final Value<String> onlineid;
+  final Value<String> phone;
+  final Value<String> address;
+  final Value<String> location;
+  final Value<String> email;
+  final Value<String> twitter;
+  final Value<String> facebook;
+  final Value<String> instagram;
+  const ContactsCompanion({
+    this.id = const Value.absent(),
+    this.onlineid = const Value.absent(),
+    this.phone = const Value.absent(),
+    this.address = const Value.absent(),
+    this.location = const Value.absent(),
+    this.email = const Value.absent(),
+    this.twitter = const Value.absent(),
+    this.facebook = const Value.absent(),
+    this.instagram = const Value.absent(),
+  });
+  ContactsCompanion.insert({
+    this.id = const Value.absent(),
+    @required String onlineid,
+    @required String phone,
+    this.address = const Value.absent(),
+    this.location = const Value.absent(),
+    @required String email,
+    this.twitter = const Value.absent(),
+    this.facebook = const Value.absent(),
+    this.instagram = const Value.absent(),
+  })  : onlineid = Value(onlineid),
+        phone = Value(phone),
+        email = Value(email);
+  static Insertable<Contact> custom({
+    Expression<int> id,
+    Expression<String> onlineid,
+    Expression<String> phone,
+    Expression<String> address,
+    Expression<String> location,
+    Expression<String> email,
+    Expression<String> twitter,
+    Expression<String> facebook,
+    Expression<String> instagram,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (onlineid != null) 'onlineid': onlineid,
+      if (phone != null) 'phone': phone,
+      if (address != null) 'address': address,
+      if (location != null) 'location': location,
+      if (email != null) 'email': email,
+      if (twitter != null) 'twitter': twitter,
+      if (facebook != null) 'facebook': facebook,
+      if (instagram != null) 'instagram': instagram,
+    });
+  }
+
+  ContactsCompanion copyWith(
+      {Value<int> id,
+      Value<String> onlineid,
+      Value<String> phone,
+      Value<String> address,
+      Value<String> location,
+      Value<String> email,
+      Value<String> twitter,
+      Value<String> facebook,
+      Value<String> instagram}) {
+    return ContactsCompanion(
+      id: id ?? this.id,
+      onlineid: onlineid ?? this.onlineid,
+      phone: phone ?? this.phone,
+      address: address ?? this.address,
+      location: location ?? this.location,
+      email: email ?? this.email,
+      twitter: twitter ?? this.twitter,
+      facebook: facebook ?? this.facebook,
+      instagram: instagram ?? this.instagram,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (onlineid.present) {
+      map['onlineid'] = Variable<String>(onlineid.value);
+    }
+    if (phone.present) {
+      map['phone'] = Variable<String>(phone.value);
+    }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (location.present) {
+      map['location'] = Variable<String>(location.value);
+    }
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
+    }
+    if (twitter.present) {
+      map['twitter'] = Variable<String>(twitter.value);
+    }
+    if (facebook.present) {
+      map['facebook'] = Variable<String>(facebook.value);
+    }
+    if (instagram.present) {
+      map['instagram'] = Variable<String>(instagram.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ContactsCompanion(')
+          ..write('id: $id, ')
+          ..write('onlineid: $onlineid, ')
+          ..write('phone: $phone, ')
+          ..write('address: $address, ')
+          ..write('location: $location, ')
+          ..write('email: $email, ')
+          ..write('twitter: $twitter, ')
+          ..write('facebook: $facebook, ')
+          ..write('instagram: $instagram')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ContactsTable extends Contacts with TableInfo<$ContactsTable, Contact> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $ContactsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _onlineidMeta = const VerificationMeta('onlineid');
+  GeneratedTextColumn _onlineid;
+  @override
+  GeneratedTextColumn get onlineid => _onlineid ??= _constructOnlineid();
+  GeneratedTextColumn _constructOnlineid() {
+    return GeneratedTextColumn(
+      'onlineid',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _phoneMeta = const VerificationMeta('phone');
+  GeneratedTextColumn _phone;
+  @override
+  GeneratedTextColumn get phone => _phone ??= _constructPhone();
+  GeneratedTextColumn _constructPhone() {
+    return GeneratedTextColumn(
+      'phone',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _addressMeta = const VerificationMeta('address');
+  GeneratedTextColumn _address;
+  @override
+  GeneratedTextColumn get address => _address ??= _constructAddress();
+  GeneratedTextColumn _constructAddress() {
+    return GeneratedTextColumn(
+      'address',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _locationMeta = const VerificationMeta('location');
+  GeneratedTextColumn _location;
+  @override
+  GeneratedTextColumn get location => _location ??= _constructLocation();
+  GeneratedTextColumn _constructLocation() {
+    return GeneratedTextColumn(
+      'location',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _emailMeta = const VerificationMeta('email');
+  GeneratedTextColumn _email;
+  @override
+  GeneratedTextColumn get email => _email ??= _constructEmail();
+  GeneratedTextColumn _constructEmail() {
+    return GeneratedTextColumn(
+      'email',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _twitterMeta = const VerificationMeta('twitter');
+  GeneratedTextColumn _twitter;
+  @override
+  GeneratedTextColumn get twitter => _twitter ??= _constructTwitter();
+  GeneratedTextColumn _constructTwitter() {
+    return GeneratedTextColumn(
+      'twitter',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _facebookMeta = const VerificationMeta('facebook');
+  GeneratedTextColumn _facebook;
+  @override
+  GeneratedTextColumn get facebook => _facebook ??= _constructFacebook();
+  GeneratedTextColumn _constructFacebook() {
+    return GeneratedTextColumn(
+      'facebook',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _instagramMeta = const VerificationMeta('instagram');
+  GeneratedTextColumn _instagram;
+  @override
+  GeneratedTextColumn get instagram => _instagram ??= _constructInstagram();
+  GeneratedTextColumn _constructInstagram() {
+    return GeneratedTextColumn(
+      'instagram',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        onlineid,
+        phone,
+        address,
+        location,
+        email,
+        twitter,
+        facebook,
+        instagram
+      ];
+  @override
+  $ContactsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'contacts';
+  @override
+  final String actualTableName = 'contacts';
+  @override
+  VerificationContext validateIntegrity(Insertable<Contact> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('onlineid')) {
+      context.handle(_onlineidMeta,
+          onlineid.isAcceptableOrUnknown(data['onlineid'], _onlineidMeta));
+    } else if (isInserting) {
+      context.missing(_onlineidMeta);
+    }
+    if (data.containsKey('phone')) {
+      context.handle(
+          _phoneMeta, phone.isAcceptableOrUnknown(data['phone'], _phoneMeta));
+    } else if (isInserting) {
+      context.missing(_phoneMeta);
+    }
+    if (data.containsKey('address')) {
+      context.handle(_addressMeta,
+          address.isAcceptableOrUnknown(data['address'], _addressMeta));
+    }
+    if (data.containsKey('location')) {
+      context.handle(_locationMeta,
+          location.isAcceptableOrUnknown(data['location'], _locationMeta));
+    }
+    if (data.containsKey('email')) {
+      context.handle(
+          _emailMeta, email.isAcceptableOrUnknown(data['email'], _emailMeta));
+    } else if (isInserting) {
+      context.missing(_emailMeta);
+    }
+    if (data.containsKey('twitter')) {
+      context.handle(_twitterMeta,
+          twitter.isAcceptableOrUnknown(data['twitter'], _twitterMeta));
+    }
+    if (data.containsKey('facebook')) {
+      context.handle(_facebookMeta,
+          facebook.isAcceptableOrUnknown(data['facebook'], _facebookMeta));
+    }
+    if (data.containsKey('instagram')) {
+      context.handle(_instagramMeta,
+          instagram.isAcceptableOrUnknown(data['instagram'], _instagramMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Contact map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Contact.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $ContactsTable createAlias(String alias) {
+    return $ContactsTable(_db, alias);
+  }
+}
+
 abstract class _$DatabaseHelper extends GeneratedDatabase {
   _$DatabaseHelper(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $MyApartmentTableTable _myApartmentTable;
@@ -3036,12 +3566,19 @@ abstract class _$DatabaseHelper extends GeneratedDatabase {
   $MyHousePaymentsTable _myHousePayments;
   $MyHousePaymentsTable get myHousePayments =>
       _myHousePayments ??= $MyHousePaymentsTable(this);
+  $ContactsTable _contacts;
+  $ContactsTable get contacts => _contacts ??= $ContactsTable(this);
   DatabaseDao _databaseDao;
   DatabaseDao get databaseDao =>
       _databaseDao ??= DatabaseDao(this as DatabaseHelper);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [myApartmentTable, myHouseDetails, myHouseArrears, myHousePayments];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        myApartmentTable,
+        myHouseDetails,
+        myHouseArrears,
+        myHousePayments,
+        contacts
+      ];
 }

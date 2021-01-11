@@ -37,6 +37,14 @@ class NetworkApi {
     return Data;
   }
 
+  Future<dynamic> getContacts() async {
+    // 6
+    Network network = Network('$url');
+    // 7
+    var Data = await network.call(contactsjson());
+    return Data;
+  }
+
   Future<dynamic> getArrears(var userId, var apartmentId) async {
     // 6
     Network network = Network('$url');
@@ -283,6 +291,12 @@ class NetworkApi {
     var json = jsonEncode(<String, String>{
       'functionality': 'getPayments',
       'userId': userId,
+    });
+    return json;
+  }
+   String contactsjson() {
+    var json = jsonEncode(<String, String>{
+      'functionality': 'getContacts',
     });
     return json;
   }

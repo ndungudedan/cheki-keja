@@ -3,14 +3,23 @@ import 'package:cheki_keja/models/apartment.dart';
 import 'package:moor/moor.dart';
 part 'dao.g.dart';
 
-@UseDao(
-    tables: [MyApartmentTable, MyHouseDetails, MyHousePayments, MyHouseArrears])
+@UseDao(tables: [
+  MyApartmentTable,
+  MyHouseDetails,
+  MyHousePayments,
+  MyHouseArrears,
+  Contacts
+])
 class DatabaseDao extends DatabaseAccessor<DatabaseHelper>
     with _$DatabaseDaoMixin {
   DatabaseDao(DatabaseHelper db) : super(db);
 
   void deleteAllPosts() {
     (delete(myApartmentTable)).go();
+  }
+
+  void deleteContacts() {
+    delete(contacts).go();
   }
 
   void deleteMyHouse() {
@@ -39,6 +48,18 @@ class DatabaseDao extends DatabaseAccessor<DatabaseHelper>
 
   Stream<List<MyHousePayment>> watchMyHousePayments() {
     return (select(myHousePayments)).watch();
+  }
+
+  Stream<List<Contact>> watchContacts() {
+    return (select(contacts)).watch();
+  }
+
+  void insertContacts(ContactsCompanion values) async {
+    await batch((batch) {
+      batch.insert(contacts, values);
+    }).catchError((Object error) {
+      print('errotr');
+    });
   }
 
   void insertPosts(List<MyApartmentTableCompanion> values) async {
