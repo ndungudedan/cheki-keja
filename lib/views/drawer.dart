@@ -8,6 +8,7 @@ import 'package:cheki_keja/ui/category.dart';
 import 'package:cheki_keja/ui/contactus.dart';
 import 'package:cheki_keja/ui/map.dart';
 import 'package:cheki_keja/ui/terms.dart';
+import 'package:commons/commons.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:cheki_keja/ui/favorites.dart';
 import 'package:cheki_keja/ui/myhouse.dart';
@@ -113,12 +114,12 @@ class _DrawState extends State<Draw> {
               Icons.favorite_border_outlined,
               color: Colors.white,
             ),
-              onTap: () {
-Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(databasehelper)));
-               /*  Navigator.push(
+              onTap: () {/* 
+Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(databasehelper))); */
+                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Favorites()), */
-               // );
+                  MaterialPageRoute(builder: (context) => Favorites()), 
+                );
               }),
               ListTile(
               title: Text(
@@ -159,7 +160,8 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
             ),
             onTap: () =>sharedPreferences.getSignedIn() ? Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => MyHouse()))
-                : dialog(),
+                : infoDialog(context,
+                  'Please Login to access this page'),
           ),
           ListTile(
               leading: Icon(Icons.contact_phone,color: Colors.white,),

@@ -25,7 +25,7 @@ class DatabaseHelper extends _$DatabaseHelper {
   // you should bump this number whenever you change or add a table definition. Migrations
   // are covered later in this readme.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 }
 
 class MyApartmentTable extends Table {
@@ -38,6 +38,7 @@ class MyApartmentTable extends Table {
   TextColumn get ownerlogo => text()();
   TextColumn get description => text().nullable()();
   TextColumn get title => text()();
+  TextColumn get category => text()();
   TextColumn get emailaddress => text().nullable()();
   TextColumn get location => text().nullable()();
   TextColumn get address => text().nullable()();
@@ -64,7 +65,7 @@ class MyHouseDetails extends Table {
   TextColumn get ownerlocation => text()();
   TextColumn get ownerphone => text()();
   TextColumn get category => text()();
-  TextColumn get unit => text().nullable()();
+  TextColumn get unit => text()();
   TextColumn get deposit => text()();
   TextColumn get price => text()();
   TextColumn get title => text()();
@@ -82,8 +83,6 @@ class MyHousePayments extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get onlineid => text()();
   TextColumn get transactionid => text()();
-  TextColumn get category => text()();
-  TextColumn get title => text()();
   TextColumn get amount => text()();
   TextColumn get status => text()();
   TextColumn get time => text()();

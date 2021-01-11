@@ -29,7 +29,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Apartdetails extends StatefulWidget {
   var apartment;
-  Apartdetails({Key key, @required this.apartment}) : super(key: key);
+  bool online;
+  Apartdetails({Key key, @required this.apartment, @required this.online})
+      : super(key: key);
 
   final String title = 'apartmentDetails';
 
@@ -44,6 +46,7 @@ class _MyHomePageState extends State<Apartdetails> {
   var apartment;
   MyCompany company;
   Stkpush stkpush;
+  bool online=true;
   final Map<String, Marker> _markers = {};
   SharedPreferences prefs;
   var features;
@@ -77,9 +80,10 @@ class _MyHomePageState extends State<Apartdetails> {
     company_bloc = CompanyBloc();
     images_bloc = ImagesBloc();
     review_bloc = ReviewBloc();
+    online = widget.online;
     apartment = widget.apartment;
     userId = '1';
-    apartmentId = widget.apartment.id;
+    apartmentId = online ? widget.apartment.id : widget.apartment.onlineid;
     ownerId = widget.apartment.ownerid;
     feature_bloc.fetchFeatures(apartmentId);
     images_bloc.fetchImages(apartmentId);
@@ -145,9 +149,9 @@ class _MyHomePageState extends State<Apartdetails> {
                 },
                 onTap: (isLiked) {
                   if (!isLiked) {
-                    return likes(apartment.id);
+                    return likes(apartmentId);
                   } else {
-                    return dislike(apartment.id);
+                    return dislike(apartmentId);
                   }
                 },
               );
@@ -452,9 +456,6 @@ class _MyHomePageState extends State<Apartdetails> {
               );
             },
           ),
-          ConnectionCallback(
-            onlineCall: () {},
-          ),
         ],
       ),
       floatingActionButton: Builder(
@@ -477,7 +478,7 @@ class _MyHomePageState extends State<Apartdetails> {
     dynamic transactionInitialisation;
     var queryParameters = {
       'userId': sharedPreferences.getUserId(),
-      'apartmentId': apartment.id,
+      'apartmentId': apartmentId,
       'type': constants.paymentDeposit,
       'ownerId': apartment.ownerid,
     };
@@ -517,6 +518,7 @@ class _MyHomePageState extends State<Apartdetails> {
       //you can implement your exception handling here.
       //Network unreachability is a sure exception.
       print(e.getMessage());
+      errorDialog(context, 'Operation failed1');
     }
   }
 
@@ -549,7 +551,7 @@ class _MyHomePageState extends State<Apartdetails> {
     );
   }
 
-  Container apartmentDetails(MyApartment apartment) {
+  Container apartmentDetails(var apartment) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
       padding: EdgeInsets.all(10),

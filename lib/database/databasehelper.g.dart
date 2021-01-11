@@ -18,6 +18,7 @@ class MyApartmentTableData extends DataClass
   final String ownerlogo;
   final String description;
   final String title;
+  final String category;
   final String emailaddress;
   final String location;
   final String address;
@@ -42,6 +43,7 @@ class MyApartmentTableData extends DataClass
       @required this.ownerlogo,
       this.description,
       @required this.title,
+      @required this.category,
       this.emailaddress,
       this.location,
       this.address,
@@ -80,6 +82,8 @@ class MyApartmentTableData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}description']),
       title:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
+      category: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}category']),
       emailaddress: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}emailaddress']),
       location: stringType
@@ -139,6 +143,9 @@ class MyApartmentTableData extends DataClass
     }
     if (!nullToAbsent || title != null) {
       map['title'] = Variable<String>(title);
+    }
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(category);
     }
     if (!nullToAbsent || emailaddress != null) {
       map['emailaddress'] = Variable<String>(emailaddress);
@@ -210,6 +217,9 @@ class MyApartmentTableData extends DataClass
           : Value(description),
       title:
           title == null && nullToAbsent ? const Value.absent() : Value(title),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
       emailaddress: emailaddress == null && nullToAbsent
           ? const Value.absent()
           : Value(emailaddress),
@@ -261,6 +271,7 @@ class MyApartmentTableData extends DataClass
       ownerlogo: serializer.fromJson<String>(json['ownerlogo']),
       description: serializer.fromJson<String>(json['description']),
       title: serializer.fromJson<String>(json['title']),
+      category: serializer.fromJson<String>(json['category']),
       emailaddress: serializer.fromJson<String>(json['emailaddress']),
       location: serializer.fromJson<String>(json['location']),
       address: serializer.fromJson<String>(json['address']),
@@ -290,6 +301,7 @@ class MyApartmentTableData extends DataClass
       'ownerlogo': serializer.toJson<String>(ownerlogo),
       'description': serializer.toJson<String>(description),
       'title': serializer.toJson<String>(title),
+      'category': serializer.toJson<String>(category),
       'emailaddress': serializer.toJson<String>(emailaddress),
       'location': serializer.toJson<String>(location),
       'address': serializer.toJson<String>(address),
@@ -317,6 +329,7 @@ class MyApartmentTableData extends DataClass
           String ownerlogo,
           String description,
           String title,
+          String category,
           String emailaddress,
           String location,
           String address,
@@ -341,6 +354,7 @@ class MyApartmentTableData extends DataClass
         ownerlogo: ownerlogo ?? this.ownerlogo,
         description: description ?? this.description,
         title: title ?? this.title,
+        category: category ?? this.category,
         emailaddress: emailaddress ?? this.emailaddress,
         location: location ?? this.location,
         address: address ?? this.address,
@@ -368,6 +382,7 @@ class MyApartmentTableData extends DataClass
           ..write('ownerlogo: $ownerlogo, ')
           ..write('description: $description, ')
           ..write('title: $title, ')
+          ..write('category: $category, ')
           ..write('emailaddress: $emailaddress, ')
           ..write('location: $location, ')
           ..write('address: $address, ')
@@ -406,29 +421,29 @@ class MyApartmentTableData extends DataClass
                                   $mrjc(
                                       title.hashCode,
                                       $mrjc(
-                                          emailaddress.hashCode,
+                                          category.hashCode,
                                           $mrjc(
-                                              location.hashCode,
+                                              emailaddress.hashCode,
                                               $mrjc(
-                                                  address.hashCode,
+                                                  location.hashCode,
                                                   $mrjc(
-                                                      phone.hashCode,
+                                                      address.hashCode,
                                                       $mrjc(
-                                                          video.hashCode,
+                                                          phone.hashCode,
                                                           $mrjc(
-                                                              price.hashCode,
+                                                              video.hashCode,
                                                               $mrjc(
-                                                                  deposit
+                                                                  price
                                                                       .hashCode,
                                                                   $mrjc(
-                                                                      space
+                                                                      deposit
                                                                           .hashCode,
                                                                       $mrjc(
-                                                                          latitude
+                                                                          space
                                                                               .hashCode,
                                                                           $mrjc(
-                                                                              longitude.hashCode,
-                                                                              $mrjc(rating.hashCode, $mrjc(likes.hashCode, $mrjc(liked.hashCode, comments.hashCode)))))))))))))))))))))));
+                                                                              latitude.hashCode,
+                                                                              $mrjc(longitude.hashCode, $mrjc(rating.hashCode, $mrjc(likes.hashCode, $mrjc(liked.hashCode, comments.hashCode))))))))))))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -442,6 +457,7 @@ class MyApartmentTableData extends DataClass
           other.ownerlogo == this.ownerlogo &&
           other.description == this.description &&
           other.title == this.title &&
+          other.category == this.category &&
           other.emailaddress == this.emailaddress &&
           other.location == this.location &&
           other.address == this.address &&
@@ -468,6 +484,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
   final Value<String> ownerlogo;
   final Value<String> description;
   final Value<String> title;
+  final Value<String> category;
   final Value<String> emailaddress;
   final Value<String> location;
   final Value<String> address;
@@ -492,6 +509,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     this.ownerlogo = const Value.absent(),
     this.description = const Value.absent(),
     this.title = const Value.absent(),
+    this.category = const Value.absent(),
     this.emailaddress = const Value.absent(),
     this.location = const Value.absent(),
     this.address = const Value.absent(),
@@ -517,6 +535,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     @required String ownerlogo,
     this.description = const Value.absent(),
     @required String title,
+    @required String category,
     this.emailaddress = const Value.absent(),
     this.location = const Value.absent(),
     this.address = const Value.absent(),
@@ -538,6 +557,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
         ownername = Value(ownername),
         ownerlogo = Value(ownerlogo),
         title = Value(title),
+        category = Value(category),
         price = Value(price),
         deposit = Value(deposit),
         space = Value(space),
@@ -557,6 +577,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     Expression<String> ownerlogo,
     Expression<String> description,
     Expression<String> title,
+    Expression<String> category,
     Expression<String> emailaddress,
     Expression<String> location,
     Expression<String> address,
@@ -582,6 +603,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       if (ownerlogo != null) 'ownerlogo': ownerlogo,
       if (description != null) 'description': description,
       if (title != null) 'title': title,
+      if (category != null) 'category': category,
       if (emailaddress != null) 'emailaddress': emailaddress,
       if (location != null) 'location': location,
       if (address != null) 'address': address,
@@ -609,6 +631,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       Value<String> ownerlogo,
       Value<String> description,
       Value<String> title,
+      Value<String> category,
       Value<String> emailaddress,
       Value<String> location,
       Value<String> address,
@@ -633,6 +656,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       ownerlogo: ownerlogo ?? this.ownerlogo,
       description: description ?? this.description,
       title: title ?? this.title,
+      category: category ?? this.category,
       emailaddress: emailaddress ?? this.emailaddress,
       location: location ?? this.location,
       address: address ?? this.address,
@@ -679,6 +703,9 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
     }
     if (emailaddress.present) {
       map['emailaddress'] = Variable<String>(emailaddress.value);
@@ -737,6 +764,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
           ..write('ownerlogo: $ownerlogo, ')
           ..write('description: $description, ')
           ..write('title: $title, ')
+          ..write('category: $category, ')
           ..write('emailaddress: $emailaddress, ')
           ..write('location: $location, ')
           ..write('address: $address, ')
@@ -863,6 +891,18 @@ class $MyApartmentTableTable extends MyApartmentTable
   GeneratedTextColumn _constructTitle() {
     return GeneratedTextColumn(
       'title',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _categoryMeta = const VerificationMeta('category');
+  GeneratedTextColumn _category;
+  @override
+  GeneratedTextColumn get category => _category ??= _constructCategory();
+  GeneratedTextColumn _constructCategory() {
+    return GeneratedTextColumn(
+      'category',
       $tableName,
       false,
     );
@@ -1049,6 +1089,7 @@ class $MyApartmentTableTable extends MyApartmentTable
         ownerlogo,
         description,
         title,
+        category,
         emailaddress,
         location,
         address,
@@ -1126,6 +1167,12 @@ class $MyApartmentTableTable extends MyApartmentTable
           _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
     } else if (isInserting) {
       context.missing(_titleMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category'], _categoryMeta));
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
     }
     if (data.containsKey('emailaddress')) {
       context.handle(
@@ -2452,8 +2499,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
   final int id;
   final String onlineid;
   final String transactionid;
-  final String category;
-  final String title;
   final String amount;
   final String status;
   final String time;
@@ -2464,8 +2509,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
       {@required this.id,
       @required this.onlineid,
       @required this.transactionid,
-      @required this.category,
-      @required this.title,
       @required this.amount,
       @required this.status,
       @required this.time,
@@ -2484,10 +2527,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
           .mapFromDatabaseResponse(data['${effectivePrefix}onlineid']),
       transactionid: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}transactionid']),
-      category: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}category']),
-      title:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
       amount:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}amount']),
       status:
@@ -2510,12 +2549,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
     }
     if (!nullToAbsent || transactionid != null) {
       map['transactionid'] = Variable<String>(transactionid);
-    }
-    if (!nullToAbsent || category != null) {
-      map['category'] = Variable<String>(category);
-    }
-    if (!nullToAbsent || title != null) {
-      map['title'] = Variable<String>(title);
     }
     if (!nullToAbsent || amount != null) {
       map['amount'] = Variable<String>(amount);
@@ -2547,11 +2580,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
       transactionid: transactionid == null && nullToAbsent
           ? const Value.absent()
           : Value(transactionid),
-      category: category == null && nullToAbsent
-          ? const Value.absent()
-          : Value(category),
-      title:
-          title == null && nullToAbsent ? const Value.absent() : Value(title),
       amount:
           amount == null && nullToAbsent ? const Value.absent() : Value(amount),
       status:
@@ -2571,8 +2599,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
       id: serializer.fromJson<int>(json['id']),
       onlineid: serializer.fromJson<String>(json['onlineid']),
       transactionid: serializer.fromJson<String>(json['transactionid']),
-      category: serializer.fromJson<String>(json['category']),
-      title: serializer.fromJson<String>(json['title']),
       amount: serializer.fromJson<String>(json['amount']),
       status: serializer.fromJson<String>(json['status']),
       time: serializer.fromJson<String>(json['time']),
@@ -2588,8 +2614,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
       'id': serializer.toJson<int>(id),
       'onlineid': serializer.toJson<String>(onlineid),
       'transactionid': serializer.toJson<String>(transactionid),
-      'category': serializer.toJson<String>(category),
-      'title': serializer.toJson<String>(title),
       'amount': serializer.toJson<String>(amount),
       'status': serializer.toJson<String>(status),
       'time': serializer.toJson<String>(time),
@@ -2603,8 +2627,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
           {int id,
           String onlineid,
           String transactionid,
-          String category,
-          String title,
           String amount,
           String status,
           String time,
@@ -2615,8 +2637,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
         id: id ?? this.id,
         onlineid: onlineid ?? this.onlineid,
         transactionid: transactionid ?? this.transactionid,
-        category: category ?? this.category,
-        title: title ?? this.title,
         amount: amount ?? this.amount,
         status: status ?? this.status,
         time: time ?? this.time,
@@ -2630,8 +2650,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
           ..write('id: $id, ')
           ..write('onlineid: $onlineid, ')
           ..write('transactionid: $transactionid, ')
-          ..write('category: $category, ')
-          ..write('title: $title, ')
           ..write('amount: $amount, ')
           ..write('status: $status, ')
           ..write('time: $time, ')
@@ -2650,19 +2668,13 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
           $mrjc(
               transactionid.hashCode,
               $mrjc(
-                  category.hashCode,
+                  amount.hashCode,
                   $mrjc(
-                      title.hashCode,
+                      status.hashCode,
                       $mrjc(
-                          amount.hashCode,
-                          $mrjc(
-                              status.hashCode,
-                              $mrjc(
-                                  time.hashCode,
-                                  $mrjc(
-                                      year.hashCode,
-                                      $mrjc(month.hashCode,
-                                          type.hashCode)))))))))));
+                          time.hashCode,
+                          $mrjc(year.hashCode,
+                              $mrjc(month.hashCode, type.hashCode)))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -2670,8 +2682,6 @@ class MyHousePayment extends DataClass implements Insertable<MyHousePayment> {
           other.id == this.id &&
           other.onlineid == this.onlineid &&
           other.transactionid == this.transactionid &&
-          other.category == this.category &&
-          other.title == this.title &&
           other.amount == this.amount &&
           other.status == this.status &&
           other.time == this.time &&
@@ -2684,8 +2694,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
   final Value<int> id;
   final Value<String> onlineid;
   final Value<String> transactionid;
-  final Value<String> category;
-  final Value<String> title;
   final Value<String> amount;
   final Value<String> status;
   final Value<String> time;
@@ -2696,8 +2704,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
     this.id = const Value.absent(),
     this.onlineid = const Value.absent(),
     this.transactionid = const Value.absent(),
-    this.category = const Value.absent(),
-    this.title = const Value.absent(),
     this.amount = const Value.absent(),
     this.status = const Value.absent(),
     this.time = const Value.absent(),
@@ -2709,8 +2715,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
     this.id = const Value.absent(),
     @required String onlineid,
     @required String transactionid,
-    @required String category,
-    @required String title,
     @required String amount,
     @required String status,
     @required String time,
@@ -2719,8 +2723,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
     @required String type,
   })  : onlineid = Value(onlineid),
         transactionid = Value(transactionid),
-        category = Value(category),
-        title = Value(title),
         amount = Value(amount),
         status = Value(status),
         time = Value(time),
@@ -2731,8 +2733,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
     Expression<int> id,
     Expression<String> onlineid,
     Expression<String> transactionid,
-    Expression<String> category,
-    Expression<String> title,
     Expression<String> amount,
     Expression<String> status,
     Expression<String> time,
@@ -2744,8 +2744,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
       if (id != null) 'id': id,
       if (onlineid != null) 'onlineid': onlineid,
       if (transactionid != null) 'transactionid': transactionid,
-      if (category != null) 'category': category,
-      if (title != null) 'title': title,
       if (amount != null) 'amount': amount,
       if (status != null) 'status': status,
       if (time != null) 'time': time,
@@ -2759,8 +2757,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
       {Value<int> id,
       Value<String> onlineid,
       Value<String> transactionid,
-      Value<String> category,
-      Value<String> title,
       Value<String> amount,
       Value<String> status,
       Value<String> time,
@@ -2771,8 +2767,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
       id: id ?? this.id,
       onlineid: onlineid ?? this.onlineid,
       transactionid: transactionid ?? this.transactionid,
-      category: category ?? this.category,
-      title: title ?? this.title,
       amount: amount ?? this.amount,
       status: status ?? this.status,
       time: time ?? this.time,
@@ -2793,12 +2787,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
     }
     if (transactionid.present) {
       map['transactionid'] = Variable<String>(transactionid.value);
-    }
-    if (category.present) {
-      map['category'] = Variable<String>(category.value);
-    }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
     }
     if (amount.present) {
       map['amount'] = Variable<String>(amount.value);
@@ -2827,8 +2815,6 @@ class MyHousePaymentsCompanion extends UpdateCompanion<MyHousePayment> {
           ..write('id: $id, ')
           ..write('onlineid: $onlineid, ')
           ..write('transactionid: $transactionid, ')
-          ..write('category: $category, ')
-          ..write('title: $title, ')
           ..write('amount: $amount, ')
           ..write('status: $status, ')
           ..write('time: $time, ')
@@ -2875,30 +2861,6 @@ class $MyHousePaymentsTable extends MyHousePayments
   GeneratedTextColumn _constructTransactionid() {
     return GeneratedTextColumn(
       'transactionid',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _categoryMeta = const VerificationMeta('category');
-  GeneratedTextColumn _category;
-  @override
-  GeneratedTextColumn get category => _category ??= _constructCategory();
-  GeneratedTextColumn _constructCategory() {
-    return GeneratedTextColumn(
-      'category',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _titleMeta = const VerificationMeta('title');
-  GeneratedTextColumn _title;
-  @override
-  GeneratedTextColumn get title => _title ??= _constructTitle();
-  GeneratedTextColumn _constructTitle() {
-    return GeneratedTextColumn(
-      'title',
       $tableName,
       false,
     );
@@ -2977,19 +2939,8 @@ class $MyHousePaymentsTable extends MyHousePayments
   }
 
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        onlineid,
-        transactionid,
-        category,
-        title,
-        amount,
-        status,
-        time,
-        year,
-        month,
-        type
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, onlineid, transactionid, amount, status, time, year, month, type];
   @override
   $MyHousePaymentsTable get asDslTable => this;
   @override
@@ -3017,18 +2968,6 @@ class $MyHousePaymentsTable extends MyHousePayments
               data['transactionid'], _transactionidMeta));
     } else if (isInserting) {
       context.missing(_transactionidMeta);
-    }
-    if (data.containsKey('category')) {
-      context.handle(_categoryMeta,
-          category.isAcceptableOrUnknown(data['category'], _categoryMeta));
-    } else if (isInserting) {
-      context.missing(_categoryMeta);
-    }
-    if (data.containsKey('title')) {
-      context.handle(
-          _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
-    } else if (isInserting) {
-      context.missing(_titleMeta);
     }
     if (data.containsKey('amount')) {
       context.handle(_amountMeta,

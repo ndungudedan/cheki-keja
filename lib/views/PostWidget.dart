@@ -14,7 +14,12 @@ import 'package:like_button/like_button.dart';
 class PostWidget extends StatefulWidget {
   var myApartment;
   var index;
-  PostWidget({Key key, @required this.myApartment, @required this.index})
+  bool online;
+  PostWidget(
+      {Key key,
+      @required this.myApartment,
+      @required this.index,
+      @required this.online})
       : super(key: key);
 
   @override
@@ -24,9 +29,11 @@ class PostWidget extends StatefulWidget {
 class _DrawState extends State<PostWidget> {
   var myApartment;
   var index;
+  bool online;
   @override
   void initState() {
     super.initState();
+    online = widget.online;
     index = widget.index;
     myApartment = widget.myApartment;
   }
@@ -41,7 +48,9 @@ class _DrawState extends State<PostWidget> {
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Apartdetails(apartment: myApartment)));
+                  builder: (context) => Apartdetails(
+                    online: online,
+                    apartment: myApartment)));
             },
             child: Card(
               child: Column(
@@ -55,13 +64,17 @@ class _DrawState extends State<PostWidget> {
                             constants.folder +
                             myApartment.ownerlogo,
                         placeholder: (context, url) => Container(
-                          color: greyPlaceHolder,
+                            color: greyPlaceHolder,
                             alignment: Alignment(0.0, 2.0),
                             child: Center(child: CircularProgressIndicator())),
                         errorWidget: (context, url, error) => Container(
-                          color: lightgreyPlaceHolder,
+                            color: lightgreyPlaceHolder,
                             alignment: Alignment(0.0, 2.0),
-                            child: Center(child: Icon(Icons.error,size: 50,))),
+                            child: Center(
+                                child: Icon(
+                              Icons.error,
+                              size: 50,
+                            ))),
                       ),
                     ),
                     title: Text(
@@ -92,17 +105,20 @@ class _DrawState extends State<PostWidget> {
                           height: 300,
                           width: MediaQuery.of(context).size.width,
                           child: CachedNetworkImage(
-                            imageUrl: constants.path +
-                                myApartment.ownerid +
-                                constants.folder +
-                                myApartment.banner,
+                            imageUrl: online ? constants.path +
+                                    myApartment.ownerid +
+                                    constants.folder +
+                                 myApartment.banner.first.banner
+                                :constants.path +
+                                    myApartment.ownerid +
+                                    constants.folder +myApartment.banner,
                             fit: BoxFit.fill,
                             placeholder: (context, url) => Container(
                                 alignment: Alignment(0.0, 2.0),
                                 child: Center(
                                     child: SizedBox(
                                         height: 30,
-                                        width: 3,
+                                        width: 30,
                                         child: CircularProgressIndicator()))),
                             errorWidget: (context, url, error) => Container(
                                 alignment: Alignment(0.0, 2.0),
@@ -127,7 +143,8 @@ class _DrawState extends State<PostWidget> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
                             child: Text(
-                              myApartment.bannertag,
+                              online ? myApartment.banner.last.tag
+                                 :myApartment.bannertag,
                               style: TextStyle(
                                 color: Colors.white,
                               ),

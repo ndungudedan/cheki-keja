@@ -35,6 +35,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       try {
         if (currentState is PostInitial) {
           final posts = await repo.getApartments(id, userid);
+          await insertPosts(posts);
           yield PostSuccess(posts: posts, hasReachedMax: false);
           return;
         }
@@ -73,6 +74,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         ownerlogo: Value(myApartment.ownerlogo),
         description: Value(myApartment.description),
         title: Value(myApartment.title),
+        category: Value(myApartment.category),
         emailaddress: Value(myApartment.email),
         location: Value(myApartment.location),
         address: Value(myApartment.address),

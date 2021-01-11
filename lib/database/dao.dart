@@ -44,7 +44,7 @@ class DatabaseDao extends DatabaseAccessor<DatabaseHelper>
   void insertPosts(List<MyApartmentTableCompanion> values) async {
     await batch((batch) {
       batch.insertAll(myApartmentTable, values);
-    }).catchError(() {
+    }).catchError((Object error) {
       print('errotr');
     });
   }
@@ -57,7 +57,7 @@ class DatabaseDao extends DatabaseAccessor<DatabaseHelper>
       batch.insert(myHouseDetails, details);
       batch.insertAll(myHouseArrears, arrears);
       batch.insertAll(myHousePayments, payments);
-    }).catchError(() {
+    }).catchError((Object error) {
       print('errotr');
     });
   }

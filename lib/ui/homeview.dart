@@ -60,18 +60,23 @@ class _HomePageState extends State<HomeView> {
                                     itemCount: snapshot.data.length,
                                     itemBuilder: (context, index) {
                                       return PostWidget(
+                                        online: false,
                                           myApartment:snapshot.data.elementAt(index),
                                           index:index);
                                     },
                                   );
                                 } else if (snapshot.hasError) {
                                   return Center(
-                                    child: Text('No data'),
+                                    child: Center(
+              child:Image.asset('assets/images/no_data.jpg'),
+            ),
                                   );
                                 } else if (snapshot.data != null &&
                                     snapshot.data.isEmpty) {
                                   return Center(
-                                    child: Text('No data'),
+                                    child: Center(
+              child:Image.asset('assets/images/no_data.jpg'),
+            ),
                                   );
                                 }
                                 return Center(
@@ -92,6 +97,7 @@ class _HomePageState extends State<HomeView> {
                 return index >= state.posts.length
                     ? BottomLoader()
                     : PostWidget(
+                      online: true,
                       myApartment:state.posts[index], 
                       index:index);
               },
