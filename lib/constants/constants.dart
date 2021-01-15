@@ -44,6 +44,7 @@ class Constants {
 }
 
 class SharedPrefs {
+  static final online = 'online';
   static final firstlogin = 'firstlogin';
   static final signedIn = 'signedIn';
   static final account = 'account';

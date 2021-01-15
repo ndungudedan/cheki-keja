@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/database/dao.dart';
+import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/status.dart';
 import 'package:cheki_keja/ui/apartdetails.dart';
@@ -9,8 +11,8 @@ import 'package:cheki_keja/ui/reviews.dart';
 import 'package:cheki_keja/ui/viewonmap.dart';
 import 'package:cheki_keja/views/postWidgetTopBar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:like_button/like_button.dart';
+import 'package:moor/moor.dart ' as value;
 
 class PostWidget extends StatefulWidget {
   var myApartment;
@@ -31,6 +33,7 @@ class _DrawState extends State<PostWidget> {
   var myApartment;
   var index;
   bool online;
+  var dao = DatabaseDao(databasehelper);
   @override
   void initState() {
     super.initState();
@@ -49,34 +52,38 @@ class _DrawState extends State<PostWidget> {
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Apartdetails(
-                    online: online,
-                    apartment: myApartment)));
+                  builder: (context) =>
+                      Apartdetails(online: online, apartment: myApartment)));
             },
             child: Card(
               child: Column(
                 children: <Widget>[
-                  PostWIdgetTopBar(title: myApartment.title, ownerid: myApartment.ownerid, 
-                  ownerlogo: myApartment.ownerlogo, ownername: myApartment.ownername, 
-                  rating: myApartment.rating,
+                  PostWIdgetTopBar(
+                    title: myApartment.title,
+                    ownerid: myApartment.ownerid,
+                    ownerlogo: myApartment.ownerlogo,
+                    ownername: myApartment.ownername,
+                    rating: myApartment.rating,
                   ),
-                   Center(
+                  Center(
                     child: Stack(
                       children: [
                         Container(
                           height: 300,
                           width: MediaQuery.of(context).size.width,
                           child: CachedNetworkImage(
-                            imageUrl: online ? constants.path +
+                            imageUrl: online
+                                ? constants.path +
                                     myApartment.ownerid +
                                     constants.folder +
-                                 myApartment.banner.first.banner
-                                :constants.path +
+                                    myApartment.banner.first.banner
+                                : constants.path +
                                     myApartment.ownerid +
-                                    constants.folder +myApartment.banner,
+                                    constants.folder +
+                                    myApartment.banner,
                             fit: BoxFit.fill,
                             placeholder: (context, url) => Container(
-                              color: greyPlaceHolder,
+                                color: greyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
                                 child: Center(
                                     child: SizedBox(
@@ -84,9 +91,13 @@ class _DrawState extends State<PostWidget> {
                                         width: 30,
                                         child: CircularProgressIndicator()))),
                             errorWidget: (context, url, error) => Container(
-                              color: lightgreyPlaceHolder,
+                                color: lightgreyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
-                                child: Center(child: Icon(Icons.error,size: 50,))),
+                                child: Center(
+                                    child: Icon(
+                                  Icons.error,
+                                  size: 50,
+                                ))),
                           ),
                         ),
                         Positioned(
@@ -107,8 +118,9 @@ class _DrawState extends State<PostWidget> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
                             child: Text(
-                              online ? myApartment.banner.last.tag
-                                 :myApartment.bannertag,
+                              online
+                                  ? myApartment.banner.last.tag
+                                  : myApartment.bannertag,
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -205,26 +217,46 @@ class _DrawState extends State<PostWidget> {
   }
 
   Future<bool> likes(var id) async {
-    var result = await NetworkApi().addLike(id, sharedPreferences.getUserId());
-    print(result);
-    var res = json.decode(result);
-    var status = Status.fromJson(res);
-    if (status.code == Constants.success) {
-      return true;
+    if (sharedPreferences.getOnline()) {
+      var result =
+          await NetworkApi().addLike(id, sharedPreferences.getUserId());
+      print(result);
+      var res = json.decode(result);
+      var status = Status.fromJson(res);
+      if (status.code == Constants.success) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      var companion = OfflineActivityCompanion(
+        userId: value.Value(sharedPreferences.getUserId()),
+        apartmentId: value.Value(id),
+        like: value.Value(true),
+      );
+      dao.insertOfflineActivity(companion);
     }
   }
 
   Future<bool> dislike(var id) async {
-    var result = await NetworkApi().disLike(id, sharedPreferences.getUserId());
-    print(result);
-    var res = json.decode(result);
-    var status = Status.fromJson(res);
-    if (status.code == Constants.success) {
-      return false;
+    if (sharedPreferences.getOnline()) {
+      var result =
+          await NetworkApi().disLike(id, sharedPreferences.getUserId());
+      print(result);
+      var res = json.decode(result);
+      var status = Status.fromJson(res);
+      if (status.code == Constants.success) {
+        return false;
+      } else {
+        return true;
+      }
     } else {
-      return true;
+      var companion = OfflineActivityCompanion(
+        userId: value.Value(sharedPreferences.getUserId()),
+        apartmentId: value.Value(id),
+        like: value.Value(false),
+      );
+      dao.insertOfflineActivity(companion);
     }
   }
 }

@@ -17,7 +17,8 @@ LazyDatabase _openConnection() {
   });
 }
 
-@UseMoor(tables: [MyApartmentTable,MyHouseDetails,MyHouseArrears,MyHousePayments,Contacts], daos: [DatabaseDao])
+@UseMoor(tables: [MyApartmentTable,MyHouseDetails,MyHouseArrears,MyHousePayments,
+Contacts,OfflineActivity], daos: [DatabaseDao])
 class DatabaseHelper extends _$DatabaseHelper {
   // we tell the database where to store the data with this constructor
   DatabaseHelper() : super(_openConnection());
@@ -100,6 +101,14 @@ class Contacts extends Table {
   TextColumn get twitter => text().nullable()();
   TextColumn get facebook => text().nullable()();
   TextColumn get instagram => text().nullable()();
+}
+class OfflineActivity extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get userId => text()();
+  TextColumn get apartmentId => text().nullable()();
+  BoolColumn get like => boolean().nullable()();
+  BoolColumn get dislike => boolean().nullable()();
+  TextColumn get comment => text().nullable()();
 }
 
 final databasehelper = DatabaseHelper();

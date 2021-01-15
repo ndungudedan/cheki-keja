@@ -31,6 +31,10 @@ class SharedPrefsManagement {
     return sharedPreferences.containsKey(SharedPrefs.email);
   }
 
+  void setOnline(bool val) {
+     sharedPreferences.setBool(SharedPrefs.online, val);
+  }
+
   void setEmail(var val) {
     sharedPreferences.setString(SharedPrefs.email, val);
   }
@@ -93,6 +97,10 @@ class SharedPrefsManagement {
 
   void setCompanyPhoto(String image) {
     sharedPreferences.setString(SharedPrefs.companyphoto, image);
+  }
+
+  getOnline() {
+    return sharedPreferences.getBool(SharedPrefs.online);
   }
 
   getEmail() {

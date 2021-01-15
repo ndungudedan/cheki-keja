@@ -3552,6 +3552,388 @@ class $ContactsTable extends Contacts with TableInfo<$ContactsTable, Contact> {
   }
 }
 
+class OfflineActivityData extends DataClass
+    implements Insertable<OfflineActivityData> {
+  final int id;
+  final String userId;
+  final String apartmentId;
+  final bool like;
+  final bool dislike;
+  final String comment;
+  OfflineActivityData(
+      {@required this.id,
+      @required this.userId,
+      this.apartmentId,
+      this.like,
+      this.dislike,
+      this.comment});
+  factory OfflineActivityData.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
+    return OfflineActivityData(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      userId:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}user_id']),
+      apartmentId: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}apartment_id']),
+      like: boolType.mapFromDatabaseResponse(data['${effectivePrefix}like']),
+      dislike:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}dislike']),
+      comment:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}comment']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || userId != null) {
+      map['user_id'] = Variable<String>(userId);
+    }
+    if (!nullToAbsent || apartmentId != null) {
+      map['apartment_id'] = Variable<String>(apartmentId);
+    }
+    if (!nullToAbsent || like != null) {
+      map['like'] = Variable<bool>(like);
+    }
+    if (!nullToAbsent || dislike != null) {
+      map['dislike'] = Variable<bool>(dislike);
+    }
+    if (!nullToAbsent || comment != null) {
+      map['comment'] = Variable<String>(comment);
+    }
+    return map;
+  }
+
+  OfflineActivityCompanion toCompanion(bool nullToAbsent) {
+    return OfflineActivityCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      userId:
+          userId == null && nullToAbsent ? const Value.absent() : Value(userId),
+      apartmentId: apartmentId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(apartmentId),
+      like: like == null && nullToAbsent ? const Value.absent() : Value(like),
+      dislike: dislike == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dislike),
+      comment: comment == null && nullToAbsent
+          ? const Value.absent()
+          : Value(comment),
+    );
+  }
+
+  factory OfflineActivityData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return OfflineActivityData(
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<String>(json['userId']),
+      apartmentId: serializer.fromJson<String>(json['apartmentId']),
+      like: serializer.fromJson<bool>(json['like']),
+      dislike: serializer.fromJson<bool>(json['dislike']),
+      comment: serializer.fromJson<String>(json['comment']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<String>(userId),
+      'apartmentId': serializer.toJson<String>(apartmentId),
+      'like': serializer.toJson<bool>(like),
+      'dislike': serializer.toJson<bool>(dislike),
+      'comment': serializer.toJson<String>(comment),
+    };
+  }
+
+  OfflineActivityData copyWith(
+          {int id,
+          String userId,
+          String apartmentId,
+          bool like,
+          bool dislike,
+          String comment}) =>
+      OfflineActivityData(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        apartmentId: apartmentId ?? this.apartmentId,
+        like: like ?? this.like,
+        dislike: dislike ?? this.dislike,
+        comment: comment ?? this.comment,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('OfflineActivityData(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('apartmentId: $apartmentId, ')
+          ..write('like: $like, ')
+          ..write('dislike: $dislike, ')
+          ..write('comment: $comment')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          userId.hashCode,
+          $mrjc(
+              apartmentId.hashCode,
+              $mrjc(
+                  like.hashCode, $mrjc(dislike.hashCode, comment.hashCode))))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is OfflineActivityData &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.apartmentId == this.apartmentId &&
+          other.like == this.like &&
+          other.dislike == this.dislike &&
+          other.comment == this.comment);
+}
+
+class OfflineActivityCompanion extends UpdateCompanion<OfflineActivityData> {
+  final Value<int> id;
+  final Value<String> userId;
+  final Value<String> apartmentId;
+  final Value<bool> like;
+  final Value<bool> dislike;
+  final Value<String> comment;
+  const OfflineActivityCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.apartmentId = const Value.absent(),
+    this.like = const Value.absent(),
+    this.dislike = const Value.absent(),
+    this.comment = const Value.absent(),
+  });
+  OfflineActivityCompanion.insert({
+    this.id = const Value.absent(),
+    @required String userId,
+    this.apartmentId = const Value.absent(),
+    this.like = const Value.absent(),
+    this.dislike = const Value.absent(),
+    this.comment = const Value.absent(),
+  }) : userId = Value(userId);
+  static Insertable<OfflineActivityData> custom({
+    Expression<int> id,
+    Expression<String> userId,
+    Expression<String> apartmentId,
+    Expression<bool> like,
+    Expression<bool> dislike,
+    Expression<String> comment,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (apartmentId != null) 'apartment_id': apartmentId,
+      if (like != null) 'like': like,
+      if (dislike != null) 'dislike': dislike,
+      if (comment != null) 'comment': comment,
+    });
+  }
+
+  OfflineActivityCompanion copyWith(
+      {Value<int> id,
+      Value<String> userId,
+      Value<String> apartmentId,
+      Value<bool> like,
+      Value<bool> dislike,
+      Value<String> comment}) {
+    return OfflineActivityCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      apartmentId: apartmentId ?? this.apartmentId,
+      like: like ?? this.like,
+      dislike: dislike ?? this.dislike,
+      comment: comment ?? this.comment,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<String>(userId.value);
+    }
+    if (apartmentId.present) {
+      map['apartment_id'] = Variable<String>(apartmentId.value);
+    }
+    if (like.present) {
+      map['like'] = Variable<bool>(like.value);
+    }
+    if (dislike.present) {
+      map['dislike'] = Variable<bool>(dislike.value);
+    }
+    if (comment.present) {
+      map['comment'] = Variable<String>(comment.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OfflineActivityCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('apartmentId: $apartmentId, ')
+          ..write('like: $like, ')
+          ..write('dislike: $dislike, ')
+          ..write('comment: $comment')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $OfflineActivityTable extends OfflineActivity
+    with TableInfo<$OfflineActivityTable, OfflineActivityData> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $OfflineActivityTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  GeneratedTextColumn _userId;
+  @override
+  GeneratedTextColumn get userId => _userId ??= _constructUserId();
+  GeneratedTextColumn _constructUserId() {
+    return GeneratedTextColumn(
+      'user_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _apartmentIdMeta =
+      const VerificationMeta('apartmentId');
+  GeneratedTextColumn _apartmentId;
+  @override
+  GeneratedTextColumn get apartmentId =>
+      _apartmentId ??= _constructApartmentId();
+  GeneratedTextColumn _constructApartmentId() {
+    return GeneratedTextColumn(
+      'apartment_id',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _likeMeta = const VerificationMeta('like');
+  GeneratedBoolColumn _like;
+  @override
+  GeneratedBoolColumn get like => _like ??= _constructLike();
+  GeneratedBoolColumn _constructLike() {
+    return GeneratedBoolColumn(
+      'like',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _dislikeMeta = const VerificationMeta('dislike');
+  GeneratedBoolColumn _dislike;
+  @override
+  GeneratedBoolColumn get dislike => _dislike ??= _constructDislike();
+  GeneratedBoolColumn _constructDislike() {
+    return GeneratedBoolColumn(
+      'dislike',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _commentMeta = const VerificationMeta('comment');
+  GeneratedTextColumn _comment;
+  @override
+  GeneratedTextColumn get comment => _comment ??= _constructComment();
+  GeneratedTextColumn _constructComment() {
+    return GeneratedTextColumn(
+      'comment',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, userId, apartmentId, like, dislike, comment];
+  @override
+  $OfflineActivityTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'offline_activity';
+  @override
+  final String actualTableName = 'offline_activity';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<OfflineActivityData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id'], _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('apartment_id')) {
+      context.handle(
+          _apartmentIdMeta,
+          apartmentId.isAcceptableOrUnknown(
+              data['apartment_id'], _apartmentIdMeta));
+    }
+    if (data.containsKey('like')) {
+      context.handle(
+          _likeMeta, like.isAcceptableOrUnknown(data['like'], _likeMeta));
+    }
+    if (data.containsKey('dislike')) {
+      context.handle(_dislikeMeta,
+          dislike.isAcceptableOrUnknown(data['dislike'], _dislikeMeta));
+    }
+    if (data.containsKey('comment')) {
+      context.handle(_commentMeta,
+          comment.isAcceptableOrUnknown(data['comment'], _commentMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  OfflineActivityData map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return OfflineActivityData.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $OfflineActivityTable createAlias(String alias) {
+    return $OfflineActivityTable(_db, alias);
+  }
+}
+
 abstract class _$DatabaseHelper extends GeneratedDatabase {
   _$DatabaseHelper(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $MyApartmentTableTable _myApartmentTable;
@@ -3568,6 +3950,9 @@ abstract class _$DatabaseHelper extends GeneratedDatabase {
       _myHousePayments ??= $MyHousePaymentsTable(this);
   $ContactsTable _contacts;
   $ContactsTable get contacts => _contacts ??= $ContactsTable(this);
+  $OfflineActivityTable _offlineActivity;
+  $OfflineActivityTable get offlineActivity =>
+      _offlineActivity ??= $OfflineActivityTable(this);
   DatabaseDao _databaseDao;
   DatabaseDao get databaseDao =>
       _databaseDao ??= DatabaseDao(this as DatabaseHelper);
@@ -3579,6 +3964,7 @@ abstract class _$DatabaseHelper extends GeneratedDatabase {
         myHouseDetails,
         myHouseArrears,
         myHousePayments,
-        contacts
+        contacts,
+        offlineActivity
       ];
 }

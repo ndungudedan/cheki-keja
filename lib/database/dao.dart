@@ -8,7 +8,8 @@ part 'dao.g.dart';
   MyHouseDetails,
   MyHousePayments,
   MyHouseArrears,
-  Contacts
+  Contacts,
+  OfflineActivity
 ])
 class DatabaseDao extends DatabaseAccessor<DatabaseHelper>
     with _$DatabaseDaoMixin {
@@ -20,6 +21,10 @@ class DatabaseDao extends DatabaseAccessor<DatabaseHelper>
 
   void deleteContacts() {
     delete(contacts).go();
+  }
+
+  void deleteOfflineActivity() {
+    delete(offlineActivity).go();
   }
 
   void deleteMyHouse() {
@@ -52,6 +57,18 @@ class DatabaseDao extends DatabaseAccessor<DatabaseHelper>
 
   Stream<List<Contact>> watchContacts() {
     return (select(contacts)).watch();
+  }
+
+  Future<List<OfflineActivityData>> watchOfflineActivity() {
+    return (select(offlineActivity)).get();
+  }
+
+void insertOfflineActivity(OfflineActivityCompanion values) async {
+    await batch((batch) {
+      batch.insert(offlineActivity, values);
+    }).catchError((Object error) {
+      print('errotr');
+    });
   }
 
   void insertContacts(ContactsCompanion values) async {

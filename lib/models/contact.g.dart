@@ -14,6 +14,7 @@ Contacts _$ContactsFromJson(Map<String, dynamic> json) {
     email: json['email'] as String,
     instagram: json['instagram'] as String,
     address: json['address'] as String,
+    location: json['location'] as String,
     twitter: json['twitter'] as String,
   );
 }
@@ -25,5 +26,6 @@ Map<String, dynamic> _$ContactsToJson(Contacts instance) => <String, dynamic>{
       'twitter': instance.twitter,
       'phone': instance.phone,
       'address': instance.address,
+      'location': instance.location,
       'email': instance.email,
     };
