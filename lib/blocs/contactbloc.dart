@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/database/dao.dart';
 import 'package:cheki_keja/database/databasehelper.dart';
@@ -14,8 +16,10 @@ class ContactBloc {
 
   fetchContacts() async {
     var res = await repo.getContacts();
-    fetcher.sink.add(res);
-    await insertContacts(res);
+    var map = json.decode(res);
+    var result=  contactModel.Contacts.fromJson(map);
+    fetcher.sink.add(result);
+    await insertContacts(result);
   }
 
   dispose() {

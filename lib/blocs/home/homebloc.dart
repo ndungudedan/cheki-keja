@@ -67,8 +67,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     await myApartments.forEach((myApartment) {
       var companion = MyApartmentTableCompanion(
         onlineid: Value(myApartment.id),
-        banner: Value(myApartment.banner.first.banner),
-        bannertag: Value(myApartment.banner.last.tag),
+        banner: Value(myApartment.banner),
+        bannertag: Value(myApartment.bannertag),
         ownerid: Value(myApartment.ownerid),
         ownername: Value(myApartment.ownername),
         ownerlogo: Value(myApartment.ownerlogo),

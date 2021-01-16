@@ -103,8 +103,8 @@ void insertOfflineActivity(OfflineActivityCompanion values) async {
   void addPost(MyApartment val) {
     final _entry = MyApartmentTableCompanion(
       onlineid: Value(val.id),
-      banner: Value(val.banner.first.banner),
-      bannertag: Value(val.banner.last.tag),
+      banner: Value(val.banner),
+      bannertag: Value(val.bannertag),
       ownerid: Value(val.ownerid),
       description: Value(val.description),
       title: Value(val.title),

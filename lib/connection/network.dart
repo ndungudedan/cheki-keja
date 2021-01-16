@@ -26,13 +26,14 @@ class Network {
       body: json,
     );
     if (response.statusCode == 200) {
+      print(response.body);
       return response.body;
     } else {
       print(response.statusCode);
       return Constants.fail;
     }
   }
-  
+
   Future<List<MyApartment>> getData(String val) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
@@ -51,6 +52,7 @@ class Network {
       print(response.statusCode);
     }
   }
+
   Future<List<MyApartment>> getSectionCategorys(String val) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
@@ -62,13 +64,15 @@ class Network {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      return MyApartmentResponse.fromJson(json.decode(response.body)).data.apartments;
+      return MyApartmentResponse.fromJson(json.decode(response.body))
+          .data
+          .apartments;
     } else {
       print(response.statusCode);
     }
   }
 
-    Future<List<Images>> getImages(String val) async {
+  Future<List<Images>> getImages(String val) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
       url,

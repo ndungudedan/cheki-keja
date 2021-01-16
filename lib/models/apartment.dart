@@ -38,7 +38,8 @@ class MyApartment {
   String longitude;
   String likes;
   String comments;
-  List<Banner> banner;
+  String banner;
+  String bannertag;
   String video;
   String rating;
   String liked;
@@ -66,6 +67,7 @@ class MyApartment {
     this.liked,
     this.location,
     this.banner,
+    this.bannertag,
   });
 
   factory MyApartment.fromJson(Map<String, dynamic> json) =>
@@ -148,7 +150,6 @@ class MyApartment {
     myApartment.likes = map["likes"];
     myApartment.comments = map["comments"];
     myApartment.rating = map["rating"];
-
     return myApartment;
   }
 }
@@ -229,6 +230,7 @@ class ImageList {
             .toList());
   }
 }
+
 @JsonSerializable()
 class ImagesResponse {
   ImageList data;

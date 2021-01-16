@@ -72,12 +72,7 @@ class _DrawState extends State<PostWidget> {
                           height: 300,
                           width: MediaQuery.of(context).size.width,
                           child: CachedNetworkImage(
-                            imageUrl: online
-                                ? constants.path +
-                                    myApartment.ownerid +
-                                    constants.folder +
-                                    myApartment.banner.first.banner
-                                : constants.path +
+                            imageUrl: constants.path +
                                     myApartment.ownerid +
                                     constants.folder +
                                     myApartment.banner,
@@ -117,10 +112,7 @@ class _DrawState extends State<PostWidget> {
                             ),
                             padding: EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
-                            child: Text(
-                              online
-                                  ? myApartment.banner.last.tag
-                                  : myApartment.bannertag,
+                            child: Text(myApartment.bannertag,
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -134,81 +126,76 @@ class _DrawState extends State<PostWidget> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          ButtonBar(
+            alignment: MainAxisAlignment.center,
             children: <Widget>[
-              ButtonBar(
-                alignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  LikeButton(
-                    isLiked: myApartment.liked.isNotEmpty,
+              LikeButton(
+                isLiked: myApartment.liked.isNotEmpty,
+                size: 30,
+                circleColor: CircleColor(
+                    start: Colors.redAccent, end: Colors.redAccent),
+                bubblesColor: BubblesColor(
+                  dotPrimaryColor: Colors.red,
+                  dotSecondaryColor: Colors.redAccent,
+                ),
+                likeBuilder: (bool isLiked) {
+                  return Icon(
+                    Icons.favorite,
+                    color: isLiked ? Colors.red : Colors.grey,
                     size: 30,
-                    circleColor: CircleColor(
-                        start: Colors.redAccent, end: Colors.redAccent),
-                    bubblesColor: BubblesColor(
-                      dotPrimaryColor: Colors.red,
-                      dotSecondaryColor: Colors.redAccent,
-                    ),
-                    likeBuilder: (bool isLiked) {
-                      return Icon(
-                        Icons.favorite,
-                        color: isLiked ? Colors.red : Colors.grey,
-                        size: 30,
-                      );
-                    },
-                    likeCount: int.tryParse(myApartment.likes),
-                    countBuilder: (int count, bool isLiked, String text) {
-                      var color = isLiked ? Colors.red : Colors.grey;
-                      Widget result;
-                      if (count == 0) {
-                        result = Text(
-                          "love",
-                          style: TextStyle(color: color),
-                        );
-                      } else {
-                        result = Text(
-                          text,
-                          style: TextStyle(color: color),
-                        );
-                      }
-                      return result;
-                    },
-                    onTap: (isLiked) {
-                      if (!isLiked) {
-                        return likes(myApartment.id);
-                      } else {
-                        return dislike(myApartment.id);
-                      }
-                    },
-                  ),
-                  IconButton(
-                      icon: Icon(
-                        Icons.comment,
-                        color: Colors.amber,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Reviews(
-                                  apartmentId: myApartment.id,
-                                )));
-                      }),
-                  Text(myApartment.comments),
-                  IconButton(
-                      icon: Icon(
-                        Icons.location_on_outlined,
-                        color: Colors.amber,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ViewOnMap(
-                                  title: myApartment.title,
-                                  address: myApartment.address,
-                                  latitude: myApartment.latitude,
-                                  longitude: myApartment.longitude,
-                                )));
-                      }),
-                ],
+                  );
+                },
+                likeCount: int.tryParse(myApartment.likes),
+                countBuilder: (int count, bool isLiked, String text) {
+                  var color = isLiked ? Colors.red : Colors.grey;
+                  Widget result;
+                  if (count == 0) {
+                    result = Text(
+                      "love",
+                      style: TextStyle(color: color),
+                    );
+                  } else {
+                    result = Text(
+                      text,
+                      style: TextStyle(color: color),
+                    );
+                  }
+                  return result;
+                },
+                onTap: (isLiked) {
+                  if (!isLiked) {
+                    return likes(myApartment.id);
+                  } else {
+                    return dislike(myApartment.id);
+                  }
+                },
               ),
+              IconButton(
+                  icon: Icon(
+                    Icons.comment,
+                    color: Colors.amber,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Reviews(
+                              apartmentId: myApartment.id,
+                            )));
+                  }),
+              Text(myApartment.comments),
+              IconButton(
+                  icon: Icon(
+                    Icons.location_on_outlined,
+                    color: Colors.amber,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ViewOnMap(
+                              title: myApartment.title,
+                              address: myApartment.address,
+                              latitude: myApartment.latitude,
+                              longitude: myApartment.longitude,
+                            )));
+                  }),
             ],
           ),
         ],
