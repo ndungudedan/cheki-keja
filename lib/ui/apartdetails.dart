@@ -41,7 +41,6 @@ class Apartdetails extends StatefulWidget {
 
 class _MyHomePageState extends State<Apartdetails> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  String userId;
   String apartmentId, ownerId;
   var apartment;
   MyCompany company;
@@ -82,7 +81,6 @@ class _MyHomePageState extends State<Apartdetails> {
     review_bloc = ReviewBloc();
     online = widget.online;
     apartment = widget.apartment;
-    userId = '1';
     apartmentId = online ? widget.apartment.id : widget.apartment.onlineid;
     ownerId = widget.apartment.ownerid;
     feature_bloc.fetchFeatures(apartmentId);
@@ -307,7 +305,7 @@ class _MyHomePageState extends State<Apartdetails> {
                           sharedPreferences.getSignedIn()
                               ? Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => AddReview(
-                                        userId: userId,
+                                        userId: sharedPreferences.getUserId(),
                                         apartmentId: apartmentId,
                                       )))
                               : Scaffold.of(context)
@@ -445,7 +443,7 @@ class _MyHomePageState extends State<Apartdetails> {
                       ListTile(
                         title: Text('Address'),
                         leading: Icon(Icons.account_box),
-                        subtitle: Text(apartment.address ?? snapshot.data.address),
+                        subtitle: Text(apartment.address+'\n'+apartment.location ?? snapshot.data.address),
                       ),
                     ],
                   ),
@@ -584,7 +582,7 @@ class _MyHomePageState extends State<Apartdetails> {
 
   Future<bool> likes(var id) async {
     if (sharedPreferences.getSignedIn()) {
-      var result = await NetworkApi().addLike(id, userId);
+      var result = await NetworkApi().addLike(id, sharedPreferences.getUserId());
       print(result);
       var res = json.decode(result);
       var status = Status.fromJson(res);
@@ -604,7 +602,7 @@ class _MyHomePageState extends State<Apartdetails> {
 
   Future<bool> dislike(var id) async {
     if (sharedPreferences.getSignedIn()) {
-      var result = await NetworkApi().disLike(id, userId);
+      var result = await NetworkApi().disLike(id, sharedPreferences.getUserId());
       print(result);
       var res = json.decode(result);
       var status = Status.fromJson(res);

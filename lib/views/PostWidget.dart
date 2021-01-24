@@ -69,7 +69,7 @@ class _DrawState extends State<PostWidget> {
                     child: Stack(
                       children: [
                         Container(
-                          height: 300,
+                         // height: 300,
                           width: MediaQuery.of(context).size.width,
                           child: CachedNetworkImage(
                             imageUrl: constants.path +
@@ -81,11 +81,17 @@ class _DrawState extends State<PostWidget> {
                                 color: greyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
                                 child: Center(
-                                    child: SizedBox(
-                                        height: 30,
-                                        width: 30,
-                                        child: CircularProgressIndicator()))),
+                                  
+                                    child: Container(
+                                      height: 300,
+                                      child: SizedBox(
+                                        
+                                          height: 30,
+                                          width: 30,
+                                          child: CircularProgressIndicator()),
+                                    ))),
                             errorWidget: (context, url, error) => Container(
+                              height: 300,
                                 color: lightgreyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
                                 child: Center(
