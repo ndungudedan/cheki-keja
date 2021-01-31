@@ -78,18 +78,14 @@ class _DrawState extends State<PostWidget> {
                                     myApartment.banner,
                             fit: BoxFit.fill,
                             placeholder: (context, url) => Container(
+                              height: 300,
                                 color: greyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
                                 child: Center(
-                                  
-                                    child: Container(
-                                      height: 300,
-                                      child: SizedBox(
-                                        
-                                          height: 30,
-                                          width: 30,
-                                          child: CircularProgressIndicator()),
-                                    ))),
+                                    child: SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        child: CircularProgressIndicator()))),
                             errorWidget: (context, url, error) => Container(
                               height: 300,
                                 color: lightgreyPlaceHolder,
