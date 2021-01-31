@@ -88,6 +88,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         rating: Value(myApartment.rating),
         likes: Value(myApartment.likes),
         comments: Value(myApartment.comments),
+        vacant: Value(myApartment.vacant),
         liked: Value(myApartment.liked),
       );
       _items.add(companion);

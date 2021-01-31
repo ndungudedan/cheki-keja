@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:cheki_keja/constants/constants.dart';
 import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/apartment.dart';
-import 'package:cheki_keja/models/category.dart';
 import 'package:cheki_keja/models/company.dart';
 import 'package:cheki_keja/models/features.dart';
 import 'package:cheki_keja/models/reviewClass.dart';
@@ -184,11 +183,25 @@ class NetworkApi {
     return Data;
   }
 
+    Future<dynamic> updateFirebaseToken() async {
+    Network network = Network('$url');
+    var Data = await network.call(tokenJson());
+    return Data;
+  }
+
   String homejson(var id, var userId) {
     var json = jsonEncode(<String, String>{
       'functionality': 'homePage',
       'pagination': id,
       'user_id': userId,
+    });
+    return json;
+  }
+    String tokenJson() {
+    var json = jsonEncode(<String, String>{
+      'functionality': 'updateFirebaseToken',
+      'token': sharedPreferences.getFirebaseToken(),
+      'user_id': sharedPreferences.getUserId(),
     });
     return json;
   }
@@ -354,6 +367,7 @@ class NetworkApi {
       'email': user.email,
       'photo': user.photoURL,
       'name': user.displayName,
+      'token': sharedPreferences.getFirebaseToken() ?? '',
     });
     return json;
   }

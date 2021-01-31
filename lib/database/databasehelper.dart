@@ -17,8 +17,16 @@ LazyDatabase _openConnection() {
   });
 }
 
-@UseMoor(tables: [MyApartmentTable,MyHouseDetails,MyHouseArrears,MyHousePayments,
-Contacts,OfflineActivity], daos: [DatabaseDao])
+@UseMoor(tables: [
+  MyApartmentTable,
+  MyHouseDetails,
+  MyHouseArrears,
+  MyHousePayments,
+  Contacts,
+  OfflineActivity
+], daos: [
+  DatabaseDao
+])
 class DatabaseHelper extends _$DatabaseHelper {
   // we tell the database where to store the data with this constructor
   DatabaseHelper() : super(_openConnection());
@@ -50,11 +58,13 @@ class MyApartmentTable extends Table {
   TextColumn get space => text()();
   TextColumn get latitude => text()();
   TextColumn get longitude => text()();
+  BoolColumn get vacant => boolean()();
   TextColumn get rating => text()();
   TextColumn get likes => text()();
   TextColumn get liked => text()();
   TextColumn get comments => text()();
 }
+
 class MyHouseDetails extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get onlineid => text()();
@@ -73,6 +83,7 @@ class MyHouseDetails extends Table {
   TextColumn get payed => text()();
   TextColumn get rating => text()();
 }
+
 class MyHouseArrears extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get onlineid => text()();
@@ -80,6 +91,7 @@ class MyHouseArrears extends Table {
   TextColumn get year => text()();
   TextColumn get month => text()();
 }
+
 class MyHousePayments extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get onlineid => text()();
@@ -91,6 +103,7 @@ class MyHousePayments extends Table {
   TextColumn get month => text()();
   TextColumn get type => text()();
 }
+
 class Contacts extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get onlineid => text()();
@@ -102,6 +115,7 @@ class Contacts extends Table {
   TextColumn get facebook => text().nullable()();
   TextColumn get instagram => text().nullable()();
 }
+
 class OfflineActivity extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get userId => text()();

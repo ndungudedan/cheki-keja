@@ -43,9 +43,11 @@ class MyApartment {
   String video;
   String rating;
   String liked;
+  bool vacant;
 
   MyApartment({
     this.id,
+    this.vacant,
     this.ownerid,
     this.ownername,
     this.ownerlogo,

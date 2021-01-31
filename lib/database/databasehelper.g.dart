@@ -29,6 +29,7 @@ class MyApartmentTableData extends DataClass
   final String space;
   final String latitude;
   final String longitude;
+  final bool vacant;
   final String rating;
   final String likes;
   final String liked;
@@ -54,6 +55,7 @@ class MyApartmentTableData extends DataClass
       @required this.space,
       @required this.latitude,
       @required this.longitude,
+      @required this.vacant,
       @required this.rating,
       @required this.likes,
       @required this.liked,
@@ -64,6 +66,7 @@ class MyApartmentTableData extends DataClass
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return MyApartmentTableData(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       onlineid: stringType
@@ -104,6 +107,8 @@ class MyApartmentTableData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}latitude']),
       longitude: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}longitude']),
+      vacant:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}vacant']),
       rating:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}rating']),
       likes:
@@ -177,6 +182,9 @@ class MyApartmentTableData extends DataClass
     if (!nullToAbsent || longitude != null) {
       map['longitude'] = Variable<String>(longitude);
     }
+    if (!nullToAbsent || vacant != null) {
+      map['vacant'] = Variable<bool>(vacant);
+    }
     if (!nullToAbsent || rating != null) {
       map['rating'] = Variable<String>(rating);
     }
@@ -246,6 +254,8 @@ class MyApartmentTableData extends DataClass
       longitude: longitude == null && nullToAbsent
           ? const Value.absent()
           : Value(longitude),
+      vacant:
+          vacant == null && nullToAbsent ? const Value.absent() : Value(vacant),
       rating:
           rating == null && nullToAbsent ? const Value.absent() : Value(rating),
       likes:
@@ -282,6 +292,7 @@ class MyApartmentTableData extends DataClass
       space: serializer.fromJson<String>(json['space']),
       latitude: serializer.fromJson<String>(json['latitude']),
       longitude: serializer.fromJson<String>(json['longitude']),
+      vacant: serializer.fromJson<bool>(json['vacant']),
       rating: serializer.fromJson<String>(json['rating']),
       likes: serializer.fromJson<String>(json['likes']),
       liked: serializer.fromJson<String>(json['liked']),
@@ -312,6 +323,7 @@ class MyApartmentTableData extends DataClass
       'space': serializer.toJson<String>(space),
       'latitude': serializer.toJson<String>(latitude),
       'longitude': serializer.toJson<String>(longitude),
+      'vacant': serializer.toJson<bool>(vacant),
       'rating': serializer.toJson<String>(rating),
       'likes': serializer.toJson<String>(likes),
       'liked': serializer.toJson<String>(liked),
@@ -340,6 +352,7 @@ class MyApartmentTableData extends DataClass
           String space,
           String latitude,
           String longitude,
+          bool vacant,
           String rating,
           String likes,
           String liked,
@@ -365,6 +378,7 @@ class MyApartmentTableData extends DataClass
         space: space ?? this.space,
         latitude: latitude ?? this.latitude,
         longitude: longitude ?? this.longitude,
+        vacant: vacant ?? this.vacant,
         rating: rating ?? this.rating,
         likes: likes ?? this.likes,
         liked: liked ?? this.liked,
@@ -393,6 +407,7 @@ class MyApartmentTableData extends DataClass
           ..write('space: $space, ')
           ..write('latitude: $latitude, ')
           ..write('longitude: $longitude, ')
+          ..write('vacant: $vacant, ')
           ..write('rating: $rating, ')
           ..write('likes: $likes, ')
           ..write('liked: $liked, ')
@@ -443,7 +458,7 @@ class MyApartmentTableData extends DataClass
                                                                               .hashCode,
                                                                           $mrjc(
                                                                               latitude.hashCode,
-                                                                              $mrjc(longitude.hashCode, $mrjc(rating.hashCode, $mrjc(likes.hashCode, $mrjc(liked.hashCode, comments.hashCode))))))))))))))))))))))));
+                                                                              $mrjc(longitude.hashCode, $mrjc(vacant.hashCode, $mrjc(rating.hashCode, $mrjc(likes.hashCode, $mrjc(liked.hashCode, comments.hashCode)))))))))))))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -468,6 +483,7 @@ class MyApartmentTableData extends DataClass
           other.space == this.space &&
           other.latitude == this.latitude &&
           other.longitude == this.longitude &&
+          other.vacant == this.vacant &&
           other.rating == this.rating &&
           other.likes == this.likes &&
           other.liked == this.liked &&
@@ -495,6 +511,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
   final Value<String> space;
   final Value<String> latitude;
   final Value<String> longitude;
+  final Value<bool> vacant;
   final Value<String> rating;
   final Value<String> likes;
   final Value<String> liked;
@@ -520,6 +537,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     this.space = const Value.absent(),
     this.latitude = const Value.absent(),
     this.longitude = const Value.absent(),
+    this.vacant = const Value.absent(),
     this.rating = const Value.absent(),
     this.likes = const Value.absent(),
     this.liked = const Value.absent(),
@@ -546,6 +564,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     @required String space,
     @required String latitude,
     @required String longitude,
+    @required bool vacant,
     @required String rating,
     @required String likes,
     @required String liked,
@@ -563,6 +582,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
         space = Value(space),
         latitude = Value(latitude),
         longitude = Value(longitude),
+        vacant = Value(vacant),
         rating = Value(rating),
         likes = Value(likes),
         liked = Value(liked),
@@ -588,6 +608,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     Expression<String> space,
     Expression<String> latitude,
     Expression<String> longitude,
+    Expression<bool> vacant,
     Expression<String> rating,
     Expression<String> likes,
     Expression<String> liked,
@@ -614,6 +635,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       if (space != null) 'space': space,
       if (latitude != null) 'latitude': latitude,
       if (longitude != null) 'longitude': longitude,
+      if (vacant != null) 'vacant': vacant,
       if (rating != null) 'rating': rating,
       if (likes != null) 'likes': likes,
       if (liked != null) 'liked': liked,
@@ -642,6 +664,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       Value<String> space,
       Value<String> latitude,
       Value<String> longitude,
+      Value<bool> vacant,
       Value<String> rating,
       Value<String> likes,
       Value<String> liked,
@@ -667,6 +690,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
       space: space ?? this.space,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      vacant: vacant ?? this.vacant,
       rating: rating ?? this.rating,
       likes: likes ?? this.likes,
       liked: liked ?? this.liked,
@@ -737,6 +761,9 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
     if (longitude.present) {
       map['longitude'] = Variable<String>(longitude.value);
     }
+    if (vacant.present) {
+      map['vacant'] = Variable<bool>(vacant.value);
+    }
     if (rating.present) {
       map['rating'] = Variable<String>(rating.value);
     }
@@ -775,6 +802,7 @@ class MyApartmentTableCompanion extends UpdateCompanion<MyApartmentTableData> {
           ..write('space: $space, ')
           ..write('latitude: $latitude, ')
           ..write('longitude: $longitude, ')
+          ..write('vacant: $vacant, ')
           ..write('rating: $rating, ')
           ..write('likes: $likes, ')
           ..write('liked: $liked, ')
@@ -1030,6 +1058,18 @@ class $MyApartmentTableTable extends MyApartmentTable
     );
   }
 
+  final VerificationMeta _vacantMeta = const VerificationMeta('vacant');
+  GeneratedBoolColumn _vacant;
+  @override
+  GeneratedBoolColumn get vacant => _vacant ??= _constructVacant();
+  GeneratedBoolColumn _constructVacant() {
+    return GeneratedBoolColumn(
+      'vacant',
+      $tableName,
+      false,
+    );
+  }
+
   final VerificationMeta _ratingMeta = const VerificationMeta('rating');
   GeneratedTextColumn _rating;
   @override
@@ -1100,6 +1140,7 @@ class $MyApartmentTableTable extends MyApartmentTable
         space,
         latitude,
         longitude,
+        vacant,
         rating,
         likes,
         liked,
@@ -1225,6 +1266,12 @@ class $MyApartmentTableTable extends MyApartmentTable
           longitude.isAcceptableOrUnknown(data['longitude'], _longitudeMeta));
     } else if (isInserting) {
       context.missing(_longitudeMeta);
+    }
+    if (data.containsKey('vacant')) {
+      context.handle(_vacantMeta,
+          vacant.isAcceptableOrUnknown(data['vacant'], _vacantMeta));
+    } else if (isInserting) {
+      context.missing(_vacantMeta);
     }
     if (data.containsKey('rating')) {
       context.handle(_ratingMeta,

@@ -1,9 +1,30 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/apartment.dart';
+import 'package:cheki_keja/ui/apartdetails.dart';
 import 'package:cheki_keja/ui/home.dart';
 import 'package:cheki_keja/views/drawer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
+dynamic backgroundMessageHandler(Map<String, dynamic> message) {
+  if (message.containsKey('data')) {
+    if (message['data']['action'] == 'vacant') {
+      final dynamic data = message['data']['apartment'];
+      return MyApartment.fromJson(json.decode(data));
+    }
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+  }
+
+  // Or do other work.
+}
 
 class Index extends StatefulWidget {
   Index({Key key, this.title}) : super(key: key);
@@ -35,6 +56,7 @@ class _MyHomePageState extends State<Index>
   bool iscollapsed = true;
   double screenwidth, screenheight;
   final Duration duration = const Duration(milliseconds: 300);
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
@@ -44,6 +66,7 @@ class _MyHomePageState extends State<Index>
     _dashscaleAnimation = Tween<double>(begin: 0, end: 1).animate(_controller);
     _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0))
         .animate(_controller);
+    cloudMessage();
   }
 
   @override
@@ -117,5 +140,50 @@ class _MyHomePageState extends State<Index>
         ],
       ),
     ));
+  }
+
+  void cloudMessage() {
+    if (sharedPreferences.getSignedIn()) {
+      firebaseMessaging.getToken().then((String token) async {
+        assert(token != null);
+        sharedPreferences.setFirebaseToken(token);
+        var result = await NetworkApi().updateFirebaseToken();
+        print(result);
+        print(token);
+      });
+    }
+
+    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message)  {
+        print("onMessage: $message");
+        /* var myApartment = backgroundMessageHandler(message);
+         Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                Apartdetails(online: true, apartment: myApartment))); */
+      },
+      onLaunch: (Map<String, dynamic> message)  {
+        print("onLaunch: $message");
+        var myApartment = backgroundMessageHandler(message);
+         Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                Apartdetails(online: true, apartment: myApartment)));
+                
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        var myApartment = backgroundMessageHandler(message);
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                Apartdetails(online: true, apartment: myApartment)));
+      },
+    );
+
+    firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(
+            sound: true, badge: true, alert: true, provisional: true));
+    firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
   }
 }

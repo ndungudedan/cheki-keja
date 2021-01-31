@@ -202,6 +202,8 @@ class _DrawState extends State<PostWidget> {
                               longitude: myApartment.longitude,
                             )));
                   }),
+              myApartment.vacant ? Image.asset('name')
+              :SizedBox()
             ],
           ),
         ],

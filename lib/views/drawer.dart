@@ -19,9 +19,9 @@ import 'package:cheki_keja/management/management.dart';
 import 'package:moor_db_viewer/moor_db_viewer.dart';
 
 class Draw extends StatefulWidget {
-  const Draw(
-      {Key key,})
-      : super(key: key);
+  const Draw({
+    Key key,
+  }) : super(key: key);
 
   @override
   _DrawState createState() => _DrawState();
@@ -50,17 +50,22 @@ class _DrawState extends State<Draw> {
               ? Center(
                   child: UserAccountsDrawerHeader(
                     margin: EdgeInsets.all(0),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent
+                    decoration: BoxDecoration(color: Colors.transparent),
+                    currentAccountPicture: sharedPreferences.getPhoto() != null
+                        ? CircleAvatar(
+                            radius: 30,
+                            backgroundImage: CachedNetworkImageProvider(
+                                sharedPreferences.getPhoto()),
+                          )
+                        : Icon(Icons.account_circle),
+                    accountEmail: Text(
+                      sharedPreferences.getEmail(),
+                      style: TextStyle(color: Colors.white),
                     ),
-                    currentAccountPicture:
-                        sharedPreferences.getPhoto() != null
-                            ? CircleAvatar(
-                                radius: 30,
-                                backgroundImage: CachedNetworkImageProvider(sharedPreferences.getPhoto()),)
-                            : Icon(Icons.account_circle),
-                    accountEmail: Text(sharedPreferences.getEmail(),style: TextStyle(color: Colors.white),),
-                    accountName: Text(sharedPreferences.getFirstname(),style: TextStyle(color: Colors.white),),
+                    accountName: Text(
+                      sharedPreferences.getFirstname(),
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 )
               : DrawerHeader(
@@ -79,8 +84,8 @@ class _DrawState extends State<Draw> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Image(
-                                image: AssetImage(
-                                    'assets/images/google_logo.png'),
+                                image:
+                                    AssetImage('assets/images/google_logo.png'),
                                 height: 35.0),
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
@@ -110,26 +115,27 @@ class _DrawState extends State<Draw> {
                 'Favorites',
                 style: TextStyle(color: Colors.white),
               ),
-             leading: Icon(
-              Icons.favorite_border_outlined,
-              color: Colors.white,
-            ),
-              onTap: () {/* 
+              leading: Icon(
+                Icons.favorite_border_outlined,
+                color: Colors.white,
+              ),
+              onTap: () {
+                /* 
 Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(databasehelper))); */
-                 Navigator.push(
+                Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Favorites()), 
+                  MaterialPageRoute(builder: (context) => Favorites()),
                 );
               }),
-              ListTile(
+          ListTile(
               title: Text(
                 'Category',
                 style: TextStyle(color: Colors.white),
               ),
-             leading: Icon(
-              Icons.category_outlined,
-              color: Colors.white,
-            ),
+              leading: Icon(
+                Icons.category_outlined,
+                color: Colors.white,
+              ),
               onTap: () {
                 Navigator.push(
                   context,
@@ -141,10 +147,10 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
                 'Map View',
                 style: TextStyle(color: Colors.white),
               ),
-             leading: Icon(
-              Icons.map_outlined,
-              color: Colors.white,
-            ),
+              leading: Icon(
+                Icons.map_outlined,
+                color: Colors.white,
+              ),
               onTap: () {
                 Navigator.push(
                   context,
@@ -152,58 +158,72 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
                 );
               }),
           ListTile(
-            title: Text('My apartment',
-                style: TextStyle(color: Colors.white)),
+            title: Text('My apartment', style: TextStyle(color: Colors.white)),
             leading: Icon(
               Icons.home_outlined,
               color: Colors.white,
             ),
-            onTap: () =>sharedPreferences.getSignedIn() ? Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => MyHouse()))
-                : infoDialog(context,
-                  'Please Login to access this page'),
+            onTap: () => sharedPreferences.getSignedIn()
+                ? Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => MyHouse()))
+                : infoDialog(context, 'Please Login to access this page'),
           ),
           ListTile(
-              leading: Icon(Icons.contact_phone,color: Colors.white,),
-              title: Text('Contact us',style:TextStyle(color: Colors.white),),
-              onTap: () {
-                Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ContactUs()));
-              },
+            leading: Icon(
+              Icons.contact_phone,
+              color: Colors.white,
             ),
-            ListTile(
-              leading: Icon(Icons.read_more,color: Colors.white,),
-              title: Text('Terms & Conditions',style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Terms()));
-              },
+            title: Text(
+              'Contact us',
+              style: TextStyle(color: Colors.white),
             ),
-            ListTile(
-              leading: Icon(Icons.chrome_reader_mode_rounded,color: Colors.white,),
-              title: Text('About',style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => About()));
-              },
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => ContactUs()));
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.read_more,
+              color: Colors.white,
             ),
+            title: Text('Terms & Conditions',
+                style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Terms()));
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.chrome_reader_mode_rounded,
+              color: Colors.white,
+            ),
+            title: Text('About', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => About()));
+            },
+          ),
           Divider(
             color: Colors.white,
             height: 5,
           ),
-         sharedPreferences.getSignedIn() ? ListTile(
-            title: Text('Log out', style: TextStyle(color: Colors.white)),
-            leading: Icon(
-              Icons.settings_power,
-              color: Colors.white,
-            ),
-            onTap: () => signOutGoogle(),
-          ): SizedBox(),
-         
+          sharedPreferences.getSignedIn()
+              ? ListTile(
+                  title: Text('Log out', style: TextStyle(color: Colors.white)),
+                  leading: Icon(
+                    Icons.settings_power,
+                    color: Colors.white,
+                  ),
+                  onTap: () => signOutGoogle(),
+                )
+              : SizedBox(),
         ],
       ),
     );
   }
+
   void signInWithGoogle() async {
     var googleSignInAccount = await googleSignIn.signIn();
     var googleSignInAuthentication = await googleSignInAccount.authentication;
@@ -228,17 +248,17 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
   }
 
   void signOutGoogle() async {
-    await googleSignIn.signOut().then((value) => {
-      sharedPreferences.setSignedIn(false)
-    });
-    
+    await googleSignIn
+        .signOut()
+        .then((value) => {sharedPreferences.setSignedIn(false)});
+
     print("User Sign Out");
   }
 
   Future<void> registerUser(auth.User fireuser) async {
     var result = await NetworkApi().registerUser(fireuser);
+    print(result);
     var Map = json.decode(result);
-
     setState(() {
       user = myuser.User.fromJson(Map);
     });
@@ -247,8 +267,8 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
     sharedPreferences.setSignedIn(true);
     sharedPreferences.setFirstname(user.name);
     sharedPreferences.setPhoto(user.photo);
-   
   }
+
   void dialog() {
     showDialog(
       context: context,

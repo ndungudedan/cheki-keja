@@ -34,6 +34,9 @@ class SharedPrefsManagement {
   void setOnline(bool val) {
      sharedPreferences.setBool(SharedPrefs.online, val);
   }
+  void setFirebaseToken(var val) {
+     sharedPreferences.setString(SharedPrefs.firebasetoken, val);
+  }
 
   void setEmail(var val) {
     sharedPreferences.setString(SharedPrefs.email, val);
@@ -101,6 +104,10 @@ class SharedPrefsManagement {
 
   getOnline() {
     return sharedPreferences.getBool(SharedPrefs.online);
+  }
+
+  getFirebaseToken() {
+    return sharedPreferences.getString(SharedPrefs.firebasetoken);
   }
 
   getEmail() {
