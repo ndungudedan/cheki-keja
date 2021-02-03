@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  final String baseurl = 'http://192.168.43.188/chekiKeja/chekiKeja.php/';
+/*   final String baseurl = 'http://192.168.43.188/chekiKeja/chekiKeja.php/';
   final String uploadurl = 'http://192.168.43.188/chekiKeja/tengenezaKeja.php/';
   final String updateurl = 'http://192.168.43.188/chekiKeja/updateKeja.php/';
   final String path = 'http://192.168.43.188/chekiKeja/uploads/';
   final String stkpush = 'http://www.thebuktu.com/chekiKeja/lipaNaMpesa.php';
   final String termsurl = 'http://192.168.43.188/chekiKeja/uploads/terms.rtf';
   final String abouturl = 'http://192.168.43.188/chekiKeja/uploads/about.rtf';
+  final String folder = '/images/'; */
+  final String baseurl =
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/chekiKeja.php';
+  final String uploadurl =
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/tengenezaKeja.php/';
+  final String updateurl =
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/updateKeja.php/';
+  final String path =
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/uploads/';
+  final String stkpush =
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/lipaNaMpesa.php';
+  final String termsurl =
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/uploads/terms.rtf';
+  final String abouturl =
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/uploads/about.rtf';
   final String folder = '/images/';
 
   final String firstlogin = 'firstlogin';
@@ -107,8 +122,8 @@ const kSecondaryColor = Color(0xFFFFA41B);
 const kTextColor = Color(0xFF000839);
 const kTextLightColor = Color(0xFF747474);
 const kBlueColor = Color(0xFF40BAD5);
-const greyPlaceHolder = Color.fromARGB(255,128, 128, 128);
-const lightgreyPlaceHolder = Color.fromARGB(255,207, 212, 219);
+const greyPlaceHolder = Color.fromARGB(255, 128, 128, 128);
+const lightgreyPlaceHolder = Color.fromARGB(255, 207, 212, 219);
 
 const kDefaultPadding = 20.0;
 

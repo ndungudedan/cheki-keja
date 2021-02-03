@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
               ),
               Icon(
                 Icons.search,
-                color: Colors.white,
+                color: Colors.transparent,
               ),
             ],
           ),
