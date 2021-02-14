@@ -67,16 +67,12 @@ class _HomePageState extends State<HomeView> {
                                   );
                                 } else if (snapshot.hasError) {
                                   return Center(
-                                    child: Center(
-              child:Image.asset('assets/images/no_data.jpg'),
-            ),
+                                    child: Image.asset('assets/images/no_data.jpg'),
                                   );
                                 } else if (snapshot.data != null &&
                                     snapshot.data.isEmpty) {
                                   return Center(
-                                    child: Center(
-              child:Image.asset('assets/images/no_data.jpg'),
-            ),
+                                    child: Image.asset('assets/images/no_data.jpg'),
                                   );
                                 }
                                 return Center(
@@ -140,33 +136,5 @@ class _HomePageState extends State<HomeView> {
       ),
     );
   }
-  Future<bool> likes(var id) async {
-    var result = await NetworkApi().addLike(id, userId);
-    print(result);
-    var res = json.decode(result);
-    var status = Status.fromJson(res);
-    if (status.code == Constants.success) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
-  Future<bool> dislike(var id) async {
-    var result = await NetworkApi().disLike(id, userId);
-    print(result);
-    var res = json.decode(result);
-    var status = Status.fromJson(res);
-    if (status.code == Constants.success) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  Future<void> getPrefs() async {
-    if (sharedPreferences.getSignedIn()) {
-      userId = sharedPreferences.getUserId();
-    }
-  }
 }

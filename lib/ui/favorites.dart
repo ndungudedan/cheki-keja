@@ -3,6 +3,7 @@ import 'package:cheki_keja/blocs/favorites/favoritebloc.dart';
 import 'package:cheki_keja/blocs/favorites/favoriteevent.dart';
 import 'package:cheki_keja/blocs/home/homebloc.dart';
 import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/apartment.dart';
 import 'package:cheki_keja/models/user.dart' as myuser;
 import 'package:cheki_keja/ui/favorieview.dart';
@@ -42,7 +43,6 @@ class _HomeState extends State<Favorites> {
   VoidCallback press;
   bool _loadingMore = true;
   var _hasMoreItems = true;
-  var userId;
   var paginationId = '0';
 
   @override
@@ -59,7 +59,7 @@ class _HomeState extends State<Favorites> {
   Widget build(BuildContext context) {
     return BlocProvider(
             create: (context) =>
-                FavoriteBloc(id: paginationId,userid: userId)..add(FavoriteFetched()),
+                FavoriteBloc(id: paginationId,userid: sharedPreferences.getUserId())..add(FavoriteFetched()),
             child:  FavoriteView());
   }
 

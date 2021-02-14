@@ -40,7 +40,6 @@ class _MyHomePageState extends State<FavoriteView> {
   bool empty = false;
   var _hasMoreItems = true;
   var paginationId = '0';
-  var userId;
 
   @override
   void initState() {
@@ -84,13 +83,13 @@ class _MyHomePageState extends State<FavoriteView> {
             }
             if (state is FavoriteFailure) {
               return Center(
-                child: Text('failed to fetch posts'),
+                child: Image.asset('assets/images/no_data.jpg'),
               );
             }
             if (state is FavoriteSuccess) {
               if (state.posts.isEmpty) {
                 return Center(
-                  child: Text('no posts'),
+                  child: Image.asset('assets/images/no_data.jpg'),
                 );
               }
               return ListView.builder(
@@ -124,29 +123,5 @@ class _MyHomePageState extends State<FavoriteView> {
         ),
       ),
     );
-  }
-
-  Future<bool> likes(var id) async {
-    var result = await NetworkApi().addLike(id, userId);
-    print(result);
-    var res = json.decode(result);
-    var status = Status.fromJson(res);
-    if (status.code == Constants.success) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> dislike(var id) async {
-    var result = await NetworkApi().disLike(id, userId);
-    print(result);
-    var res = json.decode(result);
-    var status = Status.fromJson(res);
-    if (status.code == Constants.success) {
-      return false;
-    } else {
-      return true;
-    }
   }
 }

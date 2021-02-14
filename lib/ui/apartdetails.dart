@@ -198,8 +198,8 @@ class _MyHomePageState extends State<Apartdetails> {
                             },
                             child: Stack(
                               children: <Widget>[
-                                CachedNetworkImage(
-                                  fit: BoxFit.cover,
+                                CachedNetworkImage(height: 150,
+                                  fit: BoxFit.fill,
                                   imageUrl: constants.path +
                                       apartment.ownerid +
                                       constants.folder +
@@ -326,13 +326,12 @@ class _MyHomePageState extends State<Apartdetails> {
                           ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            padding: const EdgeInsets.all(8),
-                            itemCount: 3,
+                            itemCount: snapshot.data.length,
                             itemBuilder: (context, index) {
                               return ListTile(
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.transparent,
-                                  child: Image.network(snapshot.data
+                                  backgroundImage: CachedNetworkImageProvider(snapshot.data
                                       .elementAt(index)
                                       .user
                                       .photo),
@@ -348,7 +347,7 @@ class _MyHomePageState extends State<Apartdetails> {
                                     Text(snapshot.data
                                         .elementAt(index)
                                         .timeline
-                                        .substring(0, 10))
+                                        .substring(0, 10),style: TextStyle(fontSize: 10),)
                                   ],
                                 ),
                                 subtitle: Text(
@@ -456,7 +455,7 @@ class _MyHomePageState extends State<Apartdetails> {
           ),
         ],
       ),
-      floatingActionButton: Builder(
+      /* floatingActionButton: Builder(
         builder: (context) => floatingButton(
           onPressed: () {
             if (sharedPreferences.getSignedIn()) {
@@ -466,7 +465,7 @@ class _MyHomePageState extends State<Apartdetails> {
             }
           },
         ),
-      ),
+      ), */
     );
   }
 

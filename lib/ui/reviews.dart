@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cheki_keja/blocs/reviewbloc.dart';
+import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/reviewClass.dart';
 import 'package:cheki_keja/ui/addReview.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,7 @@ class _MyHomePageState extends State<Reviews> {
                       ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        padding: const EdgeInsets.all(8),
-                        itemCount: 3,
+                        itemCount: snapshot.data.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                             leading: CircleAvatar(
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<Reviews> {
                                 Text(snapshot.data
                                     .elementAt(index)
                                     .timeline
-                                    .substring(0, 10))
+                                    .substring(0, 10),style: TextStyle(fontSize: 10))
                               ],
                             ),
                             subtitle: Text(
@@ -117,7 +117,6 @@ class _MyHomePageState extends State<Reviews> {
               },
             )
           : ListView.builder(
-              padding: const EdgeInsets.all(12),
               itemCount: reviews.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
@@ -130,14 +129,15 @@ class _MyHomePageState extends State<Reviews> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(reviews.elementAt(index).user.name),
-                      Text(reviews.elementAt(index).timeline.substring(0, 10))
+                      Text(reviews.elementAt(index).timeline.substring(0, 10),style: TextStyle(fontSize: 10))
                     ],
                   ),
                   subtitle: Text(reviews.elementAt(index).review),
                 );
               },
             ),
-      floatingActionButton: ClipRRect(
+      floatingActionButton: Builder(
+        builder: (context) => ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(50)),
         child: Container(
           color: Color.fromARGB(255, 238, 133, 57),
@@ -145,12 +145,28 @@ class _MyHomePageState extends State<Reviews> {
             color: Colors.white,
             icon: Icon(Icons.add),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddReview()));
+              if (sharedPreferences.getSignedIn()) {
+               Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddReview(
+                    apartmentId: apartmentId,
+                    userId: sharedPreferences.getUserId(),
+                  )));
+            } else {
+              Scaffold.of(context).showSnackBar(snack('Please Sign in first'));
+            }
+             
             },
           ),
         ),
       ),
+      ),
+
+    );
+  }
+   SnackBar snack(String message) {
+    return SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 500),
     );
   }
 }

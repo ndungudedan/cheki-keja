@@ -193,7 +193,7 @@ class NetworkApi {
     var json = jsonEncode(<String, String>{
       'functionality': 'homePage',
       'pagination': id,
-      'user_id': userId,
+      'userId': userId,
     });
     return json;
   }
@@ -201,7 +201,7 @@ class NetworkApi {
     var json = jsonEncode(<String, String>{
       'functionality': 'updateFirebaseToken',
       'token': sharedPreferences.getFirebaseToken(),
-      'user_id': sharedPreferences.getUserId(),
+      'userId': sharedPreferences.getUserId(),
     });
     return json;
   }
@@ -218,7 +218,7 @@ class NetworkApi {
     var json = jsonEncode(<String, String>{
       'functionality': 'Favorites',
       'pagination': id,
-      'user_id': userId,
+      'userId': userId,
     });
     return json;
   }
@@ -285,7 +285,7 @@ class NetworkApi {
   String likejson(var apartmentId, var userId) {
     var json = jsonEncode(<String, String>{
       'functionality': 'addLike',
-      'apartmentId': apartmentId,
+      'apartmentId': apartmentId.toString(),
       'userId': userId,
     });
     return json;
@@ -294,7 +294,7 @@ class NetworkApi {
   String dislikejson(var apartmentId, var userId) {
     var json = jsonEncode(<String, String>{
       'functionality': 'disLike',
-      'apartmentId': apartmentId,
+      'apartmentId': apartmentId.toString(),
       'userId': userId,
     });
     return json;

@@ -99,8 +99,8 @@ class _DrawState extends State<PostWidget> {
                         ),
                         Positioned(
                           bottom: 1.0,
-                          left: 0.0,
-                          right: 0.0,
+                        left: 0.0,
+                          right: 10.0,
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -120,7 +120,15 @@ class _DrawState extends State<PostWidget> {
                               ),
                             ),
                           ),
+                        ),
+                        myApartment.vacant ? Positioned(
+                          top: 0.0,
+                          left: 40.0,
+                                                  child: ClipRRect(
+                  //borderRadius: BorderRadius.circular(25),
+                  child: Image.asset('assets/images/vacant.png',height: 30,width: 30,)),
                         )
+                :SizedBox()
                       ],
                     ),
                   )
@@ -128,80 +136,88 @@ class _DrawState extends State<PostWidget> {
               ),
             ),
           ),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: <Widget>[
-              LikeButton(
-                isLiked: myApartment.liked.isNotEmpty,
-                size: 30,
-                circleColor: CircleColor(
-                    start: Colors.redAccent, end: Colors.redAccent),
-                bubblesColor: BubblesColor(
-                  dotPrimaryColor: Colors.red,
-                  dotSecondaryColor: Colors.redAccent,
-                ),
-                likeBuilder: (bool isLiked) {
-                  return Icon(
-                    Icons.favorite,
-                    color: isLiked ? Colors.red : Colors.grey,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Builder(builder: (context) => LikeButton(
+                    isLiked: myApartment.liked.isNotEmpty,
                     size: 30,
-                  );
-                },
-                likeCount: int.tryParse(myApartment.likes),
-                countBuilder: (int count, bool isLiked, String text) {
-                  var color = isLiked ? Colors.red : Colors.grey;
-                  Widget result;
-                  if (count == 0) {
-                    result = Text(
-                      "love",
-                      style: TextStyle(color: color),
-                    );
-                  } else {
-                    result = Text(
-                      text,
-                      style: TextStyle(color: color),
-                    );
-                  }
-                  return result;
-                },
-                onTap: (isLiked) {
-                  if (!isLiked) {
-                    return likes(myApartment.id);
-                  } else {
-                    return dislike(myApartment.id);
-                  }
-                },
-              ),
-              IconButton(
-                  icon: Icon(
-                    Icons.comment,
-                    color: Colors.amber,
+                    circleColor: CircleColor(
+            start: Colors.redAccent, end: Colors.redAccent),
+                    bubblesColor: BubblesColor(
+          dotPrimaryColor: Colors.red,
+          dotSecondaryColor: Colors.redAccent,
+                    ),
+                    likeBuilder: (bool isLiked) {
+          return Icon(
+            Icons.favorite,
+            color: isLiked ? Colors.red : Colors.grey,
+            size: 30,
+          );
+                    },
+                    likeCount: int.tryParse(myApartment.likes),
+                    countBuilder: (int count, bool isLiked, String text) {
+          var color = isLiked ? Colors.red : Colors.grey;
+          Widget result;
+          if (count == 0) {
+            result = Text(
+              "love",
+              style: TextStyle(color: color),
+            );
+          } else {
+            result = Text(
+              text,
+              style: TextStyle(color: color),
+            );
+          }
+          return result;
+                    },
+                    onTap: (isLiked) {
+          if (sharedPreferences.getSignedIn()) {
+                 if (!isLiked) {
+            return likes(myApartment.id);
+          } else {
+            return dislike(myApartment.id);
+          }
+              } else {
+                Scaffold.of(context).showSnackBar(snack('Please Sign in first'));
+              }
+          
+                    },
                   ),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Reviews(
-                              apartmentId: myApartment.id,
-                            )));
-                  }),
-              Text(myApartment.comments),
-              IconButton(
-                  icon: Icon(
-                    Icons.location_on_outlined,
-                    color: Colors.amber,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ViewOnMap(
-                              title: myApartment.title,
-                              address: myApartment.address,
-                              latitude: myApartment.latitude,
-                              longitude: myApartment.longitude,
-                            )));
-                  }),
-              myApartment.vacant ? Image.asset('name')
-              :SizedBox()
-            ],
-          ),
+                ),
+                IconButton(
+                    icon: Icon(
+          Icons.comment,
+          color: Colors.amber,
+                    ),
+                    onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Reviews(
+                    apartmentId: myApartment.id,
+                  )));
+                    }),
+                Text(myApartment.comments),
+                SizedBox(),
+                IconButton(
+                    icon: Icon(
+          Icons.location_on_outlined,
+          color: Colors.amber,
+                    ),
+                    onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ViewOnMap(
+                    title: myApartment.title,
+                    address: myApartment.address,
+                    latitude: myApartment.latitude,
+                    longitude: myApartment.longitude,
+                  )));
+                    }),
+               SizedBox(),
+               
+              ],
+            ),
         ],
       ),
     );
@@ -249,5 +265,11 @@ class _DrawState extends State<PostWidget> {
       );
       dao.insertOfflineActivity(companion);
     }
+  }
+   SnackBar snack(String message) {
+    return SnackBar(
+      content: Text(message),
+      duration: Duration(milliseconds: 500),
+    );
   }
 }

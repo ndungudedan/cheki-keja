@@ -157,7 +157,7 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
                   MaterialPageRoute(builder: (context) => Gmap()),
                 );
               }),
-          ListTile(
+          /* ListTile(
             title: Text('My apartment', style: TextStyle(color: Colors.white)),
             leading: Icon(
               Icons.home_outlined,
@@ -167,7 +167,7 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
                 ? Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => MyHouse()))
                 : infoDialog(context, 'Please Login to access this page'),
-          ),
+          ), */
           ListTile(
             leading: Icon(
               Icons.contact_phone,

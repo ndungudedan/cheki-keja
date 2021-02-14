@@ -29,6 +29,8 @@ class _MyHomePageState extends State<AddReview> {
     data['userId'] = widget.userId;
     data['apartmentId'] = widget.apartmentId;
     data['rating'] = '5';
+    data['cleanliness'] = 'Very Clean';
+    data['security'] = 'Very Secure';
     super.initState();
   }
 
