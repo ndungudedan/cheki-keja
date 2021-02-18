@@ -63,9 +63,10 @@ class _MyHomePageState extends State<Reviews> {
                           return ListTile(
                             leading: CircleAvatar(
                               backgroundColor: Colors.transparent,
-                              child: Image.network(
-                                  snapshot.data.elementAt(index).user.photo),
-                            ),
+                              radius: 30,
+                    backgroundImage: CachedNetworkImageProvider(
+                        reviews.elementAt(index).user.photo),
+                  ),
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -84,22 +85,6 @@ class _MyHomePageState extends State<Reviews> {
                           );
                         },
                       ),
-                      snapshot.data != null && snapshot.data.isNotEmpty
-                          ? GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Reviews(
-                                              apartmentId: apartmentId,
-                                              reviews: snapshot.data,
-                                            )));
-                              },
-                              child: Text(
-                                'see all reviews',
-                                style: TextStyle(color: Colors.blue),
-                              ))
-                          : SizedBox()
                     ],
                   );
                 } else if (snapshot.hasError) {

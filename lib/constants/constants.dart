@@ -20,9 +20,9 @@ class Constants {
   final String stkpush =
       'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/lipaNaMpesa.php';
   final String termsurl =
-      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/uploads/terms.rtf';
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/uploads/terms.txt';
   final String abouturl =
-      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/uploads/about.rtf';
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/uploads/about.txt';
   final String folder = '/images/';
 
   final String firstlogin = 'firstlogin';
