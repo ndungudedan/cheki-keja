@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'package:cheki_keja/blocs/home/homebloc.dart';
 import 'package:cheki_keja/blocs/home/homeevent.dart';
 import 'package:cheki_keja/blocs/home/homestate.dart';
-import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/constants/constants.dart';
 import 'package:cheki_keja/database/dao.dart';
 import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/management/management.dart';
-import 'package:cheki_keja/models/status.dart';
 import 'package:cheki_keja/views/PostWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,6 +46,7 @@ class _HomePageState extends State<HomeView> {
           );
         }
         if (state is PostFailure) {
+          sharedPreferences.setOnline(true);
           return StreamBuilder(
                               stream: dao.watchPosts(),
                               builder: (context, snapshot) {
@@ -82,6 +80,7 @@ class _HomePageState extends State<HomeView> {
                             );
         }
         if (state is PostSuccess) {
+          sharedPreferences.setOnline(true);
           if (state.posts.isEmpty) {
             return Center(
               child:Image.asset('assets/images/no_data.jpg'),

@@ -10,22 +10,6 @@ import 'package:cheki_keja/views/drawer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-dynamic backgroundMessageHandler(Map<String, dynamic> message) {
-  if (message.containsKey('data')) {
-    if (message['data']['action'] == 'vacant') {
-      final dynamic data = message['data']['apartment'];
-      return MyApartment.fromJson(json.decode(data));
-    }
-  }
-
-  if (message.containsKey('notification')) {
-    // Handle notification message
-    final dynamic notification = message['notification'];
-  }
-
-  // Or do other work.
-}
-
 class Index extends StatefulWidget {
   Index({Key key, this.title}) : super(key: key);
 
@@ -56,7 +40,7 @@ class _MyHomePageState extends State<Index>
   bool iscollapsed = true;
   double screenwidth, screenheight;
   final Duration duration = const Duration(milliseconds: 300);
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -153,21 +137,29 @@ class _MyHomePageState extends State<Index>
       });
     }
 
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+  print('Message data: ${message.data}');
+
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
+    });
+
     firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message)  {
+      onMessage: (Map<String, dynamic> message) {
         print("onMessage: $message");
         /* var myApartment = backgroundMessageHandler(message);
          Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
                 Apartdetails(online: true, apartment: myApartment))); */
       },
-      onLaunch: (Map<String, dynamic> message)  {
+      onLaunch: (Map<String, dynamic> message) {
         print("onLaunch: $message");
         var myApartment = backgroundMessageHandler(message);
-         Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
                 Apartdetails(online: true, apartment: myApartment)));
-                
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");

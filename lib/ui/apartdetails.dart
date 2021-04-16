@@ -45,7 +45,7 @@ class _MyHomePageState extends State<Apartdetails> {
   var apartment;
   MyCompany company;
   Stkpush stkpush;
-  bool online=true;
+  bool online = true;
   final Map<String, Marker> _markers = {};
   SharedPreferences prefs;
   var features;
@@ -198,7 +198,8 @@ class _MyHomePageState extends State<Apartdetails> {
                             },
                             child: Stack(
                               children: <Widget>[
-                                CachedNetworkImage(height: 150,
+                                CachedNetworkImage(
+                                  height: 150,
                                   fit: BoxFit.fill,
                                   imageUrl: constants.path +
                                       apartment.ownerid +
@@ -331,10 +332,11 @@ class _MyHomePageState extends State<Apartdetails> {
                               return ListTile(
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.transparent,
-                                  backgroundImage: CachedNetworkImageProvider(snapshot.data
-                                      .elementAt(index)
-                                      .user
-                                      .photo),
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      snapshot.data
+                                          .elementAt(index)
+                                          .user
+                                          .photo),
                                 ),
                                 title: Row(
                                   mainAxisAlignment:
@@ -344,10 +346,13 @@ class _MyHomePageState extends State<Apartdetails> {
                                         .elementAt(index)
                                         .user
                                         .name),
-                                    Text(snapshot.data
-                                        .elementAt(index)
-                                        .timeline
-                                        .substring(0, 10),style: TextStyle(fontSize: 10),)
+                                    Text(
+                                      snapshot.data
+                                          .elementAt(index)
+                                          .timeline
+                                          .substring(0, 10),
+                                      style: TextStyle(fontSize: 10),
+                                    )
                                   ],
                                 ),
                                 subtitle: Text(
@@ -442,7 +447,9 @@ class _MyHomePageState extends State<Apartdetails> {
                       ListTile(
                         title: Text('Address'),
                         leading: Icon(Icons.account_box),
-                        subtitle: Text(apartment.address+'\n'+apartment.location ?? snapshot.data.address),
+                        subtitle: Text(
+                            apartment.address + '\n' + apartment.location ??
+                                snapshot.data.address),
                       ),
                     ],
                   ),
@@ -581,7 +588,8 @@ class _MyHomePageState extends State<Apartdetails> {
 
   Future<bool> likes(var id) async {
     if (sharedPreferences.getSignedIn()) {
-      var result = await NetworkApi().addLike(id, sharedPreferences.getUserId());
+      var result =
+          await NetworkApi().addLike(id, sharedPreferences.getUserId());
       print(result);
       var res = json.decode(result);
       var status = Status.fromJson(res);
@@ -601,7 +609,8 @@ class _MyHomePageState extends State<Apartdetails> {
 
   Future<bool> dislike(var id) async {
     if (sharedPreferences.getSignedIn()) {
-      var result = await NetworkApi().disLike(id, sharedPreferences.getUserId());
+      var result =
+          await NetworkApi().disLike(id, sharedPreferences.getUserId());
       print(result);
       var res = json.decode(result);
       var status = Status.fromJson(res);

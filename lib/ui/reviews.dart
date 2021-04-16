@@ -8,8 +8,7 @@ import 'package:flutter/material.dart';
 class Reviews extends StatefulWidget {
   var apartmentId;
   List<Review> reviews;
-  Reviews({Key key, this.apartmentId, this.reviews})
-      : super(key: key);
+  Reviews({Key key, this.apartmentId, this.reviews}) : super(key: key);
 
   final String title = 'apartmentDetails';
 
@@ -53,39 +52,37 @@ class _MyHomePageState extends State<Reviews> {
               stream: review_bloc.reviews,
               builder: (context, AsyncSnapshot<List<Review>> snapshot) {
                 if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                  return Column(
-                    children: [
-                      ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              radius: 30,
-                    backgroundImage: CachedNetworkImageProvider(
-                        reviews.elementAt(index).user.photo),
-                  ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(snapshot.data.elementAt(index).user.name),
-                                Text(snapshot.data
+                  return ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: 30,
+                          backgroundImage: CachedNetworkImageProvider(
+                              snapshot.data.elementAt(index).user.photo),
+                        ),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(snapshot.data.elementAt(index).user.name),
+                            Text(
+                                snapshot.data
                                     .elementAt(index)
                                     .timeline
-                                    .substring(0, 10),style: TextStyle(fontSize: 10))
-                              ],
-                            ),
-                            subtitle: Text(
-                              snapshot.data.elementAt(index).review,
-                              overflow: TextOverflow.visible,
-                              softWrap: true,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                                    .substring(0, 10),
+                                style: TextStyle(fontSize: 10))
+                          ],
+                        ),
+                        subtitle: Text(
+                          snapshot.data.elementAt(index).review,
+                          overflow: TextOverflow.visible,
+                          softWrap: true,
+                        ),
+                      );
+                    },
                   );
                 } else if (snapshot.hasError) {
                   return Center(
@@ -114,7 +111,8 @@ class _MyHomePageState extends State<Reviews> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(reviews.elementAt(index).user.name),
-                      Text(reviews.elementAt(index).timeline.substring(0, 10),style: TextStyle(fontSize: 10))
+                      Text(reviews.elementAt(index).timeline.substring(0, 10),
+                          style: TextStyle(fontSize: 10))
                     ],
                   ),
                   subtitle: Text(reviews.elementAt(index).review),
@@ -123,32 +121,34 @@ class _MyHomePageState extends State<Reviews> {
             ),
       floatingActionButton: Builder(
         builder: (context) => ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(50)),
-        child: Container(
-          color: Color.fromARGB(255, 238, 133, 57),
-          child: IconButton(
-            color: Colors.white,
-            icon: Icon(Icons.add),
-            onPressed: () {
-              if (sharedPreferences.getSignedIn()) {
-               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddReview(
-                    apartmentId: apartmentId,
-                    userId: sharedPreferences.getUserId(),
-                  )));
-            } else {
-              Scaffold.of(context).showSnackBar(snack('Please Sign in first'));
-            }
-             
-            },
+          borderRadius: BorderRadius.all(Radius.circular(50)),
+          child: Container(
+            color: Color.fromARGB(255, 238, 133, 57),
+            child: IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.add),
+              onPressed: () {
+                if (sharedPreferences.getSignedIn()) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddReview(
+                                apartmentId: apartmentId,
+                                userId: sharedPreferences.getUserId(),
+                              )));
+                } else {
+                  Scaffold.of(context)
+                      .showSnackBar(snack('Please Sign in first'));
+                }
+              },
+            ),
           ),
         ),
       ),
-      ),
-
     );
   }
-   SnackBar snack(String message) {
+
+  SnackBar snack(String message) {
     return SnackBar(
       content: Text(message),
       duration: Duration(milliseconds: 500),

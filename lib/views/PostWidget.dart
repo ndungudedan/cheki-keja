@@ -69,16 +69,16 @@ class _DrawState extends State<PostWidget> {
                     child: Stack(
                       children: [
                         Container(
-                         // height: 300,
+                          // height: 300,
                           width: MediaQuery.of(context).size.width,
                           child: CachedNetworkImage(
                             imageUrl: constants.path +
-                                    myApartment.ownerid +
-                                    constants.folder +
-                                    myApartment.banner,
+                                myApartment.ownerid +
+                                constants.folder +
+                                myApartment.banner,
                             fit: BoxFit.fill,
                             placeholder: (context, url) => Container(
-                              height: 300,
+                                height: 300,
                                 color: greyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
                                 child: Center(
@@ -87,7 +87,7 @@ class _DrawState extends State<PostWidget> {
                                         width: 30,
                                         child: CircularProgressIndicator()))),
                             errorWidget: (context, url, error) => Container(
-                              height: 300,
+                                height: 300,
                                 color: lightgreyPlaceHolder,
                                 alignment: Alignment(0.0, 2.0),
                                 child: Center(
@@ -99,7 +99,7 @@ class _DrawState extends State<PostWidget> {
                         ),
                         Positioned(
                           bottom: 1.0,
-                        left: 0.0,
+                          left: 0.0,
                           right: 10.0,
                           child: Container(
                             decoration: BoxDecoration(
@@ -114,21 +114,27 @@ class _DrawState extends State<PostWidget> {
                             ),
                             padding: EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 20.0),
-                            child: Text(myApartment.bannertag,
+                            child: Text(
+                              myApartment.bannertag,
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                           ),
                         ),
-                        myApartment.vacant ? Positioned(
-                          top: 0.0,
-                          left: 40.0,
-                                                  child: ClipRRect(
-                  //borderRadius: BorderRadius.circular(25),
-                  child: Image.asset('assets/images/vacant.png',height: 30,width: 30,)),
-                        )
-                :SizedBox()
+                        myApartment.vacant
+                            ? Positioned(
+                                top: 0.0,
+                                left: 40.0,
+                                child: ClipRRect(
+                                    //borderRadius: BorderRadius.circular(25),
+                                    child: Image.asset(
+                                  'assets/images/vacant.png',
+                                  height: 30,
+                                  width: 30,
+                                )),
+                              )
+                            : SizedBox()
                       ],
                     ),
                   )
@@ -138,86 +144,86 @@ class _DrawState extends State<PostWidget> {
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Builder(builder: (context) => LikeButton(
-                    isLiked: myApartment.liked.isNotEmpty,
-                    size: 30,
-                    circleColor: CircleColor(
-            start: Colors.redAccent, end: Colors.redAccent),
-                    bubblesColor: BubblesColor(
-          dotPrimaryColor: Colors.red,
-          dotSecondaryColor: Colors.redAccent,
-                    ),
-                    likeBuilder: (bool isLiked) {
-          return Icon(
-            Icons.favorite,
-            color: isLiked ? Colors.red : Colors.grey,
-            size: 30,
-          );
-                    },
-                    likeCount: int.tryParse(myApartment.likes),
-                    countBuilder: (int count, bool isLiked, String text) {
-          var color = isLiked ? Colors.red : Colors.grey;
-          Widget result;
-          if (count == 0) {
-            result = Text(
-              "love",
-              style: TextStyle(color: color),
-            );
-          } else {
-            result = Text(
-              text,
-              style: TextStyle(color: color),
-            );
-          }
-          return result;
-                    },
-                    onTap: (isLiked) {
-          if (sharedPreferences.getSignedIn()) {
-                 if (!isLiked) {
-            return likes(myApartment.id);
-          } else {
-            return dislike(myApartment.id);
-          }
-              } else {
-                Scaffold.of(context).showSnackBar(snack('Please Sign in first'));
-              }
-          
-                    },
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Builder(
+                builder: (context) => LikeButton(
+                  isLiked: myApartment.liked.isNotEmpty,
+                  size: 30,
+                  circleColor: CircleColor(
+                      start: Colors.redAccent, end: Colors.redAccent),
+                  bubblesColor: BubblesColor(
+                    dotPrimaryColor: Colors.red,
+                    dotSecondaryColor: Colors.redAccent,
                   ),
+                  likeBuilder: (bool isLiked) {
+                    return Icon(
+                      Icons.favorite,
+                      color: isLiked ? Colors.red : Colors.grey,
+                      size: 30,
+                    );
+                  },
+                  likeCount: int.tryParse(myApartment.likes),
+                  countBuilder: (int count, bool isLiked, String text) {
+                    var color = isLiked ? Colors.red : Colors.grey;
+                    Widget result;
+                    if (count == 0) {
+                      result = Text(
+                        "love",
+                        style: TextStyle(color: color),
+                      );
+                    } else {
+                      result = Text(
+                        text,
+                        style: TextStyle(color: color),
+                      );
+                    }
+                    return result;
+                  },
+                  onTap: (isLiked) {
+                    if (sharedPreferences.getSignedIn()) {
+                      if (!isLiked) {
+                        return likes(myApartment.id);
+                      } else {
+                        return dislike(myApartment.id);
+                      }
+                    } else {
+                      Scaffold.of(context)
+                          .showSnackBar(snack('Please Sign in first'));
+                    }
+                  },
                 ),
-                IconButton(
-                    icon: Icon(
-          Icons.comment,
-          color: Colors.amber,
-                    ),
-                    onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Reviews(
-                    apartmentId: myApartment.id,
-                  )));
-                    }),
-                Text(myApartment.comments),
-                SizedBox(),
-                IconButton(
-                    icon: Icon(
-          Icons.location_on_outlined,
-          color: Colors.amber,
-                    ),
-                    onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ViewOnMap(
-                    title: myApartment.title,
-                    address: myApartment.address,
-                    latitude: myApartment.latitude,
-                    longitude: myApartment.longitude,
-                  )));
-                    }),
-               SizedBox(),
-               
-              ],
-            ),
+              ),
+              IconButton(
+                  icon: Icon(
+                    Icons.comment,
+                    color: Colors.amber,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Reviews(
+                              apartmentId: myApartment.id,
+                            )));
+                  }),
+              Text(myApartment.comments),
+              SizedBox(),
+              IconButton(
+                  icon: Icon(
+                    Icons.location_on_outlined,
+                    color: Colors.amber,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ViewOnMap(
+                              title: myApartment.title,
+                              address: myApartment.address,
+                              latitude: myApartment.latitude,
+                              longitude: myApartment.longitude,
+                            )));
+                  }),
+              SizedBox(),
+            ],
+          ),
         ],
       ),
     );
@@ -266,7 +272,8 @@ class _DrawState extends State<PostWidget> {
       dao.insertOfflineActivity(companion);
     }
   }
-   SnackBar snack(String message) {
+
+  SnackBar snack(String message) {
     return SnackBar(
       content: Text(message),
       duration: Duration(milliseconds: 500),

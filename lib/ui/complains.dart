@@ -74,7 +74,10 @@ class _MyHomePageState extends State<Complains> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(complains.elementAt(index).user.name),
-                        Text(complains.elementAt(index).timeline.substring(0,10))
+                        Text(complains
+                            .elementAt(index)
+                            .timeline
+                            .substring(0, 10))
                       ],
                     ),
                     subtitle: Text(complains.elementAt(index).title),
@@ -99,8 +102,8 @@ class _MyHomePageState extends State<Complains> {
             icon: Icon(Icons.add),
             onPressed: () {
               if (!signedIn) {
-                Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AddComplains()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AddComplains()));
                 //showDialog(context: context, builder: (_) => complain());
               } else {
                 Scaffold.of(context)
@@ -119,6 +122,7 @@ class _MyHomePageState extends State<Complains> {
       duration: Duration(milliseconds: 300),
     );
   }
+
   void submit() async {
     var result = await NetworkApi().addComplain(
         apartmentId, userId, titleController.text, descriptionController.text);
