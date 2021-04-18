@@ -224,12 +224,14 @@ class _DrawState extends State<PostWidget> {
               SizedBox(),
             ],
           ),
+          Divider()
         ],
       ),
     );
   }
 
   Future<bool> likes(var id) async {
+    myApartment.liked = '1';
     if (sharedPreferences.getOnline()) {
       var result =
           await NetworkApi().addLike(id, sharedPreferences.getUserId());
@@ -252,6 +254,7 @@ class _DrawState extends State<PostWidget> {
   }
 
   Future<bool> dislike(var id) async {
+    myApartment.liked = '';
     if (sharedPreferences.getOnline()) {
       var result =
           await NetworkApi().disLike(id, sharedPreferences.getUserId());
@@ -259,6 +262,7 @@ class _DrawState extends State<PostWidget> {
       var res = json.decode(result);
       var status = Status.fromJson(res);
       if (status.code == Constants.success) {
+        
         return false;
       } else {
         return true;

@@ -24,6 +24,7 @@ class PostWIdgetTopBar extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(60),
                     child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
                       radius: 25,
                                         backgroundImage: CachedNetworkImageProvider(
                        constants.path +

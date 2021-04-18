@@ -213,7 +213,7 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
               ? ListTile(
                   title: Text('Log out', style: TextStyle(color: Colors.white)),
                   leading: Icon(
-                    Icons.settings_power,
+                    Icons.logout,
                     color: Colors.white,
                   ),
                   onTap: () => signOutGoogle(),
@@ -251,7 +251,9 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
     await googleSignIn
         .signOut()
         .then((value) => {sharedPreferences.setSignedIn(false)});
-
+    setState(() {
+      sharedPreferences.setSignedIn(false);
+    });
     print("User Sign Out");
   }
 

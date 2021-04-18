@@ -26,6 +26,9 @@ class SharedPrefsManagement {
   checkFirstTime() {
     return sharedPreferences.containsKey(SharedPrefs.firstlogin);
   }
+  checkSignedIn() {
+    return sharedPreferences.containsKey(SharedPrefs.signedIn);
+  }
 
   checkEmail() {
     return sharedPreferences.containsKey(SharedPrefs.email);

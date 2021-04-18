@@ -33,6 +33,7 @@ class _HomeState extends State<Home> {
     super.initState();
     press = widget.press;
   }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -89,14 +90,14 @@ class _HomeState extends State<Home> {
         ConnectionCallback(
           onlineCall: () {},
         ),
-         Flexible(
-                    child: BlocProvider(
-            create: (context) =>
-                PostBloc(id: paginationId,userid: sharedPreferences.getUserId())..add(PostFetched()),
-            child:  HomeView()),
-         ),
+        Flexible(
+          child: BlocProvider(
+              create: (context) => PostBloc(
+                  id: paginationId, userid: sharedPreferences.getUserId())
+                ..add(PostFetched()),
+              child: HomeView()),
+        ),
       ],
     );
   }
-
 }

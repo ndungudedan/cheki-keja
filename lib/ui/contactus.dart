@@ -54,6 +54,9 @@ class _DrawState extends State<ContactUs> {
                   shrinkWrap: true,
                   children: [
                     ListTile(
+                      onTap: (){
+                        launch('tel:+254'+snapshot.data[0].phone.toString().substring(1));
+                      },
                       title: Text('Phone'),
                       leading: Icon(
                         Icons.call,

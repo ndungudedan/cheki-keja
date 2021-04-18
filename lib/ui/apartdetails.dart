@@ -345,7 +345,7 @@ class _MyHomePageState extends State<Apartdetails> {
                                     Text(snapshot.data
                                         .elementAt(index)
                                         .user
-                                        .name),
+                                        .email),
                                     Text(
                                       snapshot.data
                                           .elementAt(index)
@@ -435,18 +435,26 @@ class _MyHomePageState extends State<Apartdetails> {
                     children: <Widget>[
                       Center(child: Text('Contact us')),
                       ListTile(
+                        onTap: () {
+                          apartment.phone!=null ?
+                          launch('tel:+254'+apartment.phone.toString().substring(1))  :
+                          launch('tel:+254'+snapshot.data.phone.toString().substring(1));
+                                                  },
                         title: Text('Phone'),
-                        leading: Icon(Icons.call),
+                        leading: Icon(Icons.call,color: Colors.red,),
                         subtitle: Text(apartment.phone ?? snapshot.data.phone),
                       ),
                       ListTile(
+                        onTap: () {
+                          launch('mailto:' + snapshot.data.email);
+                        },
                         title: Text('Email'),
-                        leading: Icon(Icons.email),
+                        leading: Icon(Icons.email,color: Colors.red,),
                         subtitle: Text(snapshot.data.email),
                       ),
                       ListTile(
                         title: Text('Address'),
-                        leading: Icon(Icons.account_box),
+                        leading: Icon(Icons.account_box,color: Colors.red,),
                         subtitle: Text(
                             apartment.address + '\n' + apartment.location ??
                                 snapshot.data.address),

@@ -20,6 +20,12 @@ class NetworkApi {
     print(data.toString());
     return data;
   }
+  Future<List<MyApartment>> getSingleApartment(var id) {
+    Network network = Network('$url');
+    var data = network.getData(singlejson(id));
+    print(data.toString());
+    return data;
+  }
 
    Future<List<MyApartment>> getSectionCategorys(var id) {
     Network network = Network('$url');
@@ -197,11 +203,18 @@ class NetworkApi {
     });
     return json;
   }
+  String singlejson(var id) {
+    var json = jsonEncode(<String, String>{
+      'functionality': 'singleApartment',
+      'apartmentId': id,
+    });
+    return json;
+  }
     String tokenJson() {
     var json = jsonEncode(<String, String>{
       'functionality': 'updateFirebaseToken',
       'token': sharedPreferences.getFirebaseToken(),
-      'userId': sharedPreferences.getUserId(),
+      'userId': sharedPreferences.getUserId() ?? '0',
     });
     return json;
   }

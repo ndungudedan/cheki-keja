@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/constants/constants.dart';
-import 'package:cheki_keja/management/management.dart';
 import 'package:cheki_keja/models/apartment.dart';
 import 'package:cheki_keja/ui/apartdetails.dart';
 import 'package:cheki_keja/ui/home.dart';
+import 'package:cheki_keja/utility/utils.dart';
 import 'package:cheki_keja/views/drawer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
+Future<void> backgroundMessageHandler(RemoteMessage message) async {
+  print('handling bacground messso');
+}
 
 class Index extends StatefulWidget {
   Index({Key key, this.title}) : super(key: key);
@@ -40,7 +43,6 @@ class _MyHomePageState extends State<Index>
   bool iscollapsed = true;
   double screenwidth, screenheight;
   final Duration duration = const Duration(milliseconds: 300);
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class _MyHomePageState extends State<Index>
     _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0))
         .animate(_controller);
     cloudMessage();
+    notification();
   }
 
   @override
@@ -126,56 +129,22 @@ class _MyHomePageState extends State<Index>
     ));
   }
 
-  void cloudMessage() {
-    if (sharedPreferences.getSignedIn()) {
-      firebaseMessaging.getToken().then((String token) async {
-        assert(token != null);
-        sharedPreferences.setFirebaseToken(token);
-        var result = await NetworkApi().updateFirebaseToken();
-        print(result);
-        print(token);
-      });
+  Future<void> notification() async {
+    RemoteMessage initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null && initialMessage.data['action'] == 'vacant') {
+      var data =
+          MyApartment.fromJson(json.decode(initialMessage.data['apartment']));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Apartdetails(online: true, apartment: data)));
     }
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-  print('Message data: ${message.data}');
-
-  if (message.notification != null) {
-    print('Message also contained a notification: ${message.notification}');
-  }
-    });
-
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        print("onMessage: $message");
-        /* var myApartment = backgroundMessageHandler(message);
-         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                Apartdetails(online: true, apartment: myApartment))); */
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print("onLaunch: $message");
-        var myApartment = backgroundMessageHandler(message);
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.data['action'] == 'vacant') {
+        var data = MyApartment.fromJson(json.decode(message.data['apartment']));
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                Apartdetails(online: true, apartment: myApartment)));
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-        var myApartment = backgroundMessageHandler(message);
-        await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                Apartdetails(online: true, apartment: myApartment)));
-      },
-    );
-
-    firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(
-            sound: true, badge: true, alert: true, provisional: true));
-    firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
+            builder: (context) => Apartdetails(online: true, apartment: data)));
+      }
     });
   }
 }

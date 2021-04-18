@@ -54,7 +54,7 @@ class _MyHomePageState extends State<ViewOnMap> {
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: LatLng(double.parse(latitude), double.parse(longitude)),
-          zoom: 8,
+          zoom: 12,
         ),
         markers: _markers.values.toSet(),
       ),

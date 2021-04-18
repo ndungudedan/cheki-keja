@@ -57,29 +57,38 @@ class _MyHomePageState extends State<Reviews> {
                     shrinkWrap: true,
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          radius: 30,
-                          backgroundImage: CachedNetworkImageProvider(
-                              snapshot.data.elementAt(index).user.photo),
-                        ),
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(snapshot.data.elementAt(index).user.name),
-                            Text(
-                                snapshot.data
-                                    .elementAt(index)
-                                    .timeline
-                                    .substring(0, 10),
-                                style: TextStyle(fontSize: 10))
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          children: [
+                            Divider(),
+                            ListTile(
+                                isThreeLine: true,
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  radius: 30,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      snapshot.data.elementAt(index).user.photo),
+                                ),
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(snapshot.data.elementAt(index).user.email),
+                                    Text(
+                                        snapshot.data
+                                            .elementAt(index)
+                                            .timeline
+                                            .substring(0, 10),
+                                        style: TextStyle(fontSize: 10))
+                                  ],
+                                ),
+                                subtitle: Text(
+                                  snapshot.data.elementAt(index).review,
+                                  overflow: TextOverflow.visible,
+                                  softWrap: true,
+                                ),
+                              ),
                           ],
-                        ),
-                        subtitle: Text(
-                          snapshot.data.elementAt(index).review,
-                          overflow: TextOverflow.visible,
-                          softWrap: true,
                         ),
                       );
                     },
@@ -101,21 +110,29 @@ class _MyHomePageState extends State<Reviews> {
           : ListView.builder(
               itemCount: reviews.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: CachedNetworkImageProvider(
-                        reviews.elementAt(index).user.photo),
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(reviews.elementAt(index).user.name),
-                      Text(reviews.elementAt(index).timeline.substring(0, 10),
-                          style: TextStyle(fontSize: 10))
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Column(
+                    children: [
+                      Divider(),
+                      ListTile(
+                        leading: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: CachedNetworkImageProvider(
+                              reviews.elementAt(index).user.photo),
+                        ),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(reviews.elementAt(index).user.name),
+                            Text(reviews.elementAt(index).timeline.substring(0, 10),
+                                style: TextStyle(fontSize: 10))
+                          ],
+                        ),
+                        subtitle: Text(reviews.elementAt(index).review),
+                      ),
                     ],
                   ),
-                  subtitle: Text(reviews.elementAt(index).review),
                 );
               },
             ),
