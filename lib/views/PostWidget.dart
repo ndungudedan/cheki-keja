@@ -222,6 +222,14 @@ class _DrawState extends State<PostWidget> {
                             )));
                   }),
               SizedBox(),
+              IconButton(
+                  icon: Icon(
+                    Icons.share,
+                    color: Colors.amber,
+                  ),
+                  onPressed: () {
+                    
+                  }),
             ],
           ),
           Divider()
