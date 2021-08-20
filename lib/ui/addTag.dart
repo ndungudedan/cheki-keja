@@ -20,7 +20,7 @@ class addTag extends StatelessWidget{
 
 }
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key,@required this.image,this.index}) : super(key: key);
+  MyHomePage({Key? key,required this.image,this.index}) : super(key: key);
   var image;
   var index;
   @override
@@ -29,7 +29,7 @@ class MyHomePage extends StatefulWidget {
     }
   
   class _MyHomePageState extends State<MyHomePage>{
-    String tag;
+    String? tag;
     var image;
     var index;
 

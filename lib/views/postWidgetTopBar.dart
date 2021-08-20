@@ -1,17 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cheki_keja/connection/networkApi.dart';
-import 'package:cheki_keja/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class PostWIdgetTopBar extends StatelessWidget {
-  PostWIdgetTopBar({@required this.ownerid,@required this.ownerlogo,
-  @required this.ownername,@required this.title,@required this.rating,});
-  String ownerid;
-  String ownerlogo;
-  String rating;
-  String title;
-  String ownername;
+  PostWIdgetTopBar({required this.ownerid,required this.ownerlogo,
+  required this.ownername,required this.title,required this.rating,});
+  String? ownerid;
+  String? ownerlogo;
+  String? rating;
+  String? title;
+  String? ownername;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +25,7 @@ class PostWIdgetTopBar extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       radius: 25,
-                                        backgroundImage: CachedNetworkImageProvider(
-                       constants.path +
-                            ownerid +
-                            constants.folder +
-                            ownerlogo,
-                      ),
+                                        backgroundImage: CachedNetworkImageProvider(ownerlogo!),
                     ),
                   ),
     ),
@@ -41,19 +35,19 @@ class PostWIdgetTopBar extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                     Text(
-                    ownername,
+                    ownername!,
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,
                   ),
                   Text(
-                    title,
+                    title!,
                     overflow: TextOverflow.ellipsis,
                     softWrap: true,
                   ),
                   ],),
                 )),
                 RatingBarIndicator(
-                  rating: double.parse(rating),
+                  rating: double.parse(rating!),
                   itemBuilder: (context, index) => Icon(
                     Icons.star,
                     color: Colors.amber,

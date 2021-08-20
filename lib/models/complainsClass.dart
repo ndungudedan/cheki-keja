@@ -3,11 +3,11 @@ part 'complainsClass.g.dart';
 
 @JsonSerializable()
 class Complain {
-  String id;
-  String title;
-  String description;
-  String timeline;
-  ComplainUser user;
+  String? id;
+  String? title;
+  String? description;
+  String? timeline;
+  ComplainUser? user;
 
   Complain({
     this.id,
@@ -25,7 +25,7 @@ class Complain {
 
 @JsonSerializable()
 class ComplainList {
-  List<Complain> complains;
+  List<Complain>? complains;
 
   ComplainList({this.complains});
 
@@ -39,10 +39,10 @@ class ComplainList {
 
 @JsonSerializable()
 class ComplainUser {
-  String id;
-  String name;
-  String email;
-  String photo;
+  String? id;
+  String? name;
+  String? email;
+  String? photo;
 
   ComplainUser({
     this.id,
@@ -59,10 +59,10 @@ class ComplainUser {
 
 @JsonSerializable()
 class ComplainChat {
-  String id;
-  String chat;
-  String timeline;
-  ComplainUser user;
+  String? id;
+  String? chat;
+  String? timeline;
+  ComplainUser? user;
 
   ComplainChat({
     this.id,
@@ -79,7 +79,7 @@ class ComplainChat {
 
 @JsonSerializable()
 class ComplainChatList {
-  List<ComplainChat> chats;
+  List<ComplainChat>? chats;
 
   ComplainChatList({this.chats});
 
@@ -93,10 +93,10 @@ class ComplainChatList {
 
 @JsonSerializable()
 class ComplainResponse {
-  String id;
-  String snippet;
-  String timeline;
-  String response;
+  String? id;
+  String? snippet;
+  String? timeline;
+  String? response;
 
   ComplainResponse({
     this.id,
@@ -113,7 +113,7 @@ class ComplainResponse {
 
 @JsonSerializable()
 class ComplainResponseList {
-  List<ComplainResponse> responses;
+  List<ComplainResponse>? responses;
 
   ComplainResponseList({this.responses});
 
@@ -127,8 +127,8 @@ class ComplainResponseList {
 
 @JsonSerializable()
 class ChatsResponses {
-  ComplainChatList chatList;
-  ComplainResponseList responseList;
+  ComplainChatList? chatList;
+  ComplainResponseList? responseList;
 
   ChatsResponses({
     this.chatList,

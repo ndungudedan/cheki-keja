@@ -13,8 +13,8 @@ class _LoginPageState extends State<LoginPage>
 with TickerProviderStateMixin {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  AnimationController _loginButtonController;
-  Animation buttonSqueezeAnimation;
+  late AnimationController _loginButtonController;
+  late Animation buttonSqueezeAnimation;
   var animationStatus = 0;
 
 Future<Null> _playAnimation() async {

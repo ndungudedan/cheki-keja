@@ -3,11 +3,11 @@ part 'reviewClass.g.dart';
 
 @JsonSerializable()
 class Review {
-  String id;
-  String review;
-  String rating;
-  String timeline;
-  ReviewUser user;
+  String? id;
+  String? review;
+  String? rating;
+  String? timeline;
+  ReviewUser? user;
 
   Review(
       {this.id,
@@ -25,7 +25,7 @@ class Review {
 
 @JsonSerializable()
 class ReviewList {
-  List<Review> reviews;
+  List<Review>? reviews;
 
   ReviewList({this.reviews});
 
@@ -39,10 +39,10 @@ class ReviewList {
 
 @JsonSerializable()
 class ReviewUser {
-  String id;
-  String name;
-  String email;
-  String photo;
+  String? id;
+  String? name;
+  String? email;
+  String? photo;
 
   ReviewUser(
       {this.id,

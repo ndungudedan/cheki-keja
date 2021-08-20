@@ -5,8 +5,8 @@ part 'category.g.dart';
 
 @JsonSerializable()
 class CategoryResponse {
-  MyCategoryList data;
-  Status status;
+  MyCategoryList? data;
+  Status? status;
 
   CategoryResponse({
     this.status,
@@ -20,7 +20,7 @@ class CategoryResponse {
 }
 @JsonSerializable()
 class MyCategoryList {
-  List<MyCategory> categorys;
+  List<MyCategory>? categorys;
 
   MyCategoryList({
     this.categorys,
@@ -36,8 +36,8 @@ class MyCategoryList {
 
 @JsonSerializable()
 class MyCategory {
-  String id;
-  String title;
+  String? id;
+  String? title;
   MyCategory({
     this.id,
     this.title,
@@ -51,7 +51,7 @@ class MyCategory {
 
 @JsonSerializable()
 class SectionCatList {
-  List<MyApartment> data;
+  List<MyApartment>? data;
 
   SectionCatList({
     this.data,
@@ -67,13 +67,13 @@ class SectionCatList {
 
 @JsonSerializable()
 class SectionCatResponse {
-  SectionCatList singles;
-  SectionCatList doubles;
-  SectionCatList bedsitters;
-  SectionCatList onebeds;
-  SectionCatList twobeds;
-  SectionCatList threebeds;
-  Status status;
+  SectionCatList? singles;
+  SectionCatList? doubles;
+  SectionCatList? bedsitters;
+  SectionCatList? onebeds;
+  SectionCatList? twobeds;
+  SectionCatList? threebeds;
+  Status? status;
 
   SectionCatResponse({
     this.doubles,

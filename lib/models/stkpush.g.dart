@@ -8,8 +8,8 @@ part of 'stkpush.dart';
 
 Stkpush _$StkpushFromJson(Map<String, dynamic> json) {
   return Stkpush(
-    code: json['code'] as String,
-    message: json['message'] as String,
+    code: json['code'] as String?,
+    message: json['message'] as String?,
   );
 }
 

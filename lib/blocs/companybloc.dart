@@ -5,8 +5,8 @@ import 'package:rxdart/rxdart.dart';
 class CompanyBloc {
   final repo = NetworkApi();
   CompanyBloc();
-  final _fetcher = BehaviorSubject<MyCompany>();
-  Stream<MyCompany> get company => _fetcher.stream;
+  final _fetcher = BehaviorSubject<MyCompany?>();
+  Stream<MyCompany?> get company => _fetcher.stream;
 
   fetchCompany(var ownerId) async {
     var res = await repo.getCompany(ownerId);

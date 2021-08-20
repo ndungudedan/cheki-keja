@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
 class floatingButton extends StatelessWidget{
-  floatingButton({@required this.onPressed});
+  floatingButton({required this.onPressed});
   final GestureTapCallback onPressed;
 
   @override

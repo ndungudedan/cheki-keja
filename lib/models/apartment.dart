@@ -1,12 +1,11 @@
-import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/models/status.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'apartment.g.dart';
 
 @JsonSerializable()
 class Banner {
-  String banner;
-  String tag;
+  String? banner;
+  String? tag;
 
   Banner({
     this.banner,
@@ -20,54 +19,50 @@ class Banner {
 
 @JsonSerializable()
 class MyApartment {
-  String id;
-  String ownerid;
-  String ownername;
-  String ownerlogo;
-  String description;
-  String category;
-  String location;
-  String email;
-  String title;
-  String price;
-  String address;
-  String deposit;
-  String space;
-  String phone;
-  String latitude;
-  String longitude;
-  String likes;
-  String comments;
-  String banner;
-  String bannertag;
-  String video;
-  String rating;
-  String liked;
+  int? id;
+  int? ownerid;
+  String? ownername;
+  String? ownerlogo;
+  String? description;
+  String? location;
+  String? email;
+  String? title;
+  String? address;
+  String? space;
+  String? phone;
+  double? latitude;
+  double? longitude;
+  int? likes;
+  int? comments;
+  String? banner;
+  String? bannertag;
+  String? video;
+  String? rating;
+  String? liked;
   bool vacant;
+  List<BuildingUnit>? units;
 
   MyApartment({
     this.id,
-    this.vacant,
+    this.vacant=false,
     this.ownerid,
     this.ownername,
     this.ownerlogo,
-    this.category,
-    this.email,
-    this.address,
+    this.email = '',
+    this.address = '',
     this.title,
-    this.phone,
-    this.price,
-    this.deposit,
+    this.phone = '',
     this.description,
     this.space,
     this.latitude,
     this.longitude,
     this.likes,
     this.comments,
-    this.video,
+    this.video = '',
     this.rating,
     this.liked,
-    this.location,
+    this.location = '',
+    this.units,
     this.banner,
     this.bannertag,
   });
@@ -76,89 +71,11 @@ class MyApartment {
       _$MyApartmentFromJson(json);
 
   Map<String, dynamic> toJson() => _$MyApartmentToJson(this);
-
-  static final columns = [
-    "id",
-    "online_id",
-    "owner_id",
-    "banner",
-    "category",
-    "title",
-    "description",
-    "location",
-    "emailaddress",
-    "address",
-    "phone",
-    "video",
-    "price",
-    "deposit",
-    "space",
-    "latitude",
-    "longitude",
-    'likes',
-    'comments',
-    'rating'
-  ];
-
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {
-      "online_id": id,
-      "owner_id": ownerid,
-      "banner": banner,
-      "category": category,
-      "title": title,
-      "description": description,
-      "location": location,
-      "emailaddress": email,
-      "phone": phone,
-      "address": address,
-      "video": video,
-      "price": price,
-      "deposit": deposit,
-      "space": space,
-      "latitude": latitude,
-      "longitude": longitude,
-      "likes": likes,
-      "comments": comments,
-      "rating": rating,
-    };
-
-    if (id != null) {
-      map["id"] = id;
-    }
-
-    return map;
-  }
-
-  static fromMap(Map map) {
-    MyApartment myApartment = MyApartment();
-    //myApartment.id = map["id"].toString();
-    myApartment.id = map["online_id"];
-    myApartment.ownerid = map["owner_id"];
-    myApartment.banner = map["banner"];
-    myApartment.category = map["category"];
-    myApartment.title = map["title"];
-    myApartment.description = map["description"];
-    myApartment.location = map["location"];
-    myApartment.email = map["emailaddress"];
-    myApartment.video = map["video"];
-    myApartment.price = map["price"];
-    myApartment.phone = map["phone"];
-    myApartment.address = map["address"];
-    myApartment.deposit = map["deposit"];
-    myApartment.space = map["space"];
-    myApartment.latitude = map["latitude"];
-    myApartment.longitude = map["longitude"];
-    myApartment.likes = map["likes"];
-    myApartment.comments = map["comments"];
-    myApartment.rating = map["rating"];
-    return myApartment;
-  }
 }
 
 @JsonSerializable()
 class ApartmentList {
-  List<MyApartment> apartments;
+  List<MyApartment>? apartments;
 
   ApartmentList({this.apartments});
 
@@ -172,8 +89,8 @@ class ApartmentList {
 
 @JsonSerializable()
 class MyApartmentResponse {
-  ApartmentList data;
-  Status status;
+  ApartmentList? data;
+  Status? status;
 
   MyApartmentResponse({
     this.data,
@@ -188,8 +105,8 @@ class MyApartmentResponse {
 
 @JsonSerializable()
 class Images {
-  String tag;
-  String image;
+  String? tag;
+  String? image;
 
   Images({
     this.image,
@@ -199,30 +116,28 @@ class Images {
   factory Images.fromJson(Map<String, dynamic> json) => _$ImagesFromJson(json);
 
   Map<String, dynamic> toJson() => _$ImagesToJson(this);
+}
 
-  static final columns = ["tag", "image"];
+@JsonSerializable()
+class BuildingUnit {
+  String? category;
+  String? rent;
+  String? deposit;
 
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {
-      "online_id": tag,
-      "image": image,
-    };
+  BuildingUnit({
+    this.category,
+    this.rent,
+    this.deposit,
+  });
 
-    return map;
-  }
+  factory BuildingUnit.fromJson(Map<String, dynamic> json) => _$BuildingUnitFromJson(json);
 
-  static fromMap(Map map) {
-    Images images = Images();
-    //images.id = map["id"].toString();
-    images.tag = map["tag"];
-    images.image = map["image"];
-    return images;
-  }
+  Map<String, dynamic> toJson() => _$BuildingUnitToJson(this);
 }
 
 @JsonSerializable()
 class ImageList {
-  List<Images> data;
+  List<Images>? data;
   ImageList({this.data});
 
   factory ImageList.fromJson(List<dynamic> json) {
@@ -235,8 +150,8 @@ class ImageList {
 
 @JsonSerializable()
 class ImagesResponse {
-  ImageList data;
-  Status status;
+  ImageList? data;
+  Status? status;
 
   ImagesResponse({
     this.status,

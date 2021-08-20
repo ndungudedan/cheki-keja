@@ -8,8 +8,8 @@ part of 'status.dart';
 
 Status _$StatusFromJson(Map<String, dynamic> json) {
   return Status(
-    code: json['code'] as String,
-    message: json['message'] as String,
+    code: json['code'] as String?,
+    message: json['message'] as String?,
   );
 }
 
@@ -20,9 +20,9 @@ Map<String, dynamic> _$StatusToJson(Status instance) => <String, dynamic>{
 
 MpesaResponse _$MpesaResponseFromJson(Map<String, dynamic> json) {
   return MpesaResponse(
-    ResponseCode: json['ResponseCode'] as String,
-    ResponseDescription: json['ResponseDescription'] as String,
-    errorMessage: json['errorMessage'] as String,
+    ResponseCode: json['ResponseCode'] as String?,
+    ResponseDescription: json['ResponseDescription'] as String?,
+    errorMessage: json['errorMessage'] as String?,
   );
 }
 

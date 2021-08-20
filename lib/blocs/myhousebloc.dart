@@ -2,6 +2,7 @@ import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/database/dao.dart';
 import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/models/paymentsClass.dart';
+import 'package:cheki_keja/models/tenant.dart';
 import 'package:moor/moor.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,59 +13,68 @@ class MyhouseBloc {
   final fetcher = BehaviorSubject<Myhouse>();
   Stream<Myhouse> get result => fetcher.stream;
 
-  fetchMyhouse(var userId) async {
-    var res = await repo.getMyhouse(userId);
-    fetcher.sink.add(res);
-    await insertMyHouse(res);
+  fetchMyhouse() async {
+    MyTenantResponse res = await repo.getMyhouse();
+    //fetcher.sink.add(res);
+    await insertMyTenant(res);
   }
 
   dispose() {
     fetcher.close();
   }
 
-  Future<void> insertMyHouse(Myhouse myhouse) async {
-    dao.deleteMyHouse();
-    final arrears = <MyHouseArrearsCompanion>[];
-    final payments = <MyHousePaymentsCompanion>[];
-    await myhouse.arrearsList.arrears.forEach((value) {
-      var companion = MyHouseArrearsCompanion(
-        onlineid: Value(value.id),
-        amount: Value(value.amount),
-        year: Value(value.year),
-        month: Value(value.month),
+  Future<void> insertMyTenant(MyTenantResponse myhouse) async {
+    final house_units = <TenantUnitTableCompanion>[];
+    final house_payments = <HousePaymentsTableCompanion>[];
+    final fixed_bills = <FixedBillsTableCompanion>[];
+    final variable_bills = <VariableBillsTableCompanion>[];
+    myhouse.houseunits!.forEach((value) {
+      var companion = TenantUnitTableCompanion(
+        onlineid: Value(value.houseid!.toString()),
+        unit_deposit:Value(value.unit_deposit!),
+        unit_price:Value(value.unit_price),
+        unit_type_name: Value(value.unit_type_name!),
+        label: Value(value.label),
+        entry_date: Value(value.entry_date),
+        building_name: Value(value.building_name),
       );
-      arrears.add(companion);
+      house_units.add(companion);
     });
-    await myhouse.paymentsList.payments.forEach((value) {
-      var companion = MyHousePaymentsCompanion(
-        onlineid: Value(value.id),
-        amount: Value(value.amount),
-        year: Value(value.year),
-        month: Value(value.month),
-        transactionid: Value(value.transactionid),
-        status: Value(value.status),
-        time: Value(value.time),
-        type: Value(value.type),
+    myhouse.payments!.forEach((value) {
+      var companion = HousePaymentsTableCompanion(
+        onlineid: Value(value.id!.toString()),
+        amount: Value(value.amount!.toString()),
+        payment_description: Value(value.payment_description),
+        payment_method: Value(value.payment_method),
+        payment_reason: Value(value.payment_reason!),
+        phone_number: Value(value.phone_number!),
+        transaction_date: Value(value.transaction_date),
       );
-      payments.add(companion);
+      house_payments.add(companion);
     });
-    final details = MyHouseDetailsCompanion(
-      onlineid: Value(myhouse.details.id),
-      ownerid: Value(myhouse.details.ownerid),
-      ownername: Value(myhouse.details.ownername),
-      ownerlogo: Value(myhouse.details.ownerlogo),
-      owneraddress: Value(myhouse.details.owneraddress),
-      category: Value(myhouse.details.category),
-      title: Value(myhouse.details.title),
-      owneremail: Value(myhouse.details.owneremail),
-      ownerlocation: Value(myhouse.details.ownerlocation),
-      ownerphone: Value(myhouse.details.ownerphone),
-      unit: Value(myhouse.details.unit ??= ''),
-      deposit: Value(myhouse.details.deposit),
-      price: Value(myhouse.details.price),
-      payed: Value(myhouse.details.payed),
-      rating: Value(myhouse.details.rating),
-    );
-    dao.insertMyHouse(details, arrears, payments);
+    myhouse.fixedbills!.forEach((value) {
+      var companion = FixedBillsTableCompanion(
+        onlineid: Value(value.id!.toString()),
+        name:Value(value.name!),
+        deposit:Value(value.deposit),
+        amount: Value(value.amount!),
+        payment_frequency: Value(value.payment_frequency),
+        unit: Value(value.unit),
+      );
+      fixed_bills.add(companion);
+    });
+    myhouse.variablebills!.forEach((value) {
+      var companion = VariableBillsTableCompanion(
+        onlineid: Value(value.id!.toString()),
+        bill_name: Value(value.bill_name!.toString()),
+        amount_per_unit: Value(value.amount_per_unit!),
+        payment_status: Value(value.payment_status),
+        number_of_units: Value(value.number_of_units),
+        read_on: Value(value.read_on!),
+      );
+      variable_bills.add(companion);
+    });
+     dao.insertMyTenant(house_units, house_payments, variable_bills,fixed_bills);
   }
+
 }

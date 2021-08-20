@@ -17,13 +17,13 @@ class HomeView extends StatefulWidget {
 class _HomePageState extends State<HomeView> {
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
-  PostBloc _postBloc;
+  late PostBloc _postBloc;
   bool signed_in = false;
   int _current = 0;
   Constants constants = Constants();
-  List<int> likes_count = List();
-  List<int> comments_count = List();
-  VoidCallback press;
+  List<int> likes_count = [];
+  List<int> comments_count = [];
+  VoidCallback? press;
   var dao = DatabaseDao(databasehelper);
   bool _loadingMore = true;
   var _hasMoreItems = true;
@@ -46,63 +46,64 @@ class _HomePageState extends State<HomeView> {
           );
         }
         if (state is PostFailure) {
-          sharedPreferences.setOnline(true);
-          return StreamBuilder(
-                              stream: dao.watchPosts(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.data.isNotEmpty) {
-                                  return ListView.builder(
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.all(8),
-                                    itemCount: snapshot.data.length,
-                                    itemBuilder: (context, index) {
-                                      return PostWidget(
-                                        online: false,
-                                          myApartment:snapshot.data.elementAt(index),
-                                          index:index);
-                                    },
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Center(
-                                    child: Image.asset('assets/images/no_data.jpg'),
-                                  );
-                                } else if (snapshot.data != null &&
-                                    snapshot.data.isEmpty) {
-                                  return Center(
-                                    child: Image.asset('assets/images/no_data.jpg'),
-                                  );
-                                }
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              },
-                            );
+          sharedPreferences.setOnline(false);
+          return StreamBuilder<List<MyApartmentTableData>>(
+            stream: dao.watchPosts(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                return ListView.builder(
+                  padding: EdgeInsets.all(0),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return PostWidget(
+                        online: false,
+                        myApartment: snapshot.data!.elementAt(index),
+                        index: index);
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Image.asset('assets/images/no_data.png'),
+                );
+              } else if (snapshot.data != null && snapshot.data!.isEmpty) {
+                return Center(
+                  child: Image.asset('assets/images/no_data.png'),
+                );
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          );
         }
         if (state is PostSuccess) {
           sharedPreferences.setOnline(true);
-          if (state.posts.isEmpty) {
+          if (state.posts!.isEmpty) {
             return Center(
-              child:Image.asset('assets/images/no_data.jpg'),
+              child: Image.asset('assets/images/no_data.png'),
             );
           }
           return Container(
             child: ListView.builder(
+              padding: EdgeInsets.all(0),
               itemBuilder: (BuildContext context, int index) {
-                return index >= state.posts.length
+                print(state.posts!);
+                return index >= state.posts!.length
                     ? BottomLoader()
                     : PostWidget(
-                      online: true,
-                      myApartment:state.posts[index], 
-                      index:index);
+                        online: true,
+                        myApartment: state.posts![index],
+                        index: index);
               },
-              itemCount: state.hasReachedMax
-                  ? state.posts.length
-                  : state.posts.length + 1,
+              itemCount: state.hasReachedMax!
+                  ? state.posts!.length
+                  : state.posts!.length + 1,
               controller: _scrollController,
             ),
           );
         }
+        return Container();
       },
     );
   }
@@ -135,5 +136,4 @@ class _HomePageState extends State<HomeView> {
       ),
     );
   }
-
 }

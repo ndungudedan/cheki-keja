@@ -3,14 +3,14 @@ part 'contact.g.dart';
 
 @JsonSerializable()
 class Contacts {
-  String id;
-  String facebook;
-  String instagram;
-  String twitter;
-  String phone;
-  String address;
-  String location;
-  String email;
+  String? id;
+  String? facebook;
+  String? instagram;
+  String? twitter;
+  String? phone;
+  String? address;
+  String? location;
+  String? email;
 
   Contacts({
     this.id,

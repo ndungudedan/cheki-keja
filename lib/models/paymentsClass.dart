@@ -3,16 +3,16 @@ part 'paymentsClass.g.dart';
 
 @JsonSerializable()
 class Payments {
-  String id;
-  String transactionid;
-  String category;
-  String title;
-  String amount;
-  String status;
-  String time;
-  String year;
-  String month;
-  String type;
+  String? id;
+  String? transactionid;
+  String? category;
+  String? title;
+  String? amount;
+  String? status;
+  String? time;
+  String? year;
+  String? month;
+  String? type;
 
   Payments({
     this.id,
@@ -35,7 +35,7 @@ class Payments {
 
 @JsonSerializable()
 class PaymentsList {
-  List<Payments> payments;
+  List<Payments>? payments;
 
   PaymentsList({this.payments});
 
@@ -49,9 +49,9 @@ class PaymentsList {
 
 @JsonSerializable()
 class Myhouse {
-  PaymentsList paymentsList;
-  ArrearsList arrearsList;
-  Details details;
+  PaymentsList? paymentsList;
+  ArrearsList? arrearsList;
+  Details? details;
 
   Myhouse({
     this.paymentsList,
@@ -67,10 +67,10 @@ class Myhouse {
 
 @JsonSerializable()
 class Arrears {
-  String id;
-  String amount;
-  String year;
-  String month;
+  String? id;
+  String? amount;
+  String? year;
+  String? month;
 
   Arrears({
     this.id,
@@ -87,7 +87,7 @@ class Arrears {
 
 @JsonSerializable()
 class ArrearsList {
-  List<Arrears> arrears;
+  List<Arrears>? arrears;
 
   ArrearsList({this.arrears});
 
@@ -101,21 +101,21 @@ class ArrearsList {
 
 @JsonSerializable()
 class Details {
-  String id;
-  String ownerid;
-  String ownername;
-  String ownerlogo;
-  String ownerphone;
-  String owneraddress;
-  String ownerlocation;
-  String owneremail;
-  String title;
-  String category;
-  String price;
-  String rating;
-  String payed;
-  String deposit;
-  String unit;
+  String? id;
+  String? ownerid;
+  String? ownername;
+  String? ownerlogo;
+  String? ownerphone;
+  String? owneraddress;
+  String? ownerlocation;
+  String? owneremail;
+  String? title;
+  String? category;
+  String? price;
+  String? rating;
+  String? payed;
+  String? deposit;
+  String? unit;
 
   Details({
     this.id,

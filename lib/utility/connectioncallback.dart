@@ -3,15 +3,14 @@ import 'package:cheki_keja/database/dao.dart';
 import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/management/management.dart';
 import 'package:flutter/material.dart';
-import 'package:connectivity_widget/connectivity_widget.dart';
 
 class ConnectionCallback extends StatefulWidget {
   ConnectionCallback({
-    Key key,
+    Key? key,
     this.onlineCall,
   }) : super(key: key);
 
-  final VoidCallback onlineCall;
+  final VoidCallback? onlineCall;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -20,7 +19,7 @@ class ConnectionCallback extends StatefulWidget {
 class _MyHomePageState extends State<ConnectionCallback> {
   var dao = DatabaseDao(databasehelper);
   void onlineCall() {
-    widget.onlineCall();
+    widget.onlineCall!();
     sharedPreferences.setOnline(true);
     updateOnlinedb();
   }
@@ -31,7 +30,8 @@ class _MyHomePageState extends State<ConnectionCallback> {
 
   @override
   Widget build(BuildContext context) {
-    return ConnectivityWidget(
+    return Center();
+    /* ConnectivityWidget(
       offlineCallback: offlineCall,
       onlineCallback: onlineCall,
       showOfflineBanner: true,
@@ -47,18 +47,18 @@ class _MyHomePageState extends State<ConnectionCallback> {
           ),
         ),
       ),
-    );
+    ); */
   }
 
   Future<void> updateOnlinedb() async {
     var result = await dao.watchOfflineActivity();
     if (result.isNotEmpty) {
       result.forEach((val) async {
-        if (val.like) {
+        if (val.like!) {
           var res = await NetworkApi()
               .addLike(val.apartmentId, sharedPreferences.getUserId());
           print(res);
-        } else if (val.dislike) {
+        } else if (val.dislike!) {
           var res = await NetworkApi()
               .disLike(val.apartmentId, sharedPreferences.getUserId());
           print(res);

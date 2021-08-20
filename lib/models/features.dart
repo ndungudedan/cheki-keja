@@ -4,7 +4,7 @@ part 'features.g.dart';
 
 @JsonSerializable()
 class Features {
-  String feat;
+  String? feat;
 
   Features({
     this.feat,
@@ -37,7 +37,7 @@ class Features {
 }
 @JsonSerializable()
 class FeaturesList {
-  List<Features> data;
+  List<Features>? data;
   FeaturesList({this.data});
 
   factory FeaturesList.fromJson(List<dynamic> json) {
@@ -49,8 +49,8 @@ class FeaturesList {
 }
 @JsonSerializable()
 class FeaturesResponse {
-  FeaturesList data;
-  Status status;
+  FeaturesList? data;
+  Status? status;
 
   FeaturesResponse({
     this.status,

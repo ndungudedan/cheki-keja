@@ -1,36 +1,29 @@
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cheki_keja/blocs/companybloc.dart';
 import 'package:cheki_keja/blocs/featurebloc.dart';
 import 'package:cheki_keja/blocs/imagebloc.dart';
 import 'package:cheki_keja/blocs/reviewbloc.dart';
 import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/constants/constants.dart';
+import 'package:cheki_keja/database/dao.dart';
+import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/management/management.dart';
-import 'package:cheki_keja/models/apartment.dart';
 import 'package:cheki_keja/models/company.dart';
-import 'package:cheki_keja/models/features.dart';
-import 'package:cheki_keja/models/reviewClass.dart';
 import 'package:cheki_keja/models/status.dart';
 import 'package:cheki_keja/models/stkpush.dart';
 import 'package:cheki_keja/ui/viewonmap.dart';
-import 'package:cheki_keja/ui/addReview.dart';
-import 'package:cheki_keja/ui/photoViewer.dart';
-import 'package:cheki_keja/ui/reviews.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
-import 'package:cheki_keja/views/floatingButton.dart';
-import 'package:commons/commons.dart';
+import 'package:cheki_keja/utility/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:like_button/like_button.dart';
 import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Apartdetails extends StatefulWidget {
   var apartment;
-  bool online;
-  Apartdetails({Key key, @required this.apartment, @required this.online})
+  bool? online;
+  Apartdetails({Key? key, required this.apartment, required this.online})
       : super(key: key);
 
   final String title = 'apartmentDetails';
@@ -41,20 +34,21 @@ class Apartdetails extends StatefulWidget {
 
 class _MyHomePageState extends State<Apartdetails> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  String apartmentId, ownerId;
+  String? apartmentId, ownerId;
   var apartment;
-  MyCompany company;
-  Stkpush stkpush;
-  bool online = true;
+  MyCompany? company;
+  Stkpush? stkpush;
+  bool? online = true;
   final Map<String, Marker> _markers = {};
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
   var features;
   var phone;
   var paginationId = '0';
-  FeatureBloc feature_bloc;
-  CompanyBloc company_bloc;
-  ImagesBloc images_bloc;
-  ReviewBloc review_bloc;
+  late FeatureBloc feature_bloc;
+  late CompanyBloc company_bloc;
+  late ImagesBloc images_bloc;
+  late ReviewBloc review_bloc;
+  var dao = DatabaseDao(databasehelper);
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     setState(() {
@@ -81,21 +75,22 @@ class _MyHomePageState extends State<Apartdetails> {
     review_bloc = ReviewBloc();
     online = widget.online;
     apartment = widget.apartment;
-    apartmentId = online ? widget.apartment.id : widget.apartment.onlineid;
-    ownerId = widget.apartment.ownerid;
-    feature_bloc.fetchFeatures(apartmentId);
-    images_bloc.fetchImages(apartmentId);
-    company_bloc.fetchCompany(ownerId);
-    review_bloc.fetchReviews(apartmentId, paginationId);
+    apartmentId =
+        online! ? widget.apartment.id.toString() : widget.apartment.onlineid;
+    ownerId = widget.apartment.ownerid.toString();
+    //feature_bloc.fetchFeatures(apartmentId);
+    //images_bloc.fetchImages(apartmentId);
+    //company_bloc.fetchCompany(ownerId);
+    //review_bloc.fetchReviews(apartmentId, paginationId);
   }
 
   @override
   void dispose() {
     super.dispose();
-    feature_bloc.dispose();
+    /* feature_bloc.dispose();
     images_bloc.dispose();
     company_bloc.dispose();
-    review_bloc.dispose();
+    review_bloc.dispose(); */
   }
 
   @override
@@ -110,7 +105,7 @@ class _MyHomePageState extends State<Apartdetails> {
         ),
         title: Text(apartment.title + ' Apartments'),
         actions: <Widget>[
-          Builder(
+          /* Builder(
             builder: (BuildContext context) {
               return LikeButton(
                 isLiked: apartment.liked.isNotEmpty,
@@ -129,7 +124,7 @@ class _MyHomePageState extends State<Apartdetails> {
                   );
                 },
                 //likeCount: int.tryParse(apartment.likes),
-                countBuilder: (int count, bool isLiked, String text) {
+                countBuilder: (int? count, bool isLiked, String text) {
                   var color = isLiked ? Colors.red : Colors.white;
                   Widget result;
                   if (count == 0) {
@@ -154,7 +149,7 @@ class _MyHomePageState extends State<Apartdetails> {
                 },
               );
             },
-          ),
+          ), */
         ],
       ),
       body: ListView(
@@ -165,14 +160,40 @@ class _MyHomePageState extends State<Apartdetails> {
             onlineCall: () {},
           ),
           Center(
-            child: apartmentDetails(apartment),
+            child: online!
+                ? ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.all(0),
+                    shrinkWrap: true,
+                    itemCount: apartment.units.length,
+                    itemBuilder: (context, index) {
+                      return apartmentDetails(apartment.units.elementAt(index));
+                    })
+                : StreamBuilder<List<BuildingUnitTableData>>(
+                    stream: dao.fetchBuildingUnits(apartment.id.toString()),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                        return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.all(0),
+                            shrinkWrap: true,
+                            itemCount: apartment.units.length,
+                            itemBuilder: (context, index) {
+                              return apartmentDetails(
+                                  apartment.units.elementAt(index));
+                            });
+                      }
+                      return Center();
+                    },
+                  ),
           ),
-          StreamBuilder(
+          /* StreamBuilder(
             stream: images_bloc.allImages,
             builder:
-                (BuildContext context, AsyncSnapshot<List<Images>> snapshot) {
+                (BuildContext context, AsyncSnapshot<List<Images>?> snapshot) {
               if (snapshot.hasData) {
-                return GFItemsCarousel(
+                return Center();
+                /*  return GFItemsCarousel(
                   rowCount: 3,
                   itemHeight: 150,
                   children: snapshot.data.map(
@@ -248,7 +269,7 @@ class _MyHomePageState extends State<Apartdetails> {
                       );
                     },
                   ).toList(),
-                );
+                ); */
               } else if (snapshot.hasError) {}
               return Center(
                 child: CircularProgressIndicator(),
@@ -264,7 +285,7 @@ class _MyHomePageState extends State<Apartdetails> {
                   child: StreamBuilder(
                     stream: feature_bloc.allFeatures,
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<Features>> snapshot) {
+                        AsyncSnapshot<List<Features>?> snapshot) {
                       if (snapshot.hasData) {
                         return GridView.count(
                           shrinkWrap: true,
@@ -273,9 +294,9 @@ class _MyHomePageState extends State<Apartdetails> {
                           childAspectRatio: 6.0,
                           scrollDirection: Axis.vertical,
                           children:
-                              List.generate(snapshot.data.length, (index) {
+                              List.generate(snapshot.data!.length, (index) {
                             return featuresCard(
-                                snapshot.data.elementAt(index).feat);
+                                snapshot.data!.elementAt(index).feat);
                           }),
                         );
                       } else if (snapshot.hasError) {}
@@ -320,50 +341,50 @@ class _MyHomePageState extends State<Apartdetails> {
                 ),
                 StreamBuilder(
                   stream: review_bloc.reviews,
-                  builder: (context, AsyncSnapshot<List<Review>> snapshot) {
-                    if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                  builder: (context, AsyncSnapshot<List<Review>?> snapshot) {
+                    if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                       return Column(
                         children: [
                           ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: snapshot.data.length,
+                            itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               return ListTile(
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.transparent,
                                   backgroundImage: CachedNetworkImageProvider(
-                                      snapshot.data
+                                      snapshot.data!
                                           .elementAt(index)
-                                          .user
-                                          .photo),
+                                          .user!
+                                          .photo!),
                                 ),
                                 title: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text(snapshot.data
+                                    Text(snapshot.data!
                                         .elementAt(index)
-                                        .user
-                                        .email),
+                                        .user!
+                                        .email!),
                                     Text(
-                                      snapshot.data
+                                      snapshot.data!
                                           .elementAt(index)
-                                          .timeline
+                                          .timeline!
                                           .substring(0, 10),
                                       style: TextStyle(fontSize: 10),
                                     )
                                   ],
                                 ),
                                 subtitle: Text(
-                                  snapshot.data.elementAt(index).review,
+                                  snapshot.data!.elementAt(index).review!,
                                   overflow: TextOverflow.visible,
                                   softWrap: true,
                                 ),
                               );
                             },
                           ),
-                          snapshot.data != null && snapshot.data.isNotEmpty
+                          snapshot.data != null && snapshot.data!.isNotEmpty
                               ? GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -385,7 +406,7 @@ class _MyHomePageState extends State<Apartdetails> {
                       return Center(
                         child: Text('No reviews yet'),
                       );
-                    } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                    } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                       return Center(
                         child: Text('No reviews yet'),
                       );
@@ -398,17 +419,18 @@ class _MyHomePageState extends State<Apartdetails> {
               ],
             ),
           ),
+           */
           Container(
             padding: EdgeInsets.all(5),
-            height: 200,
+            height: 300,
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => ViewOnMap(
-                              latitude: apartment.latitude,
-                              longitude: apartment.longitude,
+                              online: online,
+                              apartment: apartment,
                             )));
               },
               child: GoogleMap(
@@ -417,17 +439,58 @@ class _MyHomePageState extends State<Apartdetails> {
                 zoomGesturesEnabled: true,
                 myLocationEnabled: true,
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(double.parse(apartment.latitude),
-                      double.parse(apartment.longitude)),
+                  target: LatLng(apartment.latitude,
+                      apartment.longitude),
                   zoom: 12,
                 ),
                 markers: _markers.values.toSet(),
               ),
             ),
           ),
-          StreamBuilder(
+          SizedBox(height: 10),
+          Container(
+            padding: EdgeInsets.all(5),
+            child: Column(
+              children: <Widget>[
+                Center(child: Text('Contact us')),
+                ListTile(
+                  onTap: () {
+                    launch(
+                        'tel:+254' + apartment.phone.toString().substring(1));
+                  },
+                  title: Text('Phone'),
+                  leading: Icon(
+                    Icons.call,
+                    color: Colors.red,
+                  ),
+                  subtitle: Text(apartment.phone ?? ''),
+                ),
+                ListTile(
+                  onTap: () {
+                    launch('mailto:' + apartment.email);
+                  },
+                  title: Text('Email'),
+                  leading: Icon(
+                    Icons.email,
+                    color: Colors.red,
+                  ),
+                  subtitle: Text(apartment.email ?? ''),
+                ),
+                ListTile(
+                  title: Text('Address'),
+                  leading: Icon(
+                    Icons.account_box,
+                    color: Colors.red,
+                  ),
+                  /* subtitle: Text(
+                      apartment.address +'\n' + apartment.location ?? ''), */
+                ),
+              ],
+            ),
+          ),
+          /* StreamBuilder(
             stream: company_bloc.company,
-            builder: (BuildContext context, AsyncSnapshot<MyCompany> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<MyCompany?> snapshot) {
               if (snapshot.hasData) {
                 return Container(
                   padding: EdgeInsets.all(5),
@@ -436,28 +499,39 @@ class _MyHomePageState extends State<Apartdetails> {
                       Center(child: Text('Contact us')),
                       ListTile(
                         onTap: () {
-                          apartment.phone!=null ?
-                          launch('tel:+254'+apartment.phone.toString().substring(1))  :
-                          launch('tel:+254'+snapshot.data.phone.toString().substring(1));
-                                                  },
+                          apartment.phone != null
+                              ? launch('tel:+254' +
+                                  apartment.phone.toString().substring(1))
+                              : launch('tel:+254' +
+                                  snapshot.data!.phone.toString().substring(1));
+                        },
                         title: Text('Phone'),
-                        leading: Icon(Icons.call,color: Colors.red,),
-                        subtitle: Text(apartment.phone ?? snapshot.data.phone),
+                        leading: Icon(
+                          Icons.call,
+                          color: Colors.red,
+                        ),
+                        subtitle: Text(apartment.phone ?? snapshot.data!.phone!),
                       ),
                       ListTile(
                         onTap: () {
-                          launch('mailto:' + snapshot.data.email);
+                          launch('mailto:' + snapshot.data!.email!);
                         },
                         title: Text('Email'),
-                        leading: Icon(Icons.email,color: Colors.red,),
-                        subtitle: Text(snapshot.data.email),
+                        leading: Icon(
+                          Icons.email,
+                          color: Colors.red,
+                        ),
+                        subtitle: Text(snapshot.data!.email!),
                       ),
                       ListTile(
                         title: Text('Address'),
-                        leading: Icon(Icons.account_box,color: Colors.red,),
+                        leading: Icon(
+                          Icons.account_box,
+                          color: Colors.red,
+                        ),
                         subtitle: Text(
                             apartment.address + '\n' + apartment.location ??
-                                snapshot.data.address),
+                                snapshot.data!.address!),
                       ),
                     ],
                   ),
@@ -467,7 +541,7 @@ class _MyHomePageState extends State<Apartdetails> {
                 child: CircularProgressIndicator(),
               );
             },
-          ),
+          ), */
         ],
       ),
       /* floatingActionButton: Builder(
@@ -518,7 +592,7 @@ class _MyHomePageState extends State<Apartdetails> {
       var response =
           MpesaResponse.fromJson(json.decode(transactionInitialisation));
       if (response.ResponseCode == '0') {
-        successDialog(context, response.ResponseDescription);
+        await successDialog(context, response.ResponseDescription);
       } else {
         errorDialog(context, response.errorMessage);
       }
@@ -529,7 +603,7 @@ class _MyHomePageState extends State<Apartdetails> {
     } catch (e) {
       //you can implement your exception handling here.
       //Network unreachability is a sure exception.
-      print(e.getMessage());
+      print(e);
       errorDialog(context, 'Operation failed1');
     }
   }
@@ -563,7 +637,7 @@ class _MyHomePageState extends State<Apartdetails> {
     );
   }
 
-  Container apartmentDetails(var apartment) {
+  Container apartmentDetails(var unit) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
       padding: EdgeInsets.all(10),
@@ -573,18 +647,18 @@ class _MyHomePageState extends State<Apartdetails> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Category: ' + apartment.category,
+              Text('Category: ' + unit.category,
                   style: TextStyle(color: Colors.white)),
-              Text(
+              /* Text(
                 'Managed by: ' + apartment.ownername,
                 style: TextStyle(color: Colors.white),
-              ),
+              ), */
               Text(
-                'Rent: ' + apartment.price,
+                'Rent: ' + unit.rent,
                 style: TextStyle(color: Colors.white),
               ),
               Text(
-                'Deposit fee: ' + apartment.deposit,
+                'Deposit fee: ' + unit.deposit,
                 style: TextStyle(color: Colors.white),
               ),
             ],
@@ -610,7 +684,7 @@ class _MyHomePageState extends State<Apartdetails> {
         return false;
       }
     } else {
-      scaffoldKey.currentState.showSnackBar(snack('Please sign in first'));
+      scaffoldKey.currentState!.showSnackBar(snack('Please sign in first'));
       return false;
     }
   }
@@ -631,7 +705,7 @@ class _MyHomePageState extends State<Apartdetails> {
         return true;
       }
     } else {
-      scaffoldKey.currentState.showSnackBar(snack('Please sign in first'));
+      scaffoldKey.currentState!.showSnackBar(snack('Please sign in first'));
       return false;
     }
   }

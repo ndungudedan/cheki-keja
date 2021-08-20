@@ -7,7 +7,7 @@ class Terms extends StatelessWidget {
   Constants constants=Constants();
 
   Future<String> makePostRequest() async {
-    Response response = await post(constants.termsurl);
+    Response response = await post(Uri.parse(constants.termsurl));
 
     if(response.statusCode==200){
       String responseBody = response.body;
@@ -44,7 +44,7 @@ class Terms extends StatelessWidget {
                   future: makePostRequest(),
                   builder: (context, snapshot) {
                     if(snapshot.hasData) {
-                      return Text(snapshot.data);
+                      return Text(snapshot.data!);
                     }
                     return Center(child: CircularProgressIndicator());
                   },

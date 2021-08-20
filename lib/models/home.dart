@@ -4,17 +4,17 @@ part 'home.g.dart';
 
 @JsonSerializable()
 class MyHome {
-  String id;
-  String apartment_id;
-  String company_id;
-  String expected;
-  String paid;
-  String timestamp;
-  String title;
-  String due;
-  String month;
-  String year;
-  String banner;
+  String? id;
+  String? apartment_id;
+  String? company_id;
+  String? expected;
+  String? paid;
+  String? timestamp;
+  String? title;
+  String? due;
+  String? month;
+  String? year;
+  String? banner;
 
   MyHome(
       {this.id,
@@ -84,12 +84,12 @@ class MyHome {
 
 @JsonSerializable()
 class MyHomeSummary {
-  String id;
-  String expected;
-  String paid;
-  String due;
-  String month;
-  String year;
+  String? id;
+  String? expected;
+  String? paid;
+  String? due;
+  String? month;
+  String? year;
   MyHomeSummary({this.id,this.expected, this.paid, this.due, this.month, this.year});
 
   factory MyHomeSummary.fromJson(Map<String, dynamic> json) =>
@@ -134,7 +134,7 @@ class MyHomeSummary {
 
 @JsonSerializable()
 class MyHomeSummaryList {
-  List<MyHomeSummary> values;
+  List<MyHomeSummary>? values;
   MyHomeSummaryList({this.values});
 
   factory MyHomeSummaryList.fromJson(List<dynamic> json) {
@@ -147,7 +147,7 @@ class MyHomeSummaryList {
 
 @JsonSerializable()
 class MyHomeList {
-  List<MyHome> myhomes;
+  List<MyHome>? myhomes;
   MyHomeList({this.myhomes});
 
   factory MyHomeList.fromJson(List<dynamic> json) {
@@ -160,9 +160,9 @@ class MyHomeList {
 
 @JsonSerializable()
 class MyHomeResponse {
-  MyHomeSummaryList summary;
-  MyHomeList data;
-  Status status;
+  MyHomeSummaryList? summary;
+  MyHomeList? data;
+  Status? status;
 
   MyHomeResponse({
     this.data,

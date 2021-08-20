@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 class Reviews extends StatefulWidget {
   var apartmentId;
-  List<Review> reviews;
-  Reviews({Key key, this.apartmentId, this.reviews}) : super(key: key);
+  List<Review>? reviews;
+  Reviews({Key? key, this.apartmentId, this.reviews}) : super(key: key);
 
   final String title = 'apartmentDetails';
 
@@ -17,12 +17,12 @@ class Reviews extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<Reviews> {
-  List<Review> reviews;
-  bool _loadingMore;
-  bool signedIn;
+  List<Review>? reviews;
+  bool? _loadingMore;
+  bool? signedIn;
   var apartmentId;
   var paginationId = '0';
-  ReviewBloc review_bloc;
+  ReviewBloc? review_bloc;
 
   @override
   void initState() {
@@ -31,14 +31,14 @@ class _MyHomePageState extends State<Reviews> {
     apartmentId = widget.apartmentId;
     if (reviews == null) {
       review_bloc = ReviewBloc();
-      review_bloc.fetchReviews(apartmentId, paginationId);
+      review_bloc!.fetchReviews(apartmentId, paginationId);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    review_bloc.dispose();
+    review_bloc!.dispose();
   }
 
   @override
@@ -49,13 +49,13 @@ class _MyHomePageState extends State<Reviews> {
       ),
       body: review_bloc != null
           ? StreamBuilder(
-              stream: review_bloc.reviews,
-              builder: (context, AsyncSnapshot<List<Review>> snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+              stream: review_bloc!.reviews,
+              builder: (context, AsyncSnapshot<List<Review>?> snapshot) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(4.0),
@@ -68,22 +68,22 @@ class _MyHomePageState extends State<Reviews> {
                                   backgroundColor: Colors.transparent,
                                   radius: 30,
                                   backgroundImage: CachedNetworkImageProvider(
-                                      snapshot.data.elementAt(index).user.photo),
+                                      snapshot.data!.elementAt(index).user!.photo!),
                                 ),
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text(snapshot.data.elementAt(index).user.email),
+                                    Text(snapshot.data!.elementAt(index).user!.email!),
                                     Text(
-                                        snapshot.data
+                                        snapshot.data!
                                             .elementAt(index)
-                                            .timeline
+                                            .timeline!
                                             .substring(0, 10),
                                         style: TextStyle(fontSize: 10))
                                   ],
                                 ),
                                 subtitle: Text(
-                                  snapshot.data.elementAt(index).review,
+                                  snapshot.data!.elementAt(index).review!,
                                   overflow: TextOverflow.visible,
                                   softWrap: true,
                                 ),
@@ -97,7 +97,7 @@ class _MyHomePageState extends State<Reviews> {
                   return Center(
                     child: Text('No reviews yet'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No reviews yet'),
                   );
@@ -108,7 +108,7 @@ class _MyHomePageState extends State<Reviews> {
               },
             )
           : ListView.builder(
-              itemCount: reviews.length,
+              itemCount: reviews!.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -119,17 +119,17 @@ class _MyHomePageState extends State<Reviews> {
                         leading: CircleAvatar(
                           radius: 30,
                           backgroundImage: CachedNetworkImageProvider(
-                              reviews.elementAt(index).user.photo),
+                              reviews!.elementAt(index).user!.photo!),
                         ),
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(reviews.elementAt(index).user.name),
-                            Text(reviews.elementAt(index).timeline.substring(0, 10),
+                            Text(reviews!.elementAt(index).user!.name!),
+                            Text(reviews!.elementAt(index).timeline!.substring(0, 10),
                                 style: TextStyle(fontSize: 10))
                           ],
                         ),
-                        subtitle: Text(reviews.elementAt(index).review),
+                        subtitle: Text(reviews!.elementAt(index).review!),
                       ),
                     ],
                   ),

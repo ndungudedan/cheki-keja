@@ -25,16 +25,16 @@ Map<String, dynamic> _$CompanyResponseToJson(CompanyResponse instance) =>
 
 MyCompany _$MyCompanyFromJson(Map<String, dynamic> json) {
   return MyCompany(
-    id: json['id'] as String,
-    logo: json['logo'] as String,
-    phone: json['phone'] as String,
-    email: json['email'] as String,
-    name: json['name'] as String,
+    id: json['id'] as String?,
+    logo: json['logo'] as String?,
+    phone: json['phone'] as String?,
+    email: json['email'] as String?,
+    name: json['name'] as String?,
     status: json['status'] == null
         ? null
         : Status.fromJson(json['status'] as Map<String, dynamic>),
-    address: json['address'] as String,
-    adminId: json['adminId'] as String,
+    address: json['address'] as String?,
+    adminId: json['adminId'] as String?,
   );
 }
 

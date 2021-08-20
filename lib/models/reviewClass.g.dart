@@ -8,10 +8,10 @@ part of 'reviewClass.dart';
 
 Review _$ReviewFromJson(Map<String, dynamic> json) {
   return Review(
-    id: json['id'] as String,
-    review: json['review'] as String,
-    rating: json['rating'] as String,
-    timeline: json['timeline'] as String,
+    id: json['id'] as String?,
+    review: json['review'] as String?,
+    rating: json['rating'] as String?,
+    timeline: json['timeline'] as String?,
     user: json['user'] == null
         ? null
         : ReviewUser.fromJson(json['user'] as Map<String, dynamic>),
@@ -28,10 +28,9 @@ Map<String, dynamic> _$ReviewToJson(Review instance) => <String, dynamic>{
 
 ReviewList _$ReviewListFromJson(Map<String, dynamic> json) {
   return ReviewList(
-    reviews: (json['reviews'] as List)
-        ?.map((e) =>
-            e == null ? null : Review.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    reviews: (json['reviews'] as List<dynamic>?)
+        ?.map((e) => Review.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -42,10 +41,10 @@ Map<String, dynamic> _$ReviewListToJson(ReviewList instance) =>
 
 ReviewUser _$ReviewUserFromJson(Map<String, dynamic> json) {
   return ReviewUser(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    email: json['email'] as String,
-    photo: json['photo'] as String,
+    id: json['id'] as String?,
+    name: json['name'] as String?,
+    email: json['email'] as String?,
+    photo: json['photo'] as String?,
   );
 }
 

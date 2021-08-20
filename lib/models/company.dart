@@ -4,8 +4,8 @@ part 'company.g.dart';
 
 @JsonSerializable()
 class CompanyResponse {
-  MyCompany data;
-  Status status;
+  MyCompany? data;
+  Status? status;
 
   CompanyResponse({
     this.status,
@@ -20,14 +20,14 @@ class CompanyResponse {
 
 @JsonSerializable()
 class MyCompany {
-  String id;
-  String adminId;
-  String name;
-  String logo;
-  String phone;
-  String address;
-  String email;
-  Status status;
+  String? id;
+  String? adminId;
+  String? name;
+  String? logo;
+  String? phone;
+  String? address;
+  String? email;
+  Status? status;
 
   MyCompany({
     this.id,

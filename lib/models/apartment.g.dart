@@ -8,8 +8,8 @@ part of 'apartment.dart';
 
 Banner _$BannerFromJson(Map<String, dynamic> json) {
   return Banner(
-    banner: json['banner'] as String,
-    tag: json['tag'] as String,
+    banner: json['banner'] as String?,
+    tag: json['tag'] as String?,
   );
 }
 
@@ -20,30 +20,30 @@ Map<String, dynamic> _$BannerToJson(Banner instance) => <String, dynamic>{
 
 MyApartment _$MyApartmentFromJson(Map<String, dynamic> json) {
   return MyApartment(
-    id: json['id'] as String,
+    id: json['id'] as int?,
     vacant: json['vacant'] as bool,
-    ownerid: json['ownerid'] as String,
-    ownername: json['ownername'] as String,
-    ownerlogo: json['ownerlogo'] as String,
-    category: json['category'] as String,
-    email: json['email'] as String,
-    address: json['address'] as String,
-    title: json['title'] as String,
-    phone: json['phone'] as String,
-    price: json['price'] as String,
-    deposit: json['deposit'] as String,
-    description: json['description'] as String,
-    space: json['space'] as String,
-    latitude: json['latitude'] as String,
-    longitude: json['longitude'] as String,
-    likes: json['likes'] as String,
-    comments: json['comments'] as String,
-    video: json['video'] as String,
-    rating: json['rating'] as String,
-    liked: json['liked'] as String,
-    location: json['location'] as String,
-    banner: json['banner'] as String,
-    bannertag: json['bannertag'] as String,
+    ownerid: json['ownerid'] as int?,
+    ownername: json['ownername'] as String?,
+    ownerlogo: json['ownerlogo'] as String?,
+    email: json['email'] as String?,
+    address: json['address'] as String?,
+    title: json['title'] as String?,
+    phone: json['phone'] as String?,
+    description: json['description'] as String?,
+    space: json['space'] as String?,
+    latitude: (json['latitude'] as num?)?.toDouble(),
+    longitude: (json['longitude'] as num?)?.toDouble(),
+    likes: json['likes'] as int?,
+    comments: json['comments'] as int?,
+    video: json['video'] as String?,
+    rating: json['rating'] as String?,
+    liked: json['liked'] as String?,
+    location: json['location'] as String?,
+    units: (json['units'] as List<dynamic>?)
+        ?.map((e) => BuildingUnit.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    banner: json['banner'] as String?,
+    bannertag: json['bannertag'] as String?,
   );
 }
 
@@ -54,13 +54,10 @@ Map<String, dynamic> _$MyApartmentToJson(MyApartment instance) =>
       'ownername': instance.ownername,
       'ownerlogo': instance.ownerlogo,
       'description': instance.description,
-      'category': instance.category,
       'location': instance.location,
       'email': instance.email,
       'title': instance.title,
-      'price': instance.price,
       'address': instance.address,
-      'deposit': instance.deposit,
       'space': instance.space,
       'phone': instance.phone,
       'latitude': instance.latitude,
@@ -73,14 +70,14 @@ Map<String, dynamic> _$MyApartmentToJson(MyApartment instance) =>
       'rating': instance.rating,
       'liked': instance.liked,
       'vacant': instance.vacant,
+      'units': instance.units,
     };
 
 ApartmentList _$ApartmentListFromJson(Map<String, dynamic> json) {
   return ApartmentList(
-    apartments: (json['apartments'] as List)
-        ?.map((e) =>
-            e == null ? null : MyApartment.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    apartments: (json['apartments'] as List<dynamic>?)
+        ?.map((e) => MyApartment.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -93,7 +90,7 @@ MyApartmentResponse _$MyApartmentResponseFromJson(Map<String, dynamic> json) {
   return MyApartmentResponse(
     data: json['data'] == null
         ? null
-        : ApartmentList.fromJson(json['data'] as List),
+        : ApartmentList.fromJson(json['data'] as List<dynamic>),
     status: json['status'] == null
         ? null
         : Status.fromJson(json['status'] as Map<String, dynamic>),
@@ -109,8 +106,8 @@ Map<String, dynamic> _$MyApartmentResponseToJson(
 
 Images _$ImagesFromJson(Map<String, dynamic> json) {
   return Images(
-    image: json['image'] as String,
-    tag: json['tag'] as String,
+    image: json['image'] as String?,
+    tag: json['tag'] as String?,
   );
 }
 
@@ -119,12 +116,26 @@ Map<String, dynamic> _$ImagesToJson(Images instance) => <String, dynamic>{
       'image': instance.image,
     };
 
+BuildingUnit _$BuildingUnitFromJson(Map<String, dynamic> json) {
+  return BuildingUnit(
+    category: json['category'] as String?,
+    rent: json['rent'] as String?,
+    deposit: json['deposit'] as String?,
+  );
+}
+
+Map<String, dynamic> _$BuildingUnitToJson(BuildingUnit instance) =>
+    <String, dynamic>{
+      'category': instance.category,
+      'rent': instance.rent,
+      'deposit': instance.deposit,
+    };
+
 ImageList _$ImageListFromJson(Map<String, dynamic> json) {
   return ImageList(
-    data: (json['data'] as List)
-        ?.map((e) =>
-            e == null ? null : Images.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    data: (json['data'] as List<dynamic>?)
+        ?.map((e) => Images.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -137,8 +148,9 @@ ImagesResponse _$ImagesResponseFromJson(Map<String, dynamic> json) {
     status: json['status'] == null
         ? null
         : Status.fromJson(json['status'] as Map<String, dynamic>),
-    data:
-        json['data'] == null ? null : ImageList.fromJson(json['data'] as List),
+    data: json['data'] == null
+        ? null
+        : ImageList.fromJson(json['data'] as List<dynamic>),
   );
 }
 

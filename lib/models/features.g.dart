@@ -8,7 +8,7 @@ part of 'features.dart';
 
 Features _$FeaturesFromJson(Map<String, dynamic> json) {
   return Features(
-    feat: json['feat'] as String,
+    feat: json['feat'] as String?,
   );
 }
 
@@ -18,10 +18,9 @@ Map<String, dynamic> _$FeaturesToJson(Features instance) => <String, dynamic>{
 
 FeaturesList _$FeaturesListFromJson(Map<String, dynamic> json) {
   return FeaturesList(
-    data: (json['data'] as List)
-        ?.map((e) =>
-            e == null ? null : Features.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    data: (json['data'] as List<dynamic>?)
+        ?.map((e) => Features.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -37,7 +36,7 @@ FeaturesResponse _$FeaturesResponseFromJson(Map<String, dynamic> json) {
         : Status.fromJson(json['status'] as Map<String, dynamic>),
     data: json['data'] == null
         ? null
-        : FeaturesList.fromJson(json['data'] as List),
+        : FeaturesList.fromJson(json['data'] as List<dynamic>),
   );
 }
 

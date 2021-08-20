@@ -3,8 +3,8 @@ part 'stkpush.g.dart';
 
 @JsonSerializable()
 class Stkpush {
-  String code;
-  String message;
+  String? code;
+  String? message;
 
   Stkpush({
     this.code,

@@ -29,10 +29,10 @@ class ContactBloc {
   Future<void> insertContacts(contactModel.Contacts contacts) async {
     dao.deleteContacts();
     final details = ContactsCompanion(
-      onlineid: Value(contacts.id),
-      phone: Value(contacts.phone),
+      onlineid: Value(contacts.id!),
+      phone: Value(contacts.phone!),
       address: Value(contacts.address),
-      email: Value(contacts.email),
+      email: Value(contacts.email!),
       location: Value(contacts.location),
       twitter: Value(contacts.twitter),
       facebook: Value(contacts.facebook),

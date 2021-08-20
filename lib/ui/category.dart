@@ -14,7 +14,7 @@ import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class Category extends StatefulWidget {
-  Category({Key key}) : super(key: key);
+  Category({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -22,12 +22,12 @@ class Category extends StatefulWidget {
 
 class _MyHomePageState extends State<Category> {
   bool onlineData=true;
-  SingleCatBloc singleCatBloc;
-  DoubleCatBloc doubleCatBloc;
-  BedSitterCatBloc bedSitterCatBloc;
-  OneBedCatBloc oneBedCatBloc;
-  TwoBedCatBloc twoBedCatBloc;
-  ThreeBedCatBloc threeBedCatBloc;
+  late SingleCatBloc singleCatBloc;
+  late DoubleCatBloc doubleCatBloc;
+  late BedSitterCatBloc bedSitterCatBloc;
+  late OneBedCatBloc oneBedCatBloc;
+  late TwoBedCatBloc twoBedCatBloc;
+  late ThreeBedCatBloc threeBedCatBloc;
 
   @override
   void initState() {
@@ -117,15 +117,15 @@ class _MyHomePageState extends State<Category> {
           body: TabBarView(children: [
             StreamBuilder(
               stream: singleCatBloc.result,
-              builder: (context, AsyncSnapshot<List<MyApartment>> snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+              builder: (context, AsyncSnapshot<List<MyApartment>?> snapshot) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return PostWidget(
-                        myApartment:snapshot.data.elementAt(index), 
+                        myApartment:snapshot.data!.elementAt(index), 
                         online:onlineData,
                         index:index);
                     },
@@ -134,7 +134,7 @@ class _MyHomePageState extends State<Category> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No data'),
                   );
@@ -146,15 +146,15 @@ class _MyHomePageState extends State<Category> {
             ),
             StreamBuilder(
               stream: doubleCatBloc.result,
-              builder: (context, AsyncSnapshot<List<MyApartment>> snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+              builder: (context, AsyncSnapshot<List<MyApartment>?> snapshot) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return PostWidget(
-                        myApartment:snapshot.data.elementAt(index), 
+                        myApartment:snapshot.data!.elementAt(index), 
                         online:onlineData,
                         index:index);
                     },
@@ -163,7 +163,7 @@ class _MyHomePageState extends State<Category> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No data'),
                   );
@@ -175,15 +175,15 @@ class _MyHomePageState extends State<Category> {
             ),
             StreamBuilder(
               stream: bedSitterCatBloc.result,
-              builder: (context, AsyncSnapshot<List<MyApartment>> snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+              builder: (context, AsyncSnapshot<List<MyApartment>?> snapshot) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return PostWidget(
-                        myApartment:snapshot.data.elementAt(index), 
+                        myApartment:snapshot.data!.elementAt(index), 
                         online:onlineData,
                         index:index);
                     },
@@ -192,7 +192,7 @@ class _MyHomePageState extends State<Category> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No data'),
                   );
@@ -204,15 +204,15 @@ class _MyHomePageState extends State<Category> {
             ),
             StreamBuilder(
               stream: oneBedCatBloc.result,
-              builder: (context, AsyncSnapshot<List<MyApartment>> snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+              builder: (context, AsyncSnapshot<List<MyApartment>?> snapshot) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return PostWidget(
-                        myApartment:snapshot.data.elementAt(index), 
+                        myApartment:snapshot.data!.elementAt(index), 
                         online:onlineData,
                         index:index);
                     },
@@ -221,7 +221,7 @@ class _MyHomePageState extends State<Category> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No data'),
                   );
@@ -233,15 +233,15 @@ class _MyHomePageState extends State<Category> {
             ),
             StreamBuilder(
               stream: twoBedCatBloc.result,
-              builder: (context, AsyncSnapshot<List<MyApartment>> snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+              builder: (context, AsyncSnapshot<List<MyApartment>?> snapshot) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return PostWidget(
-                        myApartment:snapshot.data.elementAt(index), 
+                        myApartment:snapshot.data!.elementAt(index), 
                         online:onlineData,
                         index:index);
                     },
@@ -250,7 +250,7 @@ class _MyHomePageState extends State<Category> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No data'),
                   );
@@ -262,15 +262,15 @@ class _MyHomePageState extends State<Category> {
             ),
             StreamBuilder(
               stream: threeBedCatBloc.result,
-              builder: (context, AsyncSnapshot<List<MyApartment>> snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+              builder: (context, AsyncSnapshot<List<MyApartment>?> snapshot) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       return PostWidget(
-                        myApartment:snapshot.data.elementAt(index), 
+                        myApartment:snapshot.data!.elementAt(index), 
                         online:onlineData,
                         index:index);
                     },
@@ -279,7 +279,7 @@ class _MyHomePageState extends State<Category> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No data'),
                   );

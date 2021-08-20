@@ -7,6 +7,7 @@ import 'package:cheki_keja/models/company.dart';
 import 'package:cheki_keja/models/features.dart';
 import 'package:cheki_keja/models/paymentsClass.dart';
 import 'package:cheki_keja/models/reviewClass.dart';
+import 'package:cheki_keja/models/tenant.dart';
 import 'package:cheki_keja/ui/reviews.dart';
 import 'package:http/http.dart' as http;
 import 'package:moor/moor.dart';
@@ -14,7 +15,7 @@ import 'package:path/path.dart';
 import 'package:dio/dio.dart';
 
 class Network {
-  final String url;
+  final Uri url;
   Network(this.url);
   Future call(String json) async {
     print('Calling uri: $url');
@@ -34,7 +35,7 @@ class Network {
     }
   }
 
-  Future<List<MyApartment>> getData(String val) async {
+  Future<List<MyApartment>?> getData(String val) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
       url,
@@ -45,15 +46,13 @@ class Network {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      return MyApartmentResponse.fromJson(json.decode(response.body))
-          .data
-          .apartments;
+      return ApartmentList.fromJson(json.decode(response.body)).apartments;
     } else {
       print(response.statusCode);
     }
   }
 
-  Future<List<MyApartment>> getSectionCategorys(String val) async {
+  Future<List<MyApartment>?> getSectionCategorys(String val) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
       url,
@@ -64,15 +63,13 @@ class Network {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      return MyApartmentResponse.fromJson(json.decode(response.body))
-          .data
-          .apartments;
+      return ApartmentList.fromJson(json.decode(response.body)).apartments;
     } else {
       print(response.statusCode);
     }
   }
 
-  Future<List<Images>> getImages(String val) async {
+  Future<List<Images>?> getImages(String val) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
       url,
@@ -83,13 +80,13 @@ class Network {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      return ImagesResponse.fromJson(json.decode(response.body)).data.data;
+      return ImagesResponse.fromJson(json.decode(response.body)).data!.data;
     } else {
       print(response.statusCode);
     }
   }
 
-  Future<List<MyApartment>> getFavorites(String value) async {
+  Future<List<MyApartment>?> getFavorites(String value) async {
     print('Calling uri: $url');
     //Response response = await get(url);
     final http.Response response = await http.post(
@@ -101,7 +98,7 @@ class Network {
     );
     if (response.statusCode == 200) {
       return MyApartmentResponse.fromJson(json.decode(response.body))
-          .data
+          .data!
           .apartments;
     } else {
       print(response.statusCode);
@@ -137,7 +134,7 @@ class Network {
           await MultipartFile.fromFile(video.toString(), filename: 'video'),
       'images': imageArray
     });
-    var response = await dio.post(url, data: formData);
+    var response = await dio.post(url.toString(), data: formData);
     return response;
   }
 
@@ -219,6 +216,7 @@ class Network {
       },
       body: json,
     );
+    print(response.body);
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -226,7 +224,7 @@ class Network {
     }
   }
 
-  Future<List<Review>> getReviews(String value) async {
+  Future<List<Review>?> getReviews(String value) async {
     print('Calling uri: $url');
     //Response response = await get(url);
     final http.Response response = await http.post(
@@ -244,7 +242,7 @@ class Network {
     }
   }
 
-  Future<List<Features>> getFeatures(String value) async {
+  Future<List<Features>?> getFeatures(String value) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
       url,
@@ -255,13 +253,13 @@ class Network {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      return FeaturesResponse.fromJson(json.decode(response.body)).data.data;
+      return FeaturesResponse.fromJson(json.decode(response.body)).data!.data;
     } else {
       print(response.statusCode);
     }
   }
 
-  Future<MyCompany> getCompany(String value) async {
+  Future<MyCompany?> getCompany(String value) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
       url,
@@ -278,7 +276,7 @@ class Network {
     }
   }
 
-  Future<Myhouse> getMyhouse(String value) async {
+  Future<MyTenantResponse?> getMyhouse(String value) async {
     print('Calling uri: $url');
     final http.Response response = await http.post(
       url,
@@ -289,7 +287,7 @@ class Network {
     );
     if (response.statusCode == 200) {
       print(response.body);
-      return Myhouse.fromJson(json.decode(response.body));
+      return MyTenantResponse.fromJson(json.decode(response.body));
     } else {
       print(response.statusCode);
     }

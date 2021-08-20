@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-/*   final String baseurl = 'http://192.168.43.188/chekiKeja/chekiKeja.php/';
-  final String uploadurl = 'http://192.168.43.188/chekiKeja/tengenezaKeja.php/';
-  final String updateurl = 'http://192.168.43.188/chekiKeja/updateKeja.php/';
-  final String path = 'http://192.168.43.188/chekiKeja/uploads/';
-  final String stkpush = 'http://www.thebuktu.com/chekiKeja/lipaNaMpesa.php';
-  final String termsurl = 'http://192.168.43.188/chekiKeja/uploads/terms.rtf';
-  final String abouturl = 'http://192.168.43.188/chekiKeja/uploads/about.rtf';
-  final String folder = '/images/'; */
-  final String baseurl =
-      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/chekiKeja.php';
-  final String uploadurl =
-      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/tengenezaKeja.php/';
-  final String updateurl =
+
+  static final ipayurl = 'https://app.mtickets.xyz/IpayController.php';
+  static String baseurl = 'https://m-rent.co.ke/api/v0/';
+  static String uploadurl = 'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/tengenezaKeja.php/';
+      final String updateurl =
+      'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/updateKeja.php/';
+  static String ipaystkpushurl =
       'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/updateKeja.php/';
   final String path =
       'https://adminkeja.romeofoxalpha.co.ke/chekiKeja/uploads/';
@@ -56,6 +50,12 @@ class Constants {
   static final homesummarytable = 'home_summary_table';
   static final transactionstable = 'transactions_table';
   static final tenanttable = 'tenant_table';
+
+  static final utilcode9 = '9'; //mpesa failed
+  static final utilcode0 = '0'; //mpesa successful
+  static final utilcode1 = '1'; //Ipay transaction created
+  static final utilcode8 = '8'; //Ipay transaction failed
+  static final utilcode2 = '2'; //Ipay status all good/done
 }
 
 class SharedPrefs {
@@ -79,6 +79,8 @@ class SharedPrefs {
   static final companyaddress = 'companyaddress';
   static final companylocation = 'companylocation';
   static final companyphoto = 'companyphoto';
+  static final id_no = 'id_no';
+  static final citizenship = 'citizenship';
 }
 
 class UploadData {
@@ -104,15 +106,15 @@ class ApartmentCategory {
   static final one_bed = 'One Bedroom';
   static final two_bed = 'Two Bedroom';
   static final three_bed = 'Three Bedroom';
-  //static final four_bed = 'Four Bedroom';
+  static final four_bed = 'Four Bedroom';
 
   static final single_id = '1';
   static final double_id = '2';
-  static final bedsitter_id = '4';
-  static final one_bed_id = '5';
-  static final two_bed_id = '11';
-  static final three_bed_id = '12';
-  //static final four_bed_id = 'Four Bedroom';
+  static final bedsitter_id = '3';
+  static final one_bed_id = '4';
+  static final two_bed_id = '5';
+  static final three_bed_id = '6';
+  static final four_bed_id = '7';
 }
 
 // list of colors that we use in our app

@@ -4,7 +4,7 @@ abstract class PostState {
   const PostState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class PostInitial extends PostState {}
@@ -12,8 +12,8 @@ class PostInitial extends PostState {}
 class PostFailure extends PostState {}
 
 class PostSuccess extends PostState {
-  final List<MyApartment> posts;
-  final bool hasReachedMax;
+  final List<MyApartment>? posts;
+  final bool? hasReachedMax;
 
   const PostSuccess({
     this.posts,
@@ -21,8 +21,8 @@ class PostSuccess extends PostState {
   });
 
   PostSuccess copyWith({
-    List<MyApartment> posts,
-    bool hasReachedMax,
+    List<MyApartment>? posts,
+    bool? hasReachedMax,
   }) {
     return PostSuccess(
       posts: posts ?? this.posts,
@@ -31,9 +31,9 @@ class PostSuccess extends PostState {
   }
 
   @override
-  List<Object> get props => [posts, hasReachedMax];
+  List<Object?> get props => [posts, hasReachedMax];
 
   @override
   String toString() =>
-      'PostSuccess { posts: ${posts.length}, hasReachedMax: $hasReachedMax }';
+      'PostSuccess { posts: ${posts!.length}, hasReachedMax: $hasReachedMax }';
 }

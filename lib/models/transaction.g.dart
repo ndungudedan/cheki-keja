@@ -8,16 +8,16 @@ part of 'transaction.dart';
 
 MyTransaction _$MyTransactionFromJson(Map<String, dynamic> json) {
   return MyTransaction(
-    id: json['id'] as String,
-    user_id: json['user_id'] as String,
-    transaction_id: json['transaction_id'] as String,
-    apartment_id: json['apartment_id'] as String,
-    status: json['status'] as String,
-    amount: json['amount'] as String,
-    time: json['time'] as String,
-    month: json['month'] as String,
-    year: json['year'] as String,
-    type: json['type'] as String,
+    id: json['id'] as String?,
+    user_id: json['user_id'] as String?,
+    transaction_id: json['transaction_id'] as String?,
+    apartment_id: json['apartment_id'] as String?,
+    status: json['status'] as String?,
+    amount: json['amount'] as String?,
+    time: json['time'] as String?,
+    month: json['month'] as String?,
+    year: json['year'] as String?,
+    type: json['type'] as String?,
   );
 }
 
@@ -37,11 +37,9 @@ Map<String, dynamic> _$MyTransactionToJson(MyTransaction instance) =>
 
 TransactionList _$TransactionListFromJson(Map<String, dynamic> json) {
   return TransactionList(
-    transactions: (json['transactions'] as List)
-        ?.map((e) => e == null
-            ? null
-            : MyTransaction.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    transactions: (json['transactions'] as List<dynamic>?)
+        ?.map((e) => MyTransaction.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -54,7 +52,7 @@ TransactionResponse _$TransactionResponseFromJson(Map<String, dynamic> json) {
   return TransactionResponse(
     data: json['data'] == null
         ? null
-        : TransactionList.fromJson(json['data'] as List),
+        : TransactionList.fromJson(json['data'] as List<dynamic>),
     status: json['status'] == null
         ? null
         : Status.fromJson(json['status'] as Map<String, dynamic>),

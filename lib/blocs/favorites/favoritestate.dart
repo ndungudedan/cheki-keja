@@ -4,7 +4,7 @@ abstract class FavoriteState {
   const FavoriteState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FavoriteInitial extends FavoriteState {}
@@ -12,8 +12,8 @@ class FavoriteInitial extends FavoriteState {}
 class FavoriteFailure extends FavoriteState {}
 
 class FavoriteSuccess extends FavoriteState {
-  final List<MyApartment> posts;
-  final bool hasReachedMax;
+  final List<MyApartment>? posts;
+  final bool? hasReachedMax;
 
   const FavoriteSuccess({
     this.posts,
@@ -21,8 +21,8 @@ class FavoriteSuccess extends FavoriteState {
   });
 
   FavoriteSuccess copyWith({
-    List<MyApartment> posts,
-    bool hasReachedMax,
+    List<MyApartment>? posts,
+    bool? hasReachedMax,
   }) {
     return FavoriteSuccess(
       posts: posts ?? this.posts,
@@ -31,9 +31,9 @@ class FavoriteSuccess extends FavoriteState {
   }
 
   @override
-  List<Object> get props => [posts, hasReachedMax];
+  List<Object?> get props => [posts, hasReachedMax];
 
   @override
   String toString() =>
-      'PostSuccess { posts: ${posts.length}, hasReachedMax: $hasReachedMax }';
+      'PostSuccess { posts: ${posts!.length}, hasReachedMax: $hasReachedMax }';
 }

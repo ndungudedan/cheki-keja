@@ -10,41 +10,65 @@ import 'network.dart';
 
 
 Constants constants = Constants();
-var url = constants.baseurl;
+var url =Uri.parse(Constants.baseurl);
 var stkpush = constants.stkpush;
 
 class NetworkApi {
-  Future<List<MyApartment>> getApartments(var id, var userId) {
-    Network network = Network('$url');
+
+    Future<dynamic> payBill(var biller,var accNo,var mpesaNo,var amount) async {
+    Network network = Network( Uri.parse(Constants.baseurl+'ipay/stkpush'));
+    var data = await network.call(paybillersjson(biller,accNo,mpesaNo,amount));
+    return data;
+  }
+
+   Future<dynamic> fetchBillers() async {
+    Network network = Network( Uri.parse(Constants.baseurl+'query/bills'));
+    var data = await network.call(fetchbillersjson());
+    return data;
+  }
+  Future<dynamic> fetchTransactions() async {
+    Network network = Network( Uri.parse(Constants.baseurl+'ipay/transactions'));
+    var data = await network.call(fetchtransactionsjson());
+    return data;
+  }
+
+  Future<dynamic> validateBillerAccount(var biller,var accNo) async {
+    Network network = Network( Uri.parse(Constants.baseurl+'account/validate'));
+    var data = await network.call(validatebillerjson(biller,accNo));
+    return data;
+  }
+
+  Future<List<MyApartment>?> getApartments(var id, var userId) {
+    var network = Network( Uri.parse(Constants.baseurl+'vacant'));
     var data = network.getData(homejson(id, userId));
     print(data.toString());
     return data;
   }
-  Future<List<MyApartment>> getSingleApartment(var id) {
-    Network network = Network('$url');
+  Future<List<MyApartment>?> getSingleApartment(var id) {
+    Network network = Network( Uri.parse(Constants.baseurl+'building'));
     var data = network.getData(singlejson(id));
     print(data.toString());
     return data;
   }
 
-   Future<List<MyApartment>> getSectionCategorys(var id) {
-    Network network = Network('$url');
+   Future<List<MyApartment>?> getSectionCategorys(var id) {
+    Network network = Network( Uri.parse(Constants.baseurl+'select/unit'));
     var data = network.getSectionCategorys(sectionCategorysjson(id));
     print(data.toString());
     return data;
   }
 
-  Future<dynamic> getMyhouse(var userId) async {
+  Future<dynamic> getMyhouse() async {
     // 6
-    Network network = Network('$url');
+    Network network =  Network( Uri.parse(Constants.baseurl+'myhouse'));
     // 7
-    var Data = await network.getMyhouse(myhousejson(userId));
+    var Data = await network.getMyhouse(myhousejson());
     return Data;
   }
 
   Future<dynamic> getContacts() async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.call(contactsjson());
     return Data;
@@ -52,15 +76,15 @@ class NetworkApi {
 
   Future<dynamic> getArrears(var userId, var apartmentId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.getArrears(arrearsjson(userId, apartmentId));
     return Data;
   }
 
-  Future<List<MyApartment>> getFavorites(var id, var userId) async {
+  Future<List<MyApartment>?> getFavorites(var id, var userId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.getFavorites(favoritejson(id, userId));
     return Data;
@@ -68,35 +92,35 @@ class NetworkApi {
 
   // 8
   Future<dynamic> getApartmentImage(String imageUrl) async {
-    Network network = Network('$imageUrl');
+    Network network = Network(Uri.parse(imageUrl));
     var Data = await network.getImage();
     return Data;
   }
 
   Future<dynamic> getImages(var apartmentId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.getImages(imagejson(apartmentId));
     return Data;
   }
     Future<dynamic> getApartmentLocations() async {
-    Network network = Network(constants.baseurl);
+    Network network = Network(Uri.parse(Constants.baseurl+'building/info'));
     var data = await network.call(locationsjson());
     return data;
   }
-  Future<List<Review>> getReviews(String apartmentId, var paginationId) async {
+  Future<List<Review>?> getReviews(String? apartmentId, var paginationId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data =
         await network.getReviews(getReviewJson(apartmentId, paginationId));
     return Data;
   }
 
-  Future<dynamic> getComplains(String apartmentId, var paginationId) async {
+  Future<dynamic> getComplains(String? apartmentId, var paginationId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data =
         await network.getComplains(getComplainsJson(apartmentId, paginationId));
@@ -106,24 +130,24 @@ class NetworkApi {
   Future<dynamic> getComplainChats(
       String apartmentId, var complainId, var paginationId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.getComplainChats(
         getComplainChatsJson(apartmentId, complainId, paginationId));
     return Data;
   }
 
-  Future<List<Features>>getFeatures(String apartmentId) async {
+  Future<List<Features>?>getFeatures(String? apartmentId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.getFeatures(getFeaturesJson(apartmentId));
     return Data;
   }
 
-  Future<MyCompany> getCompany(String ownerId) async {
+  Future<MyCompany?> getCompany(String? ownerId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.getCompany(getCompanyJson(ownerId));
     return Data;
@@ -132,7 +156,7 @@ class NetworkApi {
   Future<dynamic> lipaNaMpesa(var phone, var amount, var userId,
       var apartmentId, var ownerId, var type) async {
     // 6
-    Network network = Network('$stkpush');
+    Network network = Network(Uri.parse(stkpush));
     // 7
     var Data = await network.lipaNaMpesa(
         lipaNaMpesajson(phone, amount, userId, apartmentId, ownerId, type));
@@ -142,7 +166,7 @@ class NetworkApi {
   Future upload(
       var video, var images, var tags, var features, var details) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var res = await network.uploads(video, images, tags, features, details);
     return res;
@@ -150,7 +174,7 @@ class NetworkApi {
 
   Future<dynamic> addLike(var id, var userId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.addLike(likejson(id, userId));
     return Data;
@@ -158,7 +182,7 @@ class NetworkApi {
 
   Future<dynamic> disLike(var id, var userId) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.disLike(dislikejson(id, userId));
     return Data;
@@ -166,7 +190,7 @@ class NetworkApi {
 
   Future<dynamic> addReview(var data) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data = await network.addReview(reviewjson(data));
     return Data;
@@ -175,7 +199,7 @@ class NetworkApi {
   Future<dynamic> addComplain(
       var apartId, var userId, var title, var desc) async {
     // 6
-    Network network = Network('$url');
+    Network network = Network(url);
     // 7
     var Data =
         await network.addComplain(complainjson(apartId, userId, title, desc));
@@ -183,35 +207,69 @@ class NetworkApi {
   }
 
   Future<dynamic> registerUser(auth.User user) async {
-    Network network = Network('$url');
+    Network network = Network(Uri.parse(Constants.baseurl+'login'));
     // 7
     var Data = await network.registerUser(userJson(user));
     return Data;
   }
 
     Future<dynamic> updateFirebaseToken() async {
-    Network network = Network('$url');
+    Network network = Network(url);
     var Data = await network.call(tokenJson());
     return Data;
   }
 
-  String homejson(var id, var userId) {
+  String paybillersjson(var biller,var accNo,var mpesaNo,var amount) {
     var json = jsonEncode(<String, String>{
+      'biller_code': biller.biller_code,
+      'mpesa_no': mpesaNo,
+      'amount': amount,
+      'account': accNo,
+      'user_id': sharedPreferences.getUserId(),
+      'fbcode': sharedPreferences.getFirebaseToken(),
+    });
+    return json;
+  }
+
+  String fetchbillersjson() {
+    var json = jsonEncode(<String, String>{
+      'action': 'fetchBillers',
+    });
+    return json;
+  }
+  String fetchtransactionsjson() {
+    var json = jsonEncode(<String, String>{
+      'action': 'fetchTransactions',
+      'user_id': sharedPreferences.getUserId(),
+    });
+    return json;
+  }
+  String validatebillerjson(var biller,var accNo) {
+    var json = jsonEncode(<String, String>{
+      'action': 'validateAccount',
+      'biller_code': biller.biller_code,
+      'account': accNo,
+    });
+    return json;
+  }
+
+  String homejson(var id, var userId) {
+    var json = jsonEncode(<String, String?>{
       'functionality': 'homePage',
-      'pagination': id,
+      'pagination': id.toString(),
       'userId': userId,
     });
     return json;
   }
   String singlejson(var id) {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'singleApartment',
-      'apartmentId': id,
+      'building_id': id.toString(),
     });
     return json;
   }
     String tokenJson() {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'updateFirebaseToken',
       'token': sharedPreferences.getFirebaseToken(),
       'userId': sharedPreferences.getUserId() ?? '0',
@@ -221,14 +279,14 @@ class NetworkApi {
     String sectionCategorysjson(var id) {
     var json = jsonEncode(<String, String>{
       'functionality': 'fetchByCategory',
-      'categoryId': id,
+      'category_id': id.toString(),
       'pagination': '0',
     });
     return json;
   }
 
   String favoritejson(var id, var userId) {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'Favorites',
       'pagination': id,
       'userId': userId,
@@ -236,8 +294,8 @@ class NetworkApi {
     return json;
   }
 
-  String getReviewJson(String apartmentId, var paginationId) {
-    var json = jsonEncode(<String, String>{
+  String getReviewJson(String? apartmentId, var paginationId) {
+    var json = jsonEncode(<String, String?>{
       'functionality': 'getReviews',
       'apartmentId': apartmentId,
       'pagination': paginationId,
@@ -245,8 +303,8 @@ class NetworkApi {
     return json;
   }
 
-  String getComplainsJson(String apartmentId, var paginationId) {
-    var json = jsonEncode(<String, String>{
+  String getComplainsJson(String? apartmentId, var paginationId) {
+    var json = jsonEncode(<String, String?>{
       'functionality': 'getComplains',
       'apartmentId': apartmentId,
       'pagination': paginationId,
@@ -265,16 +323,16 @@ class NetworkApi {
     return json;
   }
 
-  String getFeaturesJson(String apartmentId) {
-    var json = jsonEncode(<String, String>{
+  String getFeaturesJson(String? apartmentId) {
+    var json = jsonEncode(<String, String?>{
       'functionality': 'getFeatures',
       'apartmentId': apartmentId,
     });
     return json;
   }
 
-  String getCompanyJson(String ownerId) {
-    var json = jsonEncode(<String, String>{
+  String getCompanyJson(String? ownerId) {
+    var json = jsonEncode(<String, String?>{
       'functionality': 'getCompany',
       'ownerId': ownerId,
     });
@@ -282,7 +340,7 @@ class NetworkApi {
   }
 
   String imagejson(var apartmentId) {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'retreiveImages',
       'apartmentId': apartmentId,
     });
@@ -296,7 +354,7 @@ class NetworkApi {
   }
 
   String likejson(var apartmentId, var userId) {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'addLike',
       'apartmentId': apartmentId.toString(),
       'userId': userId,
@@ -305,7 +363,7 @@ class NetworkApi {
   }
 
   String dislikejson(var apartmentId, var userId) {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'disLike',
       'apartmentId': apartmentId.toString(),
       'userId': userId,
@@ -313,10 +371,9 @@ class NetworkApi {
     return json;
   }
 
-  String myhousejson(var userId) {
-    var json = jsonEncode(<String, String>{
-      'functionality': 'getPayments',
-      'userId': userId,
+  String myhousejson() {
+    var json = jsonEncode(<String, String?>{
+      'user_id': sharedPreferences.getUserId() ?? '0',
     });
     return json;
   }
@@ -351,7 +408,7 @@ class NetworkApi {
   }
 
   String complainjson(var apartmentId, var userId, var title, var desc) {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'addComplain',
       'userId': userId,
       'apartmentId': apartmentId,
@@ -362,7 +419,7 @@ class NetworkApi {
   }
 
   String reviewjson(var data) {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'addReview',
       'rating': data['rating'],
       'review': data['review'],
@@ -375,7 +432,7 @@ class NetworkApi {
   }
 
   String userJson(auth.User user) {
-    var json = jsonEncode(<String, String>{
+    var json = jsonEncode(<String, String?>{
       'functionality': 'registerUser',
       'email': user.email,
       'photo': user.photoURL,

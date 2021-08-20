@@ -13,7 +13,7 @@ CategoryResponse _$CategoryResponseFromJson(Map<String, dynamic> json) {
         : Status.fromJson(json['status'] as Map<String, dynamic>),
     data: json['data'] == null
         ? null
-        : MyCategoryList.fromJson(json['data'] as List),
+        : MyCategoryList.fromJson(json['data'] as List<dynamic>),
   );
 }
 
@@ -25,10 +25,9 @@ Map<String, dynamic> _$CategoryResponseToJson(CategoryResponse instance) =>
 
 MyCategoryList _$MyCategoryListFromJson(Map<String, dynamic> json) {
   return MyCategoryList(
-    categorys: (json['categorys'] as List)
-        ?.map((e) =>
-            e == null ? null : MyCategory.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    categorys: (json['categorys'] as List<dynamic>?)
+        ?.map((e) => MyCategory.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -39,8 +38,8 @@ Map<String, dynamic> _$MyCategoryListToJson(MyCategoryList instance) =>
 
 MyCategory _$MyCategoryFromJson(Map<String, dynamic> json) {
   return MyCategory(
-    id: json['id'] as String,
-    title: json['title'] as String,
+    id: json['id'] as String?,
+    title: json['title'] as String?,
   );
 }
 
@@ -52,10 +51,9 @@ Map<String, dynamic> _$MyCategoryToJson(MyCategory instance) =>
 
 SectionCatList _$SectionCatListFromJson(Map<String, dynamic> json) {
   return SectionCatList(
-    data: (json['data'] as List)
-        ?.map((e) =>
-            e == null ? null : MyApartment.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    data: (json['data'] as List<dynamic>?)
+        ?.map((e) => MyApartment.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -68,22 +66,22 @@ SectionCatResponse _$SectionCatResponseFromJson(Map<String, dynamic> json) {
   return SectionCatResponse(
     doubles: json['doubles'] == null
         ? null
-        : SectionCatList.fromJson(json['doubles'] as List),
+        : SectionCatList.fromJson(json['doubles'] as List<dynamic>),
     singles: json['singles'] == null
         ? null
-        : SectionCatList.fromJson(json['singles'] as List),
+        : SectionCatList.fromJson(json['singles'] as List<dynamic>),
     bedsitters: json['bedsitters'] == null
         ? null
-        : SectionCatList.fromJson(json['bedsitters'] as List),
+        : SectionCatList.fromJson(json['bedsitters'] as List<dynamic>),
     onebeds: json['onebeds'] == null
         ? null
-        : SectionCatList.fromJson(json['onebeds'] as List),
+        : SectionCatList.fromJson(json['onebeds'] as List<dynamic>),
     twobeds: json['twobeds'] == null
         ? null
-        : SectionCatList.fromJson(json['twobeds'] as List),
+        : SectionCatList.fromJson(json['twobeds'] as List<dynamic>),
     threebeds: json['threebeds'] == null
         ? null
-        : SectionCatList.fromJson(json['threebeds'] as List),
+        : SectionCatList.fromJson(json['threebeds'] as List<dynamic>),
     status: json['status'] == null
         ? null
         : Status.fromJson(json['status'] as Map<String, dynamic>),

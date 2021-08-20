@@ -16,26 +16,26 @@ final List<String> imageList = [];
 final List<String> tagList = [];
 
 class FavoriteView extends StatefulWidget {
-  FavoriteView({Key key, this.title}) : super(key: key);
+  FavoriteView({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<FavoriteView> {
-  bool onlineData=true;
+  bool onlineData = true;
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
-  FavoriteBloc favoriteBloc;
+  late FavoriteBloc favoriteBloc;
   ApartmentList apartmentList = ApartmentList();
-  List<MyApartment> homeList = List<MyApartment>();
+  List<MyApartment> homeList = [];
   int _current = 0;
-  List<int> comments_count = List();
+  List<int> comments_count = [];
   StreamController<MyApartment> _streamController =
       StreamController<MyApartment>();
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
   bool _loadingMore = true;
   bool empty = false;
   var _hasMoreItems = true;
@@ -83,29 +83,31 @@ class _MyHomePageState extends State<FavoriteView> {
             }
             if (state is FavoriteFailure) {
               return Center(
-                child: Image.asset('assets/images/no_data.jpg'),
+                child: Image.asset('assets/images/no_data.png'),
               );
             }
             if (state is FavoriteSuccess) {
-              if (state.posts.isEmpty) {
+              if (state.posts!.isEmpty) {
                 return Center(
-                  child: Image.asset('assets/images/no_data.jpg'),
+                  child: Image.asset('assets/images/no_data.png'),
                 );
               }
               return ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
-                  return index >= state.posts.length
+                  return index >= state.posts!.length
                       ? BottomLoader()
-                      : PostWidget(online:onlineData,
-                          myApartment: state.posts[index], 
+                      : PostWidget(
+                          online: onlineData,
+                          myApartment: state.posts![index],
                           index: index);
                 },
-                itemCount: state.hasReachedMax
-                    ? state.posts.length
-                    : state.posts.length + 1,
+                itemCount: state.hasReachedMax!
+                    ? state.posts!.length
+                    : state.posts!.length + 1,
                 controller: _scrollController,
               );
             }
+            return Container();
           },
         ));
   }

@@ -4,14 +4,13 @@ import 'package:cheki_keja/constants/constants.dart';
 import 'package:cheki_keja/database/dao.dart';
 import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/management/management.dart';
-import 'package:cheki_keja/models/paymentsClass.dart';
 import 'package:cheki_keja/utility/connectioncallback.dart';
 import 'package:flutter/material.dart';
 
 class MyHouse extends StatefulWidget {
-  MyHouse({Key key, this.title}) : super(key: key);
+  MyHouse({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -19,7 +18,7 @@ class MyHouse extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHouse> {
   Constants constants = Constants();
-  MyhouseBloc myhouseBloc;
+  late MyhouseBloc myhouseBloc;
   var dao = DatabaseDao(databasehelper);
   var userId;
 
@@ -28,7 +27,7 @@ class _MyHomePageState extends State<MyHouse> {
     super.initState();
     myhouseBloc = MyhouseBloc();
     userId = sharedPreferences.getUserId();
-    myhouseBloc.fetchMyhouse(userId);
+    //myhouseBloc.fetchMyhouse(userId);
   }
 
   @override
@@ -54,10 +53,10 @@ class _MyHomePageState extends State<MyHouse> {
             ConnectionCallback(
               onlineCall: () {},
             ),
-            StreamBuilder(
+            StreamBuilder<List<MyHouseDetail>>(
               stream: dao.watchMyHouseDetails(),
               builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return Column(
                     children: [
                       Container(
@@ -75,9 +74,9 @@ class _MyHomePageState extends State<MyHouse> {
                                                             height: 140,
                                                             width: MediaQuery.of(context).size.width/2.65,
                                 imageUrl: constants.path +
-                                    snapshot.data[0].ownerid +
+                                    snapshot.data![0].ownerid +
                                     constants.folder +
-                                    snapshot.data[0].ownerlogo,
+                                    snapshot.data![0].ownerlogo,
                                 placeholder: (context, url) => Container(
                                   height: 140,
                                                             width: MediaQuery.of(context).size.width/2.6,
@@ -99,18 +98,18 @@ class _MyHomePageState extends State<MyHouse> {
                                                             height: 120,
                                                             width: MediaQuery.of(context).size.width/2,
                                                             child: ListTile(
-                                  title: Text(snapshot.data[0].ownername +
+                                  title: Text(snapshot.data![0].ownername +
                                       '\n' +
-                                      snapshot.data[0].title +
+                                      snapshot.data![0].title +
                                       '\n' +
-                                      snapshot.data[0].category),
+                                      snapshot.data![0].category),
                                   isThreeLine: true,
                                   subtitle: Text('rent: ' +
-                                      snapshot.data[0].price +
+                                      snapshot.data![0].price +
                                       '\ndeposit: ' +
-                                      snapshot.data[0].deposit +
+                                      snapshot.data![0].deposit +
                                       '\nunit: ' +
-                                      snapshot.data[0].unit)),
+                                      snapshot.data![0].unit)),
                                                           ),
                             ),
                           ],
@@ -124,24 +123,24 @@ class _MyHomePageState extends State<MyHouse> {
                             ListTile(
                               title: Text('Phone'),
                               leading: Icon(Icons.call),
-                              subtitle: Text(snapshot.data[0].ownerphone),
+                              subtitle: Text(snapshot.data![0].ownerphone),
                             ),
                             ListTile(
                               title: Text('Email'),
                               leading: Icon(Icons.email),
-                              subtitle: Text(snapshot.data[0].owneremail),
+                              subtitle: Text(snapshot.data![0].owneremail),
                             ),
                             ListTile(
                               title: Text('Address'),
                               leading: Icon(Icons.account_box),
-                              subtitle: Text(snapshot.data[0].owneraddress +
+                              subtitle: Text(snapshot.data![0].owneraddress +
                                   '\n' +
-                                  snapshot.data[0].ownerlocation),
+                                  snapshot.data![0].ownerlocation),
                             ),
                           ],
                         ),
                       ),
-                    int.parse(snapshot.data[0].payed) == 0
+                    int.parse(snapshot.data![0].payed) == 0
                           ? FlatButton(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(40)),
@@ -160,7 +159,7 @@ class _MyHomePageState extends State<MyHouse> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No data'),
                   );
@@ -170,10 +169,10 @@ class _MyHomePageState extends State<MyHouse> {
                 );
               },
             ),
-            StreamBuilder(
+            StreamBuilder<List<MyHouseArrear>>(
               stream: dao.watchMyHouseArrears(),
               builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return Container(
                     color: Colors.redAccent,
                     child: Column(
@@ -218,7 +217,7 @@ class _MyHomePageState extends State<MyHouse> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text(''),
                   );
@@ -228,10 +227,10 @@ class _MyHomePageState extends State<MyHouse> {
                 );
               },
             ),
-            StreamBuilder(
+            StreamBuilder<List<MyHousePayment>>(
               stream: dao.watchMyHousePayments(),
               builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return Column(
                     children: [
                       Center(child: Text('Payment history')),
@@ -263,7 +262,7 @@ class _MyHomePageState extends State<MyHouse> {
                   return Center(
                     child: Text('No data'),
                   );
-                } else if (snapshot.data != null && snapshot.data.isEmpty) {
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                   return Center(
                     child: Text('No data'),
                   );
@@ -278,7 +277,7 @@ class _MyHomePageState extends State<MyHouse> {
   }
 
   List<DataRow> getRows(var values) {
-    var result = List<DataRow>();
+    List<DataRow> result = [];
     for (var payments in values) {
       var row = DataRow(cells: [
         DataCell(
@@ -301,10 +300,10 @@ class _MyHomePageState extends State<MyHouse> {
 
   Text arreardetails(var arrearList) {
     var val = '';
-    var year = '';
+    String? year = '';
     for (var i = 0; i < arrearList.length; i++) {
       val = val + arrearList.elementAt(i).month + ',';
-      if (year.isNotEmpty &&
+      if (year!.isNotEmpty &&
           double.parse(arrearList.elementAt(i).year) != double.parse(year)) {
         val = val + ' ' + year + ' and ';
       }

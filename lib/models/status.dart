@@ -3,8 +3,8 @@ part 'status.g.dart';
 
 @JsonSerializable()
 class Status {
-  String code;
-  String message;
+  String? code;
+  String? message;
 
   Status({
     this.code,
@@ -18,9 +18,9 @@ class Status {
 
 @JsonSerializable()
 class MpesaResponse {
-  String ResponseCode;
-  String ResponseDescription;
-  String errorMessage;
+  String? ResponseCode;
+  String? ResponseDescription;
+  String? errorMessage;
 
   MpesaResponse({
     this.ResponseCode,

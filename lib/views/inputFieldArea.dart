@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class InputFieldArea extends StatelessWidget {
-  final String hint;
-  final bool obscure;
-  final IconData icon;
+  final String? hint;
+  final bool? obscure;
+  final IconData? icon;
   InputFieldArea({this.hint, this.obscure, this.icon});
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class InputFieldArea extends StatelessWidget {
         ),
       ),
       child: TextFormField(
-        obscureText: obscure,
+        obscureText: obscure!,
         style: const TextStyle(
           color: Colors.white,
         ),

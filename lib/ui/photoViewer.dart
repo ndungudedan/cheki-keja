@@ -7,20 +7,20 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 class PhotoViewer extends StatefulWidget {
   PhotoViewer({
-    Key key,
+    Key? key,
     this.loadingBuilder,
     this.backgroundDecoration,
     this.minScale,
     this.maxScale,
-    this.initialIndex,
+    required this.initialIndex,
     this.scrollDirection = Axis.horizontal,
-    @required this.picList,@required this.apartment,
+    required this.picList,required this.apartment,
   }) : pageController = PageController(initialPage: initialIndex);
 
 List<Images> picList = [];
   MyApartment apartment;
-  final LoadingBuilder loadingBuilder;
-  final Decoration backgroundDecoration;
+  final LoadingBuilder? loadingBuilder;
+  final Decoration? backgroundDecoration;
   final dynamic minScale;
   final dynamic maxScale;
   final int initialIndex;
@@ -33,8 +33,8 @@ List<Images> picList = [];
 class _MyHomePageState extends State<PhotoViewer> {
   List<Images> picList = [];
   var picIndex = 0;
-  MyApartment apartment;
-  int currentIndex;
+  late MyApartment apartment;
+  late int currentIndex;
 
   @override
   void initState() {
@@ -57,8 +57,8 @@ void onPageChanged(int index) {
       builder: (BuildContext context, int index) {
         return PhotoViewGalleryPageOptions(
           imageProvider: CachedNetworkImageProvider(constants.path +
-                                      apartment.ownerid +
-                                      constants.folder +widget.picList[index].image),
+                                      apartment.ownerid!.toString() +
+                                      constants.folder +widget.picList[index].image!),
           initialScale: PhotoViewComputedScale.contained * 0.8,
           heroAttributes: PhotoViewHeroAttributes(tag: currentIndex),
         );
@@ -71,11 +71,11 @@ void onPageChanged(int index) {
           child: CircularProgressIndicator(
             value: event == null
                 ? 0
-                : event.cumulativeBytesLoaded / event.expectedTotalBytes,
+                : event.cumulativeBytesLoaded / event.expectedTotalBytes!,
           ),
         ),
       ),
-      backgroundDecoration: widget.backgroundDecoration,
+      backgroundDecoration: widget.backgroundDecoration as BoxDecoration?,
       pageController: widget.pageController,
       onPageChanged: onPageChanged,
     )

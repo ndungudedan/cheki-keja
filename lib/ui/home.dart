@@ -8,24 +8,24 @@ import 'package:cheki_keja/management/management.dart';
 
 class Home extends StatefulWidget {
   Home(
-      {Key key,
-      @required this.controller,
-      @required this.iscollapsed,
-      @required this.press})
+      {Key? key,
+      required this.controller,
+      required this.iscollapsed,
+      required this.press})
       : super(key: key);
   bool iscollapsed;
-  AnimationController controller;
+  AnimationController? controller;
   final VoidCallback press;
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  bool iscollapsed;
-  AnimationController _controller;
+  bool? iscollapsed;
+  AnimationController? _controller;
   final _scrollController = ScrollController();
-  PostBloc _postBloc;
-  VoidCallback press;
+  PostBloc? _postBloc;
+  late VoidCallback press;
   var paginationId = '0';
 
   @override

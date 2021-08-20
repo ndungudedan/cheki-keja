@@ -5,8 +5,8 @@ import 'package:rxdart/rxdart.dart';
 class SingleCatBloc {
   final repo = NetworkApi();
   SingleCatBloc();
-  final _fetcher = BehaviorSubject<List<MyApartment>>();
-  Stream<List<MyApartment>> get result => _fetcher.stream;
+  final _fetcher = BehaviorSubject<List<MyApartment>?>();
+  Stream<List<MyApartment>?> get result => _fetcher.stream;
 
   fetchData(var categoryId) async {
     var res = await repo.getSectionCategorys(categoryId);

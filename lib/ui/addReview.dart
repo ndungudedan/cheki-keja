@@ -6,9 +6,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddReview extends StatefulWidget {
-  String apartmentId;
-  String userId;
-  AddReview({Key key,  this.apartmentId,  this.userId}) : super(key: key);
+  String? apartmentId;
+  String? userId;
+  AddReview({Key? key,  this.apartmentId,  this.userId}) : super(key: key);
   
   final String title = 'Reviews';
 
@@ -17,11 +17,11 @@ class AddReview extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<AddReview> {
-  var _cleanValue = 5;
-  var _secureValue = 5;
+  int? _cleanValue = 5;
+  int? _secureValue = 5;
   final _formKey = GlobalKey<FormState>();
-  Map<String, String> data = {};
-  SharedPreferences prefs;
+  Map<String, String?> data = {};
+  SharedPreferences? prefs;
 
   @override
   void initState() {
@@ -86,7 +86,7 @@ class _MyHomePageState extends State<AddReview> {
                     activeColor: Colors.blue,
                     value: 5,
                     selected: true,
-                    onChanged: (val) {
+                    onChanged: (dynamic val) {
                       setState(() {
                         _cleanValue=val;
                         data['cleanliness'] = 'Very Clean';
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<AddReview> {
                     groupValue: _cleanValue,
                     activeColor: Colors.blue,
                     value: 4,
-                    onChanged: (val) {
+                    onChanged: (dynamic val) {
                       setState(() {
                         _cleanValue=val;
                         data['cleanliness'] = 'Clean';
@@ -112,7 +112,7 @@ class _MyHomePageState extends State<AddReview> {
                     groupValue: _cleanValue,
                     activeColor: Colors.blue,
                     value: 3,
-                    onChanged: (val) {
+                    onChanged: (dynamic val) {
                       setState(() {
                         _cleanValue=val;
                         data['cleanliness'] = 'Dirty';
@@ -125,7 +125,7 @@ class _MyHomePageState extends State<AddReview> {
                     groupValue: _cleanValue,
                     activeColor: Colors.blue,
                     value: 2,
-                    onChanged: (val) {
+                    onChanged: (dynamic val) {
                       setState(() {
                         _cleanValue=val;
                         data['cleanliness'] = 'Very Dirty';
@@ -146,7 +146,7 @@ class _MyHomePageState extends State<AddReview> {
                     value: 5,
                     selected: true,
                     activeColor: Colors.blue,
-                    onChanged: (val) {
+                    onChanged: (dynamic val) {
                       setState(() {
                         _secureValue=val;
                         data['security'] = 'Very Secure';
@@ -159,7 +159,7 @@ class _MyHomePageState extends State<AddReview> {
                     groupValue: _secureValue,
                     value: 4,
                     activeColor: Colors.blue,
-                    onChanged: (val) {
+                    onChanged: (dynamic val) {
                       setState(() {
                         _secureValue=val;
                         data['security'] = 'Secure';
@@ -172,7 +172,7 @@ class _MyHomePageState extends State<AddReview> {
                     groupValue: _secureValue,
                     value: 3,
                     activeColor: Colors.blue,
-                    onChanged: (val) {
+                    onChanged: (dynamic val) {
                       setState(() {
                         _secureValue=val;
                         data['security'] = 'Insecure';
@@ -185,7 +185,7 @@ class _MyHomePageState extends State<AddReview> {
                     groupValue: _secureValue,
                     value: 2,
                     activeColor: Colors.blue,
-                    onChanged: (val) {
+                    onChanged: (dynamic val) {
                       setState(() {
                         _secureValue=val;
                         data['security'] = 'Very Insecure';
@@ -202,7 +202,7 @@ class _MyHomePageState extends State<AddReview> {
                 child: TextFormField(
                   maxLines: 5,
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value!.isEmpty) {
                       return 'Please enter some text';
                     }
                     return null;
@@ -226,7 +226,7 @@ class _MyHomePageState extends State<AddReview> {
               color: Color.fromARGB(255, 238, 133, 57),
               child: Text('Submit',style: TextStyle(fontSize: 20,color: Colors.white),),
               onPressed: () async {
-                if (_formKey.currentState.validate()) {
+                if (_formKey.currentState!.validate()) {
                   data['userId'] = sharedPreferences.getUserId();
                   var result = await NetworkApi().addReview(data);
                   print(result);

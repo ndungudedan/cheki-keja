@@ -7,7 +7,7 @@ class About extends StatelessWidget {
   Constants constants=Constants();
 
   Future<String> makePostRequest() async {
-    Response response = await post(constants.abouturl);
+    Response response = await post(Uri.parse(constants.abouturl));
 
     if(response.statusCode==200){
       String responseBody = response.body;
@@ -44,7 +44,7 @@ class About extends StatelessWidget {
                 future: makePostRequest(),
                 builder: (context, snapshot) {
                   if(snapshot.hasData) {
-                    return Text(snapshot.data);
+                    return Text(snapshot.data!);
                   }
                   return Center(child: CircularProgressIndicator());
                 },

@@ -1,99 +1,125 @@
-import 'package:cheki_keja/models/status.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'tenant.g.dart';
 
 @JsonSerializable()
-class MyTenant {
-  String id;
-  String apartment_id;
-  String name;
-  String photo;
-  String email;
-  String payed;
-  String unit;
+class FixedBill {
+  int? id;
+  String? name;
+  String? amount;
+  String? deposit;
+  String? payment_frequency;
+  String? unit;
 
-  MyTenant({
+  FixedBill({
     this.id,
-    this.apartment_id,
-    this.photo,
-    this.email,
+    this.amount,
+    this.deposit,
     this.name,
-    this.payed,
+    this.payment_frequency,
     this.unit,
   });
 
-  factory MyTenant.fromJson(Map<String, dynamic> json) =>
-      _$MyTenantFromJson(json);
+  factory FixedBill.fromJson(Map<String, dynamic> json) =>
+      _$FixedBillFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MyTenantToJson(this);
-
-  static final columns = [
-    "id",
-    "online_id",
-    "apartment_id",
-    "photo",
-    "email",
-    "name"
-    "payed",
-    "unit",
-  ];
-
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {
-      "online_id": id,
-      "apartment_id": apartment_id,
-      "photo": photo,
-      "email": email,
-      "name": name,
-      "payed": payed,
-      "unit": unit,
-    };
-
-    if (id != null) {
-      map["id"] = id;
-    }
-
-    return map;
-  }
-
-  static fromMap(Map map) {
-    MyTenant tenant = MyTenant();
-    //transaction.id = map["id"].toString();
-    tenant.id = map["online_id"];
-    tenant.apartment_id = map["apartment_id"];
-    tenant.photo = map["photo"];
-    tenant.email = map["email"];
-    tenant.name = map["name"];
-    tenant.payed = map["payed"];
-    tenant.unit = map["unit"];
-    return tenant;
-  }
+  Map<String, 
+  dynamic> toJson() => _$FixedBillToJson(this);
 }
 
 @JsonSerializable()
-class MyTenantList {
-  List<MyTenant> tenants;
+class VariableBill {
+  int? id;
+  String? bill_name;
+  String? amount_per_unit;
+  String? number_of_units;
+  String? payment_status;
+  String? read_on;
 
-  MyTenantList({
-    this.tenants,
+  VariableBill({
+    this.id,
+    this.bill_name,
+    this.number_of_units,
+    this.amount_per_unit,
+    this.payment_status,
+    this.read_on,
   });
 
-  factory MyTenantList.fromJson(List<dynamic> json) {
-    return MyTenantList(
-        tenants: json
-            .map((e) => MyTenant.fromJson(e as Map<String, dynamic>))
-            .toList());
-  }
+  factory VariableBill.fromJson(Map<String, dynamic> json) =>
+      _$VariableBillFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VariableBillToJson(this);
+}
+
+@JsonSerializable()
+class TenantUnit {
+  int? houseid;
+  String? unit_price;
+  String? label;
+  String? building_name;
+  String? unit_deposit;
+  String? entry_date;
+  String? unit_type_name;
+
+  TenantUnit({
+    this.houseid,
+    this.building_name,
+    this.unit_deposit,
+    this.unit_price,
+    this.entry_date,
+    this.unit_type_name,
+    this.label,
+  });
+
+  factory TenantUnit.fromJson(Map<String, dynamic> json) =>
+      _$TenantUnitFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TenantUnitToJson(this);
+}
+
+@JsonSerializable()
+class Payment {
+  int? id;
+  String? first_name;
+  String? last_name;
+  String? phone_number;
+  String? id_number;
+  String? payment_reason;
+  String? payment_method;
+  int? amount;
+  String? payment_description;
+  String? transaction_date;
+
+  Payment({
+    this.id,
+    this.amount,
+    this.first_name,
+    this.id_number,
+    this.last_name,
+    this.payment_description='',
+    this.payment_method,
+    this.payment_reason,
+    this.phone_number,
+    this.transaction_date,
+  });
+
+  factory Payment.fromJson(Map<String, dynamic> json) =>
+      _$PaymentFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PaymentToJson(this);
 }
 
 @JsonSerializable()
 class MyTenantResponse {
-  MyTenantList data;
-  Status status;
+  List<Payment>? payments;
+  List<TenantUnit>? houseunits;
+  List<VariableBill>? variablebills;
+  List<FixedBill>? fixedbills;
 
   MyTenantResponse({
-    this.data,
-    this.status,
+    this.payments,
+    this.fixedbills,
+    this.houseunits,
+    this.variablebills,
   });
 
   factory MyTenantResponse.fromJson(Map<String, dynamic> json) =>

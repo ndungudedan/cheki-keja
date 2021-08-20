@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Complains extends StatefulWidget {
   Complains({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final String title = 'Complains';
@@ -19,16 +19,16 @@ class Complains extends StatefulWidget {
 
 class _MyHomePageState extends State<Complains> {
   ComplainList complainList = ComplainList();
-  SharedPreferences prefs;
+  late SharedPreferences prefs;
   var _hasMoreItems = true;
-  bool _loadingMore;
-  bool signedIn;
+  bool? _loadingMore;
+  bool? signedIn;
   bool empty = false;
   //for testing purposes
-  var apartmentId = '13', userId;
+  String? apartmentId = '13', userId;
   StreamController<Complain> _streamController = StreamController<Complain>();
-  var paginationId = '0';
-  List<Complain> complains = List<Complain>();
+  String? paginationId = '0';
+  List<Complain> complains = [];
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
@@ -58,8 +58,8 @@ class _MyHomePageState extends State<Complains> {
                 padding: const EdgeInsets.all(8),
                 itemCount: complains.length,
                 itemBuilder: (BuildContext context, int index) {
-                  if ((_hasMoreItems ?? false) &&
-                      index == complainList.complains.length - 1) {
+                  if ((_hasMoreItems) &&
+                      index == complainList.complains!.length - 1) {
                     if (!(_loadingMore ?? false)) {
                       _loadMoreItems();
                     }
@@ -68,19 +68,19 @@ class _MyHomePageState extends State<Complains> {
                     leading: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       child:
-                          Image.network(complains.elementAt(index).user.photo),
+                          Image.network(complains.elementAt(index).user!.photo!),
                     ),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(complains.elementAt(index).user.name),
+                        Text(complains.elementAt(index).user!.name!),
                         Text(complains
                             .elementAt(index)
-                            .timeline
+                            .timeline!
                             .substring(0, 10))
                       ],
                     ),
-                    subtitle: Text(complains.elementAt(index).title),
+                    subtitle: Text(complains.elementAt(index).title!),
                   );
                 },
               );
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<Complains> {
             color: Colors.deepOrange,
             icon: Icon(Icons.add),
             onPressed: () {
-              if (!signedIn) {
+              if (!signedIn!) {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => AddComplains()));
                 //showDialog(context: context, builder: (_) => complain());
@@ -148,18 +148,18 @@ class _MyHomePageState extends State<Complains> {
       _loadingMore = false;
 
       complainList = ComplainList.fromJson(Map);
-      if (complainList.complains.isEmpty) {
+      if (complainList.complains!.isEmpty) {
         _hasMoreItems = false;
-        if (paginationId.contains('0')) {
+        if (paginationId!.contains('0')) {
           empty = true;
         }
       } else {
-        for (int i = 0; i < complainList.complains.length; i++) {
-          _streamController.add(complainList.complains.elementAt(i));
-          complains.add(complainList.complains.elementAt(i));
-          if (int.parse(complainList.complains.elementAt(i).id) >
-              int.parse(paginationId)) {
-            paginationId = complainList.complains.elementAt(i).id;
+        for (int i = 0; i < complainList.complains!.length; i++) {
+          _streamController.add(complainList.complains!.elementAt(i));
+          complains.add(complainList.complains!.elementAt(i));
+          if (int.parse(complainList.complains!.elementAt(i).id!) >
+              int.parse(paginationId!)) {
+            paginationId = complainList.complains!.elementAt(i).id;
           }
         }
       }

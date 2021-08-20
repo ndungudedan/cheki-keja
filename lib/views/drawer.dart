@@ -1,14 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cheki_keja/connection/networkApi.dart';
 import 'package:cheki_keja/database/databasehelper.dart';
 import 'package:cheki_keja/models/user.dart' as myuser;
+import 'package:cheki_keja/ui/Utilities/billpayments.dart';
 import 'package:cheki_keja/ui/about.dart';
 import 'package:cheki_keja/ui/category.dart';
 import 'package:cheki_keja/ui/contactus.dart';
 import 'package:cheki_keja/ui/map.dart';
+import 'package:cheki_keja/ui/tenant/tenant.dart';
 import 'package:cheki_keja/ui/terms.dart';
-import 'package:commons/commons.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:cheki_keja/ui/favorites.dart';
 import 'package:cheki_keja/ui/myhouse.dart';
@@ -20,7 +22,7 @@ import 'package:moor_db_viewer/moor_db_viewer.dart';
 
 class Draw extends StatefulWidget {
   const Draw({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -30,9 +32,9 @@ class Draw extends StatefulWidget {
 class _DrawState extends State<Draw> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  auth.User fireuser;
-  myuser.User user;
-  bool iscollapsed;
+  auth.User? fireuser;
+  late myuser.User user;
+  bool? iscollapsed;
 
   @override
   void initState() {
@@ -59,7 +61,7 @@ class _DrawState extends State<Draw> {
                           )
                         : Icon(Icons.account_circle),
                     accountEmail: Text(
-                      sharedPreferences.getEmail(),
+                      sharedPreferences.getEmail()+'\n'+sharedPreferences.getPhone(),
                       style: TextStyle(color: Colors.white),
                     ),
                     accountName: Text(
@@ -157,17 +159,30 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
                   MaterialPageRoute(builder: (context) => Gmap()),
                 );
               }),
-          /* ListTile(
-            title: Text('My apartment', style: TextStyle(color: Colors.white)),
-            leading: Icon(
-              Icons.home_outlined,
-              color: Colors.white,
-            ),
-            onTap: () => sharedPreferences.getSignedIn()
-                ? Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => MyHouse()))
-                : infoDialog(context, 'Please Login to access this page'),
-          ), */
+          ListTile(
+              title: Text(
+                'Pay Bills',
+                style: TextStyle(color: Colors.white),
+              ),
+              leading: Icon(
+                Icons.payment,
+                color: Colors.white,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BillPayments()),
+                );
+              }),
+          ListTile(
+              title:
+                  Text('My apartment', style: TextStyle(color: Colors.white)),
+              leading: Icon(
+                Icons.home_outlined,
+                color: Colors.white,
+              ),
+              onTap: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Tenant()))),
           ListTile(
             leading: Icon(
               Icons.contact_phone,
@@ -226,7 +241,7 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
 
   void signInWithGoogle() async {
     var googleSignInAccount = await googleSignIn.signIn();
-    var googleSignInAuthentication = await googleSignInAccount.authentication;
+    var googleSignInAuthentication = await googleSignInAccount!.authentication;
 
     var credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
@@ -236,14 +251,14 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
     var authResult = await _auth.signInWithCredential(credential);
     fireuser = authResult.user;
 
-    assert(!fireuser.isAnonymous);
-    assert(await fireuser.getIdToken() != null);
+    assert(!fireuser!.isAnonymous);
+    assert(await fireuser!.getIdToken() != null);
 
-    var currentUser = await _auth.currentUser;
-    assert(fireuser.uid == currentUser.uid);
+    var currentUser = await _auth.currentUser!;
+    assert(fireuser!.uid == currentUser.uid);
     setState(() {
       fireuser = authResult.user;
-      registerUser(fireuser);
+      registerUser(fireuser!);
     });
   }
 
@@ -261,14 +276,17 @@ Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoorDbViewer(
     var result = await NetworkApi().registerUser(fireuser);
     print(result);
     var Map = json.decode(result);
-    setState(() {
-      user = myuser.User.fromJson(Map);
-    });
+    user = myuser.User.fromJson(Map);
+    sharedPreferences.setPhoto(fireuser.photoURL ?? '');
     sharedPreferences.setEmail(user.email);
-    sharedPreferences.setUserId(user.id);
+    sharedPreferences.setUserId(user.id.toString());
     sharedPreferences.setSignedIn(true);
-    sharedPreferences.setFirstname(user.name);
-    sharedPreferences.setPhoto(user.photo);
+    sharedPreferences.setFirstname(user.first_name! + ' ' + user.last_name!);
+    sharedPreferences.setPhone(user.phone_number);
+    sharedPreferences.setIdNo(user.id_number!);
+    sharedPreferences.setCitizenship(user.citizenship);
+
+    setState(() {});
   }
 
   void dialog() {

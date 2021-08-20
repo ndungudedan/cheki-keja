@@ -8,14 +8,14 @@ part of 'contact.dart';
 
 Contacts _$ContactsFromJson(Map<String, dynamic> json) {
   return Contacts(
-    id: json['id'] as String,
-    facebook: json['facebook'] as String,
-    phone: json['phone'] as String,
-    email: json['email'] as String,
-    instagram: json['instagram'] as String,
-    address: json['address'] as String,
-    location: json['location'] as String,
-    twitter: json['twitter'] as String,
+    id: json['id'] as String?,
+    facebook: json['facebook'] as String?,
+    phone: json['phone'] as String?,
+    email: json['email'] as String?,
+    instagram: json['instagram'] as String?,
+    address: json['address'] as String?,
+    location: json['location'] as String?,
+    twitter: json['twitter'] as String?,
   );
 }
 

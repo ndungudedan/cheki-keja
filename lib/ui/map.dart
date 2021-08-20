@@ -13,17 +13,17 @@ class Gmap extends StatefulWidget {
 }
 
 class _MyAppState extends State<Gmap> {
-  final Map<String, Marker> _markers = {};
-  List<Point> points = List<Point>();
-  var tar_lat = "-1.362863";
-  var tar_long = "36.834583";
+  final Map<String?, Marker> _markers = {};
+  List<Point> points = [];
+  String? tar_lat = "-1.362863";
+  String? tar_long = "36.834583";
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     var result = await NetworkApi().getApartmentLocations();
     print(result);
     var Map = json.decode(result);
     var locations = Locations.fromJson(Map);
-    points = locations.data;
+    points = locations.houses!;
 
     setState(() {
       _markers.clear();
@@ -35,32 +35,31 @@ class _MyAppState extends State<Gmap> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text(point.title),
+                    title: Text(point.building_name!),
                     content: Text('phone: ' +
-                        point.phone +
+                        point.phone_number! +
                         '\naddress: ' +
-                        point.address),
+                        point.location!),
                     actions: [
                       TextButton(
                           onPressed: () {
-                            fetchApartment(point.id);
+                            fetchApartment(point.building_id.toString());
                           },
                           child: Text('see'))
                     ],
                   );
                 });
           },
-          markerId: MarkerId(point.title),
-          position: LatLng(
-              double.parse(point.latitude), double.parse(point.longitude)),
+          markerId: MarkerId(point.building_name!),
+          position: LatLng(point.latitude!, point.longitude!),
           infoWindow: InfoWindow(
-            title: point.title,
-            snippet: point.address,
+            title: point.building_name,
+            snippet: point.location,
           ),
         );
-        _markers[point.id] = marker;
-        tar_lat = point.latitude;
-        tar_long = point.longitude;
+        _markers[point.building_id.toString()] = marker;
+        tar_lat = point.latitude.toString();
+        tar_long = point.longitude.toString();
       });
     });
   }
@@ -82,7 +81,7 @@ class _MyAppState extends State<Gmap> {
         child: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            target: LatLng(double.parse(tar_lat), double.parse(tar_long)),
+            target: LatLng(double.parse(tar_lat!), double.parse(tar_long!)),
             zoom: 8,
           ),
           markers: _markers.values.toSet(),
@@ -97,7 +96,7 @@ class _MyAppState extends State<Gmap> {
     var Map = json.decode(result);
     var locations = Locations.fromJson(Map);
     setState(() {
-      points = locations.data;
+      points = locations.houses!;
     });
   }
 

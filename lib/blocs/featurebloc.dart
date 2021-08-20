@@ -6,8 +6,8 @@ import 'package:rxdart/rxdart.dart';
 class FeatureBloc {
   final repo = NetworkApi();
   FeatureBloc();
-  final _featFetcher = BehaviorSubject<List<Features>>();
-  Stream<List<Features>> get allFeatures => _featFetcher.stream;
+  final _featFetcher = BehaviorSubject<List<Features>?>();
+  Stream<List<Features>?> get allFeatures => _featFetcher.stream;
 
   fetchFeatures(var apartmentId) async {
     var res = await repo.getFeatures(apartmentId);

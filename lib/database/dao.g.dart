@@ -14,4 +14,15 @@ mixin _$DatabaseDaoMixin on DatabaseAccessor<DatabaseHelper> {
   $MyHouseArrearsTable get myHouseArrears => attachedDatabase.myHouseArrears;
   $ContactsTable get contacts => attachedDatabase.contacts;
   $OfflineActivityTable get offlineActivity => attachedDatabase.offlineActivity;
+  $TransactionsTableTable get transactionsTable =>
+      attachedDatabase.transactionsTable;
+  $BillerTableTable get billerTable => attachedDatabase.billerTable;
+  $BuildingUnitTableTable get buildingUnitTable =>
+      attachedDatabase.buildingUnitTable;
+  $HousePaymentsTableTable get housePaymentsTable =>
+      attachedDatabase.housePaymentsTable;
+  $FixedBillsTableTable get fixedBillsTable => attachedDatabase.fixedBillsTable;
+  $VariableBillsTableTable get variableBillsTable =>
+      attachedDatabase.variableBillsTable;
+  $TenantUnitTableTable get tenantUnitTable => attachedDatabase.tenantUnitTable;
 }

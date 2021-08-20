@@ -7,8 +7,8 @@ import 'package:rxdart/rxdart.dart';
 class ImagesBloc {
   final repo = NetworkApi();
   ImagesBloc();
-  final _fetcher = BehaviorSubject<List<Images>>();
-  Stream<List<Images>> get allImages => _fetcher.stream;
+  final _fetcher = BehaviorSubject<List<Images>?>();
+  Stream<List<Images>?> get allImages => _fetcher.stream;
 
   fetchImages(var apartmentId) async {
     var res = await repo.getImages(apartmentId);

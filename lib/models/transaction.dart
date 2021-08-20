@@ -4,16 +4,16 @@ part 'transaction.g.dart';
 
 @JsonSerializable()
 class MyTransaction {
-  String id;
-  String user_id;
-  String apartment_id;
-  String transaction_id;
-  String status;
-  String amount;
-  String time;
-  String month;
-  String type;
-  String year;
+  String? id;
+  String? user_id;
+  String? apartment_id;
+  String? transaction_id;
+  String? status;
+  String? amount;
+  String? time;
+  String? month;
+  String? type;
+  String? year;
 
   MyTransaction({
     this.id,
@@ -87,7 +87,7 @@ class MyTransaction {
 
 @JsonSerializable()
 class TransactionList {
-  List<MyTransaction> transactions;
+  List<MyTransaction>? transactions;
 
   TransactionList({
     this.transactions,
@@ -103,8 +103,8 @@ class TransactionList {
 
 @JsonSerializable()
 class TransactionResponse {
-  TransactionList data;
-  Status status;
+  TransactionList? data;
+  Status? status;
 
   TransactionResponse({
     this.data,

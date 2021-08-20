@@ -9,20 +9,22 @@ import 'package:cheki_keja/models/status.dart';
 import 'package:cheki_keja/ui/apartdetails.dart';
 import 'package:cheki_keja/ui/reviews.dart';
 import 'package:cheki_keja/ui/viewonmap.dart';
+import 'package:cheki_keja/utility/utils.dart';
 import 'package:cheki_keja/views/postWidgetTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:moor/moor.dart ' as value;
+import 'package:share/share.dart';
 
 class PostWidget extends StatefulWidget {
   var myApartment;
   var index;
   bool online;
   PostWidget(
-      {Key key,
-      @required this.myApartment,
-      @required this.index,
-      @required this.online})
+      {Key? key,
+      required this.myApartment,
+      required this.index,
+      required this.online})
       : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class PostWidget extends StatefulWidget {
 class _DrawState extends State<PostWidget> {
   var myApartment;
   var index;
-  bool online;
+  bool? online;
   var dao = DatabaseDao(databasehelper);
   @override
   void initState() {
@@ -48,6 +50,8 @@ class _DrawState extends State<PostWidget> {
       color: Colors.white,
       margin: EdgeInsets.fromLTRB(0, 2, 0, 2),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           GestureDetector(
             onTap: () {
@@ -60,7 +64,7 @@ class _DrawState extends State<PostWidget> {
                 children: <Widget>[
                   PostWIdgetTopBar(
                     title: myApartment.title,
-                    ownerid: myApartment.ownerid,
+                    ownerid: myApartment.ownerid.toString(),
                     ownerlogo: myApartment.ownerlogo,
                     ownername: myApartment.ownername,
                     rating: myApartment.rating,
@@ -72,10 +76,7 @@ class _DrawState extends State<PostWidget> {
                           // height: 300,
                           width: MediaQuery.of(context).size.width,
                           child: CachedNetworkImage(
-                            imageUrl: constants.path +
-                                myApartment.ownerid +
-                                constants.folder +
-                                myApartment.banner,
+                            imageUrl: myApartment.banner,
                             fit: BoxFit.fill,
                             placeholder: (context, url) => Container(
                                 height: 300,
@@ -143,10 +144,10 @@ class _DrawState extends State<PostWidget> {
             ),
           ),
           Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Builder(
+              /* Builder(
                 builder: (context) => LikeButton(
                   isLiked: myApartment.liked.isNotEmpty,
                   size: 30,
@@ -164,7 +165,7 @@ class _DrawState extends State<PostWidget> {
                     );
                   },
                   likeCount: int.tryParse(myApartment.likes),
-                  countBuilder: (int count, bool isLiked, String text) {
+                  countBuilder: (int? count, bool isLiked, String text) {
                     var color = isLiked ? Colors.red : Colors.grey;
                     Widget result;
                     if (count == 0) {
@@ -190,6 +191,8 @@ class _DrawState extends State<PostWidget> {
                     } else {
                       Scaffold.of(context)
                           .showSnackBar(snack('Please Sign in first'));
+                          
+                     return Future<bool>.value(false);
                     }
                   },
                 ),
@@ -205,7 +208,7 @@ class _DrawState extends State<PostWidget> {
                               apartmentId: myApartment.id,
                             )));
                   }),
-              Text(myApartment.comments),
+              Text(myApartment.comments), */
               SizedBox(),
               IconButton(
                   icon: Icon(
@@ -214,21 +217,25 @@ class _DrawState extends State<PostWidget> {
                   ),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ViewOnMap(
-                              title: myApartment.title,
-                              address: myApartment.address,
-                              latitude: myApartment.latitude,
-                              longitude: myApartment.longitude,
-                            )));
+                        builder: (context) =>
+                            ViewOnMap(online: online, apartment: myApartment)));
                   }),
               SizedBox(),
-              IconButton(
-                  icon: Icon(
-                    Icons.share,
-                    color: Colors.amber,
-                  ),
-                  onPressed: () {
-                    
+              FutureBuilder<String>(
+                  future: dynamicLink(myApartment.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return IconButton(
+                          icon: Icon(
+                            Icons.share,
+                            color: Colors.amber,
+                          ),
+                          onPressed: () {
+                            Share.share(snapshot.data!);
+                          });
+                    } else {
+                      return SizedBox();
+                    }
                   }),
             ],
           ),
@@ -258,6 +265,7 @@ class _DrawState extends State<PostWidget> {
         like: value.Value(true),
       );
       dao.insertOfflineActivity(companion);
+      return true;
     }
   }
 
@@ -270,7 +278,6 @@ class _DrawState extends State<PostWidget> {
       var res = json.decode(result);
       var status = Status.fromJson(res);
       if (status.code == Constants.success) {
-        
         return false;
       } else {
         return true;
@@ -282,6 +289,7 @@ class _DrawState extends State<PostWidget> {
         like: value.Value(false),
       );
       dao.insertOfflineActivity(companion);
+      return false;
     }
   }
 

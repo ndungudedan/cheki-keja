@@ -4,8 +4,8 @@ part 'user.g.dart';
 
 @JsonSerializable()
 class UserResponse {
-  User data;
-  Status status;
+  User? data;
+  Status? status;
 
   UserResponse({
     this.status,
@@ -20,20 +20,22 @@ class UserResponse {
 
 @JsonSerializable()
 class User {
-  String id;
-  String name;
-  String password;
-  String phone;
-  String photo;
-  String email;
+  int? id;
+  String? first_name;
+  String? last_name;
+  String? id_number;
+  String? phone_number;
+  String? citizenship;
+  String? email;
 
   User({
     this.id,
-    this.password,
-    this.photo,
-    this.phone,
+    this.citizenship,
+    this.first_name,
+    this.id_number,
     this.email,
-    this.name,
+    this.last_name,
+    this.phone_number,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

@@ -16,7 +16,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  bool firsttime = false;
+  bool? firsttime = false;
 
   Future<void> initPrefs() async {
     if (!sharedPreferences.checkFirstTime()) {
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => firsttime ? OnBoardingPage() : Index(),
+        '/': (context) => firsttime! ? OnBoardingPage() : Index(),
         '/index': (context) => Index(),
       },
     );

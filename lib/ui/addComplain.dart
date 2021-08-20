@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AddComplains extends StatefulWidget {
   AddComplains({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final String title = 'Complains';
@@ -17,14 +17,14 @@ class AddComplains extends StatefulWidget {
 
 class _MyHomePageState extends State<AddComplains> {
   ComplainList complainList = ComplainList();
-  SharedPreferences prefs;
-  bool signedIn;
+  late SharedPreferences prefs;
+  bool? signedIn;
   bool empty = false;
   //for testing purposes
-  var apartmentId = '13', userId;
+  String? apartmentId = '13', userId;
   StreamController<Complain> _streamController = StreamController<Complain>();
   var paginationId = '0';
-  List<Complain> complains = List<Complain>();
+  List<Complain> complains = [];
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 

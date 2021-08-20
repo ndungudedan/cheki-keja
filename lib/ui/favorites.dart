@@ -15,32 +15,32 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class Favorites extends StatefulWidget {
   Favorites(
-      {Key key,})
+      {Key? key,})
       : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Favorites> {
-  bool iscollapsed;
-  AnimationController _controller;
+  bool? iscollapsed;
+  AnimationController? _controller;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  auth.User fireuser;
-  myuser.User user;
+  auth.User? fireuser;
+  myuser.User? user;
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
-  PostBloc _postBloc;
+  PostBloc? _postBloc;
   bool signed_in = false;
   ApartmentList apartmentList = ApartmentList();
-  List<MyApartment> homeList = List<MyApartment>();
+  List<MyApartment> homeList = [];
   int _current = 0;
   Constants constants = Constants();
-  List<int> likes_count = List();
-  List<int> comments_count = List();
+  List<int> likes_count = [];
+  List<int> comments_count = [];
   StreamController<MyApartment> _streamController =
       StreamController<MyApartment>();
-  VoidCallback press;
+  VoidCallback? press;
   bool _loadingMore = true;
   var _hasMoreItems = true;
   var paginationId = '0';

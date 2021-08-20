@@ -14,9 +14,9 @@ Future<void> backgroundMessageHandler(RemoteMessage message) async {
 }
 
 class Index extends StatefulWidget {
-  Index({Key key, this.title}) : super(key: key);
+  Index({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -24,16 +24,16 @@ class Index extends StatefulWidget {
 
 class _MyHomePageState extends State<Index>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _scaleAnimation;
-  Animation<double> _dashscaleAnimation;
-  Animation<Offset> _slideAnimation;
+  AnimationController? _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _dashscaleAnimation;
+  late Animation<Offset> _slideAnimation;
   ApartmentList apartmentList = ApartmentList();
-  List<MyApartment> homeList = List<MyApartment>();
+  List<MyApartment> homeList =[];
   int _current = 0;
   Constants constants = Constants();
-  List<int> likes_count = List();
-  List<int> comments_count = List();
+  List<int> likes_count = [];
+  List<int> comments_count = [];
   StreamController<MyApartment> _streamController =
       StreamController<MyApartment>();
   bool _loadingMore = true;
@@ -41,24 +41,25 @@ class _MyHomePageState extends State<Index>
   var paginationId = '0';
   var userId;
   bool iscollapsed = true;
-  double screenwidth, screenheight;
+  late double screenwidth, screenheight;
   final Duration duration = const Duration(milliseconds: 300);
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: duration);
-    _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(_controller);
-    _dashscaleAnimation = Tween<double>(begin: 0, end: 1).animate(_controller);
+    _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(_controller!);
+    _dashscaleAnimation = Tween<double>(begin: 0, end: 1).animate(_controller!);
     _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0))
-        .animate(_controller);
+        .animate(_controller!);
     cloudMessage();
     notification();
+    initDynamicLinks(context);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -103,7 +104,7 @@ class _MyHomePageState extends State<Index>
                   if (!iscollapsed) {
                     setState(() {
                       iscollapsed = !iscollapsed;
-                      _controller.reverse();
+                      _controller!.reverse();
                     });
                   }
                 },
@@ -111,9 +112,9 @@ class _MyHomePageState extends State<Index>
                   press: () {
                     setState(() {
                       if (iscollapsed) {
-                        _controller.forward();
+                        _controller!.forward();
                       } else {
-                        _controller.reverse();
+                        _controller!.reverse();
                       }
                       iscollapsed = !iscollapsed;
                     });
@@ -130,7 +131,7 @@ class _MyHomePageState extends State<Index>
   }
 
   Future<void> notification() async {
-    RemoteMessage initialMessage =
+    RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null && initialMessage.data['action'] == 'vacant') {
       var data =

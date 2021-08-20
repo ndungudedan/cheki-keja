@@ -8,10 +8,10 @@ part of 'complainsClass.dart';
 
 Complain _$ComplainFromJson(Map<String, dynamic> json) {
   return Complain(
-    id: json['id'] as String,
-    title: json['title'] as String,
-    timeline: json['timeline'] as String,
-    description: json['description'] as String,
+    id: json['id'] as String?,
+    title: json['title'] as String?,
+    timeline: json['timeline'] as String?,
+    description: json['description'] as String?,
     user: json['user'] == null
         ? null
         : ComplainUser.fromJson(json['user'] as Map<String, dynamic>),
@@ -28,10 +28,9 @@ Map<String, dynamic> _$ComplainToJson(Complain instance) => <String, dynamic>{
 
 ComplainList _$ComplainListFromJson(Map<String, dynamic> json) {
   return ComplainList(
-    complains: (json['complains'] as List)
-        ?.map((e) =>
-            e == null ? null : Complain.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    complains: (json['complains'] as List<dynamic>?)
+        ?.map((e) => Complain.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -42,10 +41,10 @@ Map<String, dynamic> _$ComplainListToJson(ComplainList instance) =>
 
 ComplainUser _$ComplainUserFromJson(Map<String, dynamic> json) {
   return ComplainUser(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    email: json['email'] as String,
-    photo: json['photo'] as String,
+    id: json['id'] as String?,
+    name: json['name'] as String?,
+    email: json['email'] as String?,
+    photo: json['photo'] as String?,
   );
 }
 
@@ -59,9 +58,9 @@ Map<String, dynamic> _$ComplainUserToJson(ComplainUser instance) =>
 
 ComplainChat _$ComplainChatFromJson(Map<String, dynamic> json) {
   return ComplainChat(
-    id: json['id'] as String,
-    chat: json['chat'] as String,
-    timeline: json['timeline'] as String,
+    id: json['id'] as String?,
+    chat: json['chat'] as String?,
+    timeline: json['timeline'] as String?,
     user: json['user'] == null
         ? null
         : ComplainUser.fromJson(json['user'] as Map<String, dynamic>),
@@ -78,10 +77,9 @@ Map<String, dynamic> _$ComplainChatToJson(ComplainChat instance) =>
 
 ComplainChatList _$ComplainChatListFromJson(Map<String, dynamic> json) {
   return ComplainChatList(
-    chats: (json['chats'] as List)
-        ?.map((e) =>
-            e == null ? null : ComplainChat.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    chats: (json['chats'] as List<dynamic>?)
+        ?.map((e) => ComplainChat.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -92,10 +90,10 @@ Map<String, dynamic> _$ComplainChatListToJson(ComplainChatList instance) =>
 
 ComplainResponse _$ComplainResponseFromJson(Map<String, dynamic> json) {
   return ComplainResponse(
-    id: json['id'] as String,
-    snippet: json['snippet'] as String,
-    timeline: json['timeline'] as String,
-    response: json['response'] as String,
+    id: json['id'] as String?,
+    snippet: json['snippet'] as String?,
+    timeline: json['timeline'] as String?,
+    response: json['response'] as String?,
   );
 }
 
@@ -109,11 +107,9 @@ Map<String, dynamic> _$ComplainResponseToJson(ComplainResponse instance) =>
 
 ComplainResponseList _$ComplainResponseListFromJson(Map<String, dynamic> json) {
   return ComplainResponseList(
-    responses: (json['responses'] as List)
-        ?.map((e) => e == null
-            ? null
-            : ComplainResponse.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    responses: (json['responses'] as List<dynamic>?)
+        ?.map((e) => ComplainResponse.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -127,10 +123,10 @@ ChatsResponses _$ChatsResponsesFromJson(Map<String, dynamic> json) {
   return ChatsResponses(
     chatList: json['chatList'] == null
         ? null
-        : ComplainChatList.fromJson(json['chatList'] as List),
+        : ComplainChatList.fromJson(json['chatList'] as List<dynamic>),
     responseList: json['responseList'] == null
         ? null
-        : ComplainResponseList.fromJson(json['responseList'] as List),
+        : ComplainResponseList.fromJson(json['responseList'] as List<dynamic>),
   );
 }
 
